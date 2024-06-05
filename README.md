@@ -1,5 +1,5 @@
-# Motorsport-Predictor API
+## Motorsport-Predictor API
 
-## Description
+### Description
 
 This API is used for user management in the Motorsport-Predictor website.
