@@ -25,8 +25,8 @@ public class User {
     @Column(name = "second_name", nullable = false, length = 50)
     private String secondName;
 
-    @Column(name = "user_nacionality", nullable = false, length = 50)
-    private String userNacionality;
+    @Column(name = "user_nationality", nullable = false, length = 50)
+    private String userNationality;
 
     @Column(name = "user_email", nullable = false, unique = true, length = 100)
     private String userEmail;
@@ -34,7 +34,7 @@ public class User {
     @Column(name = "user_password", nullable = false, length = 100)
     private String userPassword;
 
-    @Column(name = "date_of_regsitration", nullable = false)
+    @Column(name = "date_of_registration", nullable = false)
     private LocalDateTime dateOfRegistration = LocalDateTime.now();
 
     @OneToMany(mappedBy = "creator")
