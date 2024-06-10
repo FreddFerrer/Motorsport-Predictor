@@ -1,8 +1,7 @@
 package com.fredd.motorsport_predictor.service;
 
-import com.fredd.motorsport_predictor.dto.PredictionGroupDto;
+import com.fredd.motorsport_predictor.dto.response.PredictionGroupDto;
 import com.fredd.motorsport_predictor.dto.request.PredictionGroupRequestDto;
-import com.fredd.motorsport_predictor.models.entities.PredictionGroup;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,5 +1,6 @@
-package com.fredd.motorsport_predictor.dto;
+package com.fredd.motorsport_predictor.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +16,9 @@ public class UserDto {
     private String secondName;
     private String userNationality;
     private String userEmail;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String token;
     private LocalDateTime dateOfRegistration;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Set<PredictionGroupDto> predictionGroups;
 }

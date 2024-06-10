@@ -1,9 +1,8 @@
 package com.fredd.motorsport_predictor.service.impl;
 
-import com.fredd.motorsport_predictor.dto.PredictionGroupDto;
+import com.fredd.motorsport_predictor.dto.response.PredictionGroupDto;
 import com.fredd.motorsport_predictor.dto.request.PredictionGroupRequestDto;
 import com.fredd.motorsport_predictor.models.entities.PredictionGroup;
-import com.fredd.motorsport_predictor.models.entities.User;
 import com.fredd.motorsport_predictor.models.mappers.IPredictionGroupMapper;
 import com.fredd.motorsport_predictor.repositories.IPredictionGroupRepository;
 import com.fredd.motorsport_predictor.service.IPredictionGroupService;

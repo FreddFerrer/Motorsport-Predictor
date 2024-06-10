@@ -46,9 +46,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "creator")
     private Set<PredictionGroup> predictionGroups;
 
+    @Column(name = "user_role", nullable = false)
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
-    private Boolean enabled = false;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

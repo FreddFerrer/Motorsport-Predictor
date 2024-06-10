@@ -1,6 +1,5 @@
-package com.fredd.motorsport_predictor.dto;
+package com.fredd.motorsport_predictor.dto.response;
 
-import com.fredd.motorsport_predictor.models.entities.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,5 +13,5 @@ public class PredictionGroupDto {
 
     private String groupType;
 
-    private User creator;
+    private UserDto creator;
 }

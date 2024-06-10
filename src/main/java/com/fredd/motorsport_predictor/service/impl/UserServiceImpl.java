@@ -1,6 +1,6 @@
 package com.fredd.motorsport_predictor.service.impl;
 
-import com.fredd.motorsport_predictor.dto.UserDto;
+import com.fredd.motorsport_predictor.dto.response.UserDto;
 import com.fredd.motorsport_predictor.dto.request.SignUpRequestDto;
 import com.fredd.motorsport_predictor.models.entities.User;
 import com.fredd.motorsport_predictor.models.mappers.IUserDtoMapper;
