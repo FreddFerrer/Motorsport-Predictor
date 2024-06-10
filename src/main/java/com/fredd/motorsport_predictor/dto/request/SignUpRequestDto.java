@@ -10,7 +10,7 @@ import org.hibernate.validator.constraints.Length;
 
 @Getter
 @Setter
-public class UserRequestDto {
+public class SignUpRequestDto {
     private int id;
     @NotEmpty(message = "Required field")
     @NotNull

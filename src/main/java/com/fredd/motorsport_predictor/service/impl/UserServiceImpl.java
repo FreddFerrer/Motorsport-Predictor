@@ -1,7 +1,7 @@
 package com.fredd.motorsport_predictor.service.impl;
 
 import com.fredd.motorsport_predictor.dto.UserDto;
-import com.fredd.motorsport_predictor.dto.request.UserRequestDto;
+import com.fredd.motorsport_predictor.dto.request.SignUpRequestDto;
 import com.fredd.motorsport_predictor.models.entities.User;
 import com.fredd.motorsport_predictor.models.mappers.IUserDtoMapper;
 import com.fredd.motorsport_predictor.repositories.IUserRepository;
@@ -40,7 +40,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public UserDto saveUser(UserRequestDto userRequest) {
+    public UserDto saveUser(SignUpRequestDto userRequest) {
         User newUser = userDtoMapper.toEntity(userRequest);
         userRepository.save(newUser);
         return userDtoMapper.toDto(newUser);
