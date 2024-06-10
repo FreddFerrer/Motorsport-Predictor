@@ -46,13 +46,23 @@ public class PredictionGroupServiceImpl implements IPredictionGroupService {
 
     //To be completed
     @Override
-    public PredictionGroupDto editPredictionGroup(PredictionGroupRequestDto predictionGroupRequestDto) {
-        return null;
+    public Optional<PredictionGroupDto> editPredictionGroup(PredictionGroupRequestDto predictionGroupRequestDto) {
+        if (iPredictionGroupRepository.findById(predictionGroupRequestDto.getId()).isEmpty()) {
+            return Optional.empty();
+        }
+        PredictionGroup newPredictionGroup = iPredictionGroupMapper.toEntity(predictionGroupRequestDto);
+        iPredictionGroupRepository.save(newPredictionGroup);
+        return Optional.of(iPredictionGroupMapper.toDto(newPredictionGroup));
     }
 
     //To be completed
     @Override
-    public void deletePredictionGroup(Long id) {
+    public Boolean deletePredictionGroup(Long id) {
+        if (iPredictionGroupRepository.findById(id).isEmpty()) {
+            return false;
+        }
 
+        iPredictionGroupRepository.delete();
+        return true;
     }
 }
