@@ -63,7 +63,7 @@ public class PredictionGroupServiceImpl implements IPredictionGroupService {
             return false;
         }
 
-        iPredictionGroupRepository.delete();
+        iPredictionGroupRepository.deleteById(id);
         return true;
     }
 }
