@@ -17,7 +17,7 @@ public interface IPredictionGroupService {
 
     PredictionGroupDto savePredictionGroup(PredictionGroupRequestDto predictionGroupRequestDto);
 
-    PredictionGroupDto editPredictionGroup(PredictionGroupRequestDto predictionGroupRequestDto);
+    Optional<PredictionGroupDto> editPredictionGroup(PredictionGroupRequestDto predictionGroupRequestDto);
 
-    void deletePredictionGroup(Long id);
+    Boolean deletePredictionGroup(Long id);
 }
