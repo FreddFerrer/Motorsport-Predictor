@@ -11,6 +11,6 @@ public interface IUserService {
     Optional<UserDto> getUserById(Long id);
     Optional<UserDto> getUserByEmailOrUsername();
     UserDto saveUser(SignUpRequestDto userRequest);
-    UserDto editUser();
-    void deleteUser();
+    Optional<UserDto> editUser(UserDto userDto);
+    Boolean deleteUser(Long userId);
 }

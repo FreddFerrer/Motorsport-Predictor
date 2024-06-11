@@ -46,15 +46,25 @@ public class UserServiceImpl implements IUserService {
         return userDtoMapper.toDto(newUser);
     }
 
-    //To be completed
+
     @Override
-    public UserDto editUser() {
-        return null;
+    public Optional<UserDto> editUser(UserDto userDto) {
+        if (userRepository.findById(userDto.getId()).isEmpty()) {
+            return Optional.empty();
+        }
+        User newUser = userDtoMapper.toEntity(userDto);
+        userRepository.save(newUser);
+        return Optional.of(userDtoMapper.toDto(newUser));
     }
 
     //To be completed
     @Override
-    public void deleteUser() {
+    public Boolean deleteUser(Long userId) {
+        if (userRepository.findById(userId).isEmpty()) {
+            return false;
+        }
 
+        userRepository.deleteById(userId);
+        return true;
     }
 }

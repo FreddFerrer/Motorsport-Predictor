@@ -11,7 +11,7 @@ import java.util.Set;
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDto {
-    private int id;
+    private Long id;
     private String username;
     private String firstName;
     private String secondName;
