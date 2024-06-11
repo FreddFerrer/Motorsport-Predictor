@@ -10,4 +10,6 @@ public interface IUserDtoMapper {
     UserDto toDto(User user);
 
     User toEntity(SignUpRequestDto usuario);
+
+    User toEntity(UserDto userDto);
 }
