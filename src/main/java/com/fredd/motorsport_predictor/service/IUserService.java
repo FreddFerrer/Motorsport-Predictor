@@ -2,6 +2,7 @@ package com.fredd.motorsport_predictor.service;
 
 import com.fredd.motorsport_predictor.dto.UserDto;
 import com.fredd.motorsport_predictor.dto.request.SignUpRequestDto;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;

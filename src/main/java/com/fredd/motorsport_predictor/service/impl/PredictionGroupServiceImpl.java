@@ -34,7 +34,7 @@ public class PredictionGroupServiceImpl implements IPredictionGroupService {
     }
 
     @Override
-    public Optional<PredictionGroupDto> getPredictionGroupByUser(String userCreator) {
+    public Optional<PredictionGroupDto> getPredictionGroupByUser(User userCreator) {
         return iPredictionGroupRepository.findByCreator(userCreator).map(iPredictionGroupMapper::toDto);
     }
 

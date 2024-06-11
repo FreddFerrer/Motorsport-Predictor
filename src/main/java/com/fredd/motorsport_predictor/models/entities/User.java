@@ -18,6 +18,7 @@ import java.util.Set;
 @Getter
 @Setter
 public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

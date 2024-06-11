@@ -1,6 +1,7 @@
 package com.fredd.motorsport_predictor.controllers;
 
 import com.fredd.motorsport_predictor.dto.PredictionGroupDto;
+import com.fredd.motorsport_predictor.models.entities.User;
 import com.fredd.motorsport_predictor.service.IPredictionGroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,7 @@ public class PredictionGroupController {
     }
 
     @GetMapping(path = "/usuario/{groupName}")
-    public ResponseEntity<PredictionGroupDto> getPredictionGroupByUserCreator(@PathVariable String userCreator) {
+    public ResponseEntity<PredictionGroupDto> getPredictionGroupByUserCreator(@PathVariable User userCreator) {
         return ResponseEntity.of(iPredictionGroupService.getPredictionGroupByUser(userCreator));
     }
 
@@ -37,7 +38,5 @@ public class PredictionGroupController {
 //        return ResponseEntity.status(HttpStatus.CREATED)
 //                .body(iPredictionGroupService.savePredictionGroup(predictionGroupDto));
 //    }
-
-    @Pat
 
 }
