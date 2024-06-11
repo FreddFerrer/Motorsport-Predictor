@@ -1,11 +1,12 @@
-package com.fredd.motorsport_predictor.dto;
+package com.fredd.motorsport_predictor.dto.response;
 
-import com.fredd.motorsport_predictor.models.entities.User;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PredictionGroupDto {
 
     private int id;
@@ -14,5 +15,5 @@ public class PredictionGroupDto {
 
     private String groupType;
 
-    private User creator;
+    private UserDto creator;
 }

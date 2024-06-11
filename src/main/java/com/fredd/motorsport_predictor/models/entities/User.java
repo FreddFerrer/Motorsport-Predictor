@@ -3,6 +3,7 @@ package com.fredd.motorsport_predictor.models.entities;
 import com.fredd.motorsport_predictor.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -47,9 +48,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "creator")
     private Set<PredictionGroup> predictionGroups;
 
+    @Column(name = "user_role", nullable = false)
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
-    private Boolean enabled = false;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
