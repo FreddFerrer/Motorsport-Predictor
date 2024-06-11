@@ -12,7 +12,7 @@ public interface IPredictionGroupService {
 
     Optional<PredictionGroupDto> getPredictionGroupById(Long id);
 
-    Optional<PredictionGroupDto> getPredictionGroupByUser(String userCreator);   //devuelve todos los grupos creados por un usuario
+    Optional<PredictionGroupDto> getPredictionGroupByUser(Long userCreatorId);   //devuelve todos los grupos creados por un usuario
 
     PredictionGroupDto savePredictionGroup(PredictionGroupRequestDto predictionGroupRequestDto);
 

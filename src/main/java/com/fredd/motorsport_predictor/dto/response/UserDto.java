@@ -9,6 +9,7 @@ import java.util.Set;
 
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDto {
     private int id;
     private String username;
@@ -19,6 +20,6 @@ public class UserDto {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String token;
     private LocalDateTime dateOfRegistration;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Set<PredictionGroupDto> predictionGroups;
 }

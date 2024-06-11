@@ -3,6 +3,7 @@ package com.fredd.motorsport_predictor.service.impl;
 import com.fredd.motorsport_predictor.dto.response.UserDto;
 import com.fredd.motorsport_predictor.dto.request.LoginRequestDto;
 import com.fredd.motorsport_predictor.dto.request.SignUpRequestDto;
+import com.fredd.motorsport_predictor.enums.UserRole;
 import com.fredd.motorsport_predictor.exceptions.BadRequestException;
 import com.fredd.motorsport_predictor.jwt.JwtService;
 import com.fredd.motorsport_predictor.models.entities.User;
@@ -58,8 +59,12 @@ public class AuthServiceImpl implements IAuthService {
 
         User user = userDtoMapper.toEntity(request);
 
+        UserRole role = UserRole.USER;
+
         String encodedPassword = passwordEncoder.encode(request.getUserPassword());
+
         user.setUserPassword(encodedPassword);
+        user.setUserRole(role);
 
         userRepository.save(user);
 
