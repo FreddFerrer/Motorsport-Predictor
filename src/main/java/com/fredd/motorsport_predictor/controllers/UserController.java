@@ -13,21 +13,21 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
 
     private final IUserService iUserService;
 
     // Nuevo método para obtener todos los usuarios
-    @GetMapping("/users")
+    @GetMapping("/")
     public ResponseEntity<?> getAllUsers() {
         List<UserDto> users = iUserService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
     // Nuevo método para obtener un usuario por ID
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable Long id) {
         Optional<UserDto> user = iUserService.getUserById(id);
         return user.map(ResponseEntity::ok)
@@ -35,3 +35,5 @@ public class UserController {
     }
 
 }
+
+

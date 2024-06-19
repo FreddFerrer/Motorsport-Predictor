@@ -59,7 +59,7 @@ public class AuthServiceImpl implements IAuthService {
 
         User user = userDtoMapper.toEntity(request);
 
-        UserRole role = UserRole.USER;
+        UserRole role = UserRole.ROLE_USER;
 
         String encodedPassword = passwordEncoder.encode(request.getUserPassword());
 
@@ -71,3 +71,5 @@ public class AuthServiceImpl implements IAuthService {
         return userDtoMapper.toDto(user);
     }
 }
+
+
