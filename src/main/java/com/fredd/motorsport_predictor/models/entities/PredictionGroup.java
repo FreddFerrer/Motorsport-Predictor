@@ -16,11 +16,15 @@ public class PredictionGroup {
     @Column(name = "group_name", nullable = false, length = 100)
     private String groupName;
 
-    @Column(name = "group_type", nullable = false, length = 50)
-    private String groupType;
+    @Column(name = "is_oficial", nullable = false)
+    private boolean isOficial;
 
     @ManyToOne
     @JoinColumn(name = "creator_id")
     private User creator;
+
+    @ManyToOne
+    @JoinColumn(name = "discipline_id", nullable = false)
+    private Discipline discipline;
 
 }
