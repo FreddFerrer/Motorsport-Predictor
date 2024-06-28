@@ -11,7 +11,6 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @Setter
 public class SignUpRequestDto {
-    private int id;
     @NotEmpty(message = "Required field")
     @NotNull
     @Length(min = 5, max = 32, message = "must have between 6 and 32 characters")

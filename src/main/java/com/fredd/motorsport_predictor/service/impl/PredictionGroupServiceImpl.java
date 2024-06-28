@@ -13,6 +13,9 @@ import com.fredd.motorsport_predictor.repositories.IPredictionGroupRepository;
 import com.fredd.motorsport_predictor.repositories.IUserRepository;
 import com.fredd.motorsport_predictor.service.IPredictionGroupService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,12 +39,12 @@ public class PredictionGroupServiceImpl implements IPredictionGroupService {
     }
 
     @Override
-    public Optional<PredictionGroupDto> getPredictionGroupById(Integer id) {
+    public Optional<PredictionGroupDto> getPredictionGroupById(Long id) {
         return iPredictionGroupRepository.findById(id).map(iPredictionGroupMapper::toDto);
     }
 
     @Override
-    public Optional<PredictionGroupDto> getPredictionGroupByUser(Integer userCreatorId) {
+    public Optional<PredictionGroupDto> getPredictionGroupByUser(Long userCreatorId) {
         Optional<User> userCreatorOptional = iUserRepository.findById(userCreatorId);
         User userCreator = new User();
 
@@ -57,14 +60,37 @@ public class PredictionGroupServiceImpl implements IPredictionGroupService {
 
     @Override
     public PredictionGroupDto savePredictionGroup(PredictionGroupRequestDto predictionGroupRequestDto) {
-        PredictionGroup newPredictionGroup = iPredictionGroupMapper.toEntity(predictionGroupRequestDto);
-        iPredictionGroupRepository.save(newPredictionGroup);
-        return iPredictionGroupMapper.toDto(newPredictionGroup);
+        // Obtener el usuario autenticado
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userCreator = (User) authentication.getPrincipal();
+
+        // Obtener la disciplina ingresada por el usuario
+        DisciplineEnum disciplineEnum = predictionGroupRequestDto.getDiscipline();
+        Optional<Discipline> optionalDiscipline = iDisciplineRepository.findByDisciplineName(disciplineEnum);
+
+        if (optionalDiscipline.isPresent()) {
+            Discipline discipline = optionalDiscipline.get();
+
+            // Crear un nuevo grupo de predicción
+            PredictionGroup newPredictionGroup = PredictionGroup.builder()
+                    .creator(userCreator)
+                    .groupName(predictionGroupRequestDto.getGroupName())
+                    .isOficial(false)
+                    .discipline(discipline)
+                    .build();
+
+            // Guardar
+            iPredictionGroupRepository.save(newPredictionGroup);
+
+            return iPredictionGroupMapper.toDto(newPredictionGroup);
+        } else {
+            throw new BadRequestException("Discipline doesn't exist");
+        }
     }
 
     //To be completed
     @Override
-    public Optional<PredictionGroupDto> editPredictionGroup(int id, PredictionGroupRequestDto predictionGroupRequestDto) {
+    public Optional<PredictionGroupDto> editPredictionGroup(Long id, PredictionGroupRequestDto predictionGroupRequestDto) {
 
         Optional<PredictionGroup> optionalPredictionGroup = iPredictionGroupRepository.findById(id);
 
@@ -98,7 +124,7 @@ public class PredictionGroupServiceImpl implements IPredictionGroupService {
 
     //To be completed
     @Override
-    public Boolean deletePredictionGroup(Integer id) {
+    public Boolean deletePredictionGroup(Long id) {
         if (iPredictionGroupRepository.findById(id).isEmpty()) {
             return false;
         }

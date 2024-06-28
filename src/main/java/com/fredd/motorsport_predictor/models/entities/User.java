@@ -1,5 +1,6 @@
 package com.fredd.motorsport_predictor.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fredd.motorsport_predictor.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -22,7 +23,7 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(name = "username", nullable = false, unique = true, length = 50)
     private String username;

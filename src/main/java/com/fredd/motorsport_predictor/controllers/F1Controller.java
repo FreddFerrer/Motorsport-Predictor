@@ -1,5 +1,6 @@
 package com.fredd.motorsport_predictor.controllers;
 
+import com.fredd.motorsport_predictor.exceptions.BadRequestException;
 import com.fredd.motorsport_predictor.rest.f1.drivers.F1DriversDto;
 import com.fredd.motorsport_predictor.rest.f1.tracks.F1TracksDto;
 import com.fredd.motorsport_predictor.service.IF1Service;
@@ -20,13 +21,23 @@ public class F1Controller {
 
     @GetMapping("/drivers/{year}")
     public ResponseEntity<?> getDriversByYear(@PathVariable int year) {
-        F1DriversDto driversByYear = if1Service.getDriversByYear(year);
-        return ResponseEntity.ok(driversByYear);
+        try {
+            F1DriversDto driversByYear = if1Service.getDriversByYear(year);
+            return ResponseEntity.ok(driversByYear);
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
+        }
+
+
     }
 
     @GetMapping("/schedule/current")
     public ResponseEntity<?> getCurrentSchedule(){
-        F1TracksDto currentSchedule = if1Service.getCurrentSchedule();
-        return ResponseEntity.ok(currentSchedule);
+        try {
+            F1TracksDto currentSchedule = if1Service.getCurrentSchedule();
+            return ResponseEntity.ok(currentSchedule);
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
+        }
     }
 }

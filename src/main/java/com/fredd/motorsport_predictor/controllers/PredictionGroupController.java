@@ -20,7 +20,7 @@ public class PredictionGroupController {
 
     private final IPredictionGroupService iPredictionGroupService;
 
-    @GetMapping()
+    @GetMapping("/PredictionGroups")
     public ResponseEntity<?> getAll() {
         try {
             return ResponseEntity.ok(iPredictionGroupService.getAllPredictionGroup());
@@ -29,8 +29,8 @@ public class PredictionGroupController {
         }
     }
 
-    @GetMapping(path = "/{id}")
-    public ResponseEntity<PredictionGroupDto> getPredictionGroupById(@PathVariable Integer id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<PredictionGroupDto> getPredictionGroupById(@PathVariable Long id) {
         try {
             return ResponseEntity.of(iPredictionGroupService.getPredictionGroupById(id));
         } catch (Exception e) {
@@ -39,7 +39,7 @@ public class PredictionGroupController {
     }
 
     @GetMapping(path = "/usuario/{userCreator}")
-    public ResponseEntity<PredictionGroupDto> getPredictionGroupByUserCreator(@PathVariable Integer userCreator) {
+    public ResponseEntity<PredictionGroupDto> getPredictionGroupByUserCreator(@PathVariable Long userCreator) {
         try {
             return ResponseEntity.of(iPredictionGroupService.getPredictionGroupByUser(userCreator));
         } catch (Exception e) {
@@ -47,7 +47,7 @@ public class PredictionGroupController {
         }
     }
 
-    @PostMapping()
+    @PostMapping("/newPredictionGroup")
     public ResponseEntity<PredictionGroupDto> save(@RequestBody PredictionGroupRequestDto predictionGroupRequestDto) {
         try {
             return ResponseEntity.status(HttpStatus.CREATED)
@@ -58,7 +58,7 @@ public class PredictionGroupController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PredictionGroupDto> edit(@PathVariable int id, @RequestBody PredictionGroupRequestDto predictionGroupRequestDto) {
+    public ResponseEntity<PredictionGroupDto> edit(@PathVariable Long id, @RequestBody PredictionGroupRequestDto predictionGroupRequestDto) {
         try {
             return ResponseEntity.of(iPredictionGroupService.editPredictionGroup(id, predictionGroupRequestDto));
         } catch (Exception e) {

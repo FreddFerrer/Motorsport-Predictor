@@ -12,7 +12,7 @@ import lombok.Setter;
 public class Discipline {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(name = "discipline_name", nullable = false, length = 100)
     @Enumerated(EnumType.STRING)

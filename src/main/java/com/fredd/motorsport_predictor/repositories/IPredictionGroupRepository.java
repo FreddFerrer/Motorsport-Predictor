@@ -9,7 +9,7 @@ import java.util.Optional;
 
 
 @Repository
-public interface IPredictionGroupRepository extends JpaRepository<PredictionGroup, Integer> {
+public interface IPredictionGroupRepository extends JpaRepository<PredictionGroup, Long> {
 
     Optional<PredictionGroup> findByCreator(User creator);
 }

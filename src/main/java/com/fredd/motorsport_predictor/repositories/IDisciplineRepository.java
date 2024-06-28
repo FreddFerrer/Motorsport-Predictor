@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface IDisciplineRepository extends JpaRepository<Discipline, Integer> {
+public interface IDisciplineRepository extends JpaRepository<Discipline, Long> {
     Optional<Discipline> findByDisciplineName(DisciplineEnum disciplineName);
 }

@@ -11,13 +11,13 @@ public interface IPredictionGroupService {
 
     List<PredictionGroupDto> getAllPredictionGroup();
 
-    Optional<PredictionGroupDto> getPredictionGroupById(Integer id);
+    Optional<PredictionGroupDto> getPredictionGroupById(Long id);
 
-    Optional<PredictionGroupDto> getPredictionGroupByUser(Integer userCreatorId);   //devuelve todos los grupos creados por un usuario
+    Optional<PredictionGroupDto> getPredictionGroupByUser(Long userCreatorId);   //devuelve todos los grupos creados por un usuario
 
     PredictionGroupDto savePredictionGroup(PredictionGroupRequestDto predictionGroupRequestDto);
 
-    Optional<PredictionGroupDto> editPredictionGroup(int id, PredictionGroupRequestDto predictionGroupRequestDto);
+    Optional<PredictionGroupDto> editPredictionGroup(Long id, PredictionGroupRequestDto predictionGroupRequestDto);
 
-    Boolean deletePredictionGroup(Integer id);
+    Boolean deletePredictionGroup(Long id);
 }
