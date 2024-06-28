@@ -1,26 +1,33 @@
 package com.fredd.motorsport_predictor.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "prediction_groups")
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PredictionGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(name = "group_name", nullable = false, length = 100)
     private String groupName;
 
-    @Column(name = "group_type", nullable = false, length = 50)
-    private String groupType;
+    @Column(name = "is_oficial", nullable = false)
+    private boolean isOficial;
 
     @ManyToOne
     @JoinColumn(name = "creator_id")
     private User creator;
+
+    @ManyToOne
+    @JoinColumn(name = "discipline_id", nullable = false)
+    private Discipline discipline;
 
 }
