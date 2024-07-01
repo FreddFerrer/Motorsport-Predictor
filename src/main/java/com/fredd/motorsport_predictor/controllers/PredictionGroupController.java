@@ -3,6 +3,7 @@ package com.fredd.motorsport_predictor.controllers;
 
 import com.fredd.motorsport_predictor.dto.request.PredictionGroupRequestDto;
 import com.fredd.motorsport_predictor.dto.response.PredictionGroupDto;
+import com.fredd.motorsport_predictor.exceptions.BadRequestException;
 import com.fredd.motorsport_predictor.models.entities.User;
 import com.fredd.motorsport_predictor.service.IPredictionGroupService;
 import lombok.RequiredArgsConstructor;
@@ -19,27 +20,49 @@ public class PredictionGroupController {
 
     private final IPredictionGroupService iPredictionGroupService;
 
-    @GetMapping()
-    public ResponseEntity<List<PredictionGroupDto>> getAll() {
-        return ResponseEntity.ok(iPredictionGroupService.getAllPredictionGroup());
+    @GetMapping("/PredictionGroups")
+    public ResponseEntity<?> getAll() {
+        try {
+            return ResponseEntity.ok(iPredictionGroupService.getAllPredictionGroup());
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
+        }
     }
 
-    @GetMapping(path = "/{id}")
-    public ResponseEntity<PredictionGroupDto> getPredictionGroupById(@PathVariable Long id){
-        return ResponseEntity.of(iPredictionGroupService.getPredictionGroupById(id));
+    @GetMapping("/{id}")
+    public ResponseEntity<PredictionGroupDto> getPredictionGroupById(@PathVariable Long id) {
+        try {
+            return ResponseEntity.of(iPredictionGroupService.getPredictionGroupById(id));
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
+        }
     }
 
-    @GetMapping(path = "/usuario/{groupId}")
+    @GetMapping(path = "/usuario/{userCreator}")
     public ResponseEntity<PredictionGroupDto> getPredictionGroupByUserCreator(@PathVariable Long userCreator) {
-        return ResponseEntity.of(iPredictionGroupService.getPredictionGroupByUser(userCreator));
+        try {
+            return ResponseEntity.of(iPredictionGroupService.getPredictionGroupByUser(userCreator));
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
+        }
     }
 
-    @PostMapping()
+    @PostMapping("/newPredictionGroup")
     public ResponseEntity<PredictionGroupDto> save(@RequestBody PredictionGroupRequestDto predictionGroupRequestDto) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(iPredictionGroupService.savePredictionGroup(predictionGroupRequestDto));
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(iPredictionGroupService.savePredictionGroup(predictionGroupRequestDto));
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
+        }
     }
 
-
-
+    @PutMapping("/{id}")
+    public ResponseEntity<PredictionGroupDto> edit(@PathVariable Long id, @RequestBody PredictionGroupRequestDto predictionGroupRequestDto) {
+        try {
+            return ResponseEntity.of(iPredictionGroupService.editPredictionGroup(id, predictionGroupRequestDto));
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
+        }
+    }
 }

@@ -2,6 +2,7 @@ package com.fredd.motorsport_predictor.service;
 
 import com.fredd.motorsport_predictor.dto.response.PredictionGroupDto;
 import com.fredd.motorsport_predictor.dto.request.PredictionGroupRequestDto;
+import com.fredd.motorsport_predictor.models.entities.PredictionGroup;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +17,7 @@ public interface IPredictionGroupService {
 
     PredictionGroupDto savePredictionGroup(PredictionGroupRequestDto predictionGroupRequestDto);
 
-    Optional<PredictionGroupDto> editPredictionGroup(PredictionGroupRequestDto predictionGroupRequestDto);
+    Optional<PredictionGroupDto> editPredictionGroup(Long id, PredictionGroupRequestDto predictionGroupRequestDto);
 
     Boolean deletePredictionGroup(Long id);
 }
