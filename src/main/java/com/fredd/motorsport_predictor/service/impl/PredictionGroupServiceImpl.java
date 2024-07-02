@@ -5,13 +5,17 @@ import com.fredd.motorsport_predictor.dto.request.PredictionGroupRequestDto;
 import com.fredd.motorsport_predictor.enums.DisciplineEnum;
 import com.fredd.motorsport_predictor.exceptions.BadRequestException;
 import com.fredd.motorsport_predictor.models.entities.Discipline;
+import com.fredd.motorsport_predictor.models.entities.Invitation;
 import com.fredd.motorsport_predictor.models.entities.PredictionGroup;
 import com.fredd.motorsport_predictor.models.entities.User;
 import com.fredd.motorsport_predictor.models.mappers.IPredictionGroupMapper;
 import com.fredd.motorsport_predictor.repositories.IDisciplineRepository;
+import com.fredd.motorsport_predictor.repositories.IInvitationRepository;
 import com.fredd.motorsport_predictor.repositories.IPredictionGroupRepository;
 import com.fredd.motorsport_predictor.repositories.IUserRepository;
+import com.fredd.motorsport_predictor.service.IInvitationService;
 import com.fredd.motorsport_predictor.service.IPredictionGroupService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
 import org.springframework.security.core.Authentication;
@@ -30,6 +34,7 @@ public class PredictionGroupServiceImpl implements IPredictionGroupService {
     private final IDisciplineRepository iDisciplineRepository;
     private final IUserRepository iUserRepository;
     private final IPredictionGroupMapper iPredictionGroupMapper;
+    private final IInvitationRepository iInvitationRepository;
 
     @Override
     public List<PredictionGroupDto> getAllPredictionGroup() {
@@ -131,5 +136,35 @@ public class PredictionGroupServiceImpl implements IPredictionGroupService {
 
         iPredictionGroupRepository.deleteById(id);
         return true;
+    }
+
+    @Override
+    public void inviteUser(Long groupId, Long userId) {
+
+        PredictionGroup predictionGroup = iPredictionGroupRepository.findById(groupId).orElseThrow(() -> new EntityNotFoundException("Group not found"));
+        User user = iUserRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        Invitation invitation = new Invitation();
+        invitation.setPredictionGroup(predictionGroup);
+        invitation.setUser(user);
+        invitation.setAccept(false);
+        invitation.setReject(false);
+
+        iInvitationRepository.save(invitation);
+
+    }
+
+    @Override
+    public void acceptUser(Long inviteId) {
+        Invitation invitation = iInvitationRepository.findById(inviteId).orElseThrow(() -> new EntityNotFoundException("Invitation not found"));
+        invitation.setAccept(true);
+        iInvitationRepository.save(invitation);
+    }
+
+    @Override
+    public void rejectUser(Long inviteId) {
+        Invitation invitation = iInvitationRepository.findById(inviteId).orElseThrow(() -> new EntityNotFoundException("Invitation not found"));
+        invitation.setReject(true);
+        iInvitationRepository.save(invitation);
     }
 }

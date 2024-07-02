@@ -49,6 +49,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "creator")
     private Set<PredictionGroup> predictionGroups;
 
+    @OneToMany(mappedBy = "user")
+    private Set<Invitation> invitations;
+
     @Column(name = "user_role", nullable = false)
     @Enumerated(EnumType.STRING)
     private UserRole userRole;

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "prediction_groups")
 @Getter
@@ -29,5 +31,8 @@ public class PredictionGroup {
     @ManyToOne
     @JoinColumn(name = "discipline_id", nullable = false)
     private Discipline discipline;
+
+    @OneToMany(mappedBy = "predictionGroup")
+    private Set<Invitation> invitations;
 
 }

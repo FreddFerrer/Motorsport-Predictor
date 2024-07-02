@@ -20,4 +20,10 @@ public interface IPredictionGroupService {
     Optional<PredictionGroupDto> editPredictionGroup(Long id, PredictionGroupRequestDto predictionGroupRequestDto);
 
     Boolean deletePredictionGroup(Long id);
+
+    void inviteUser(Long groupId, Long userId);
+
+    void acceptUser(Long inviteId);
+
+    void rejectUser(Long inviteId);
 }
