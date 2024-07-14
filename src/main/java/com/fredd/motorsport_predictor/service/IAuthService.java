@@ -5,6 +5,5 @@ import com.fredd.motorsport_predictor.dto.request.LoginRequestDto;
 import com.fredd.motorsport_predictor.dto.request.SignUpRequestDto;
 
 public interface IAuthService {
-    UserDto login(LoginRequestDto request);
     UserDto signup(SignUpRequestDto request);
 }
