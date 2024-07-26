@@ -1,0 +1,69 @@
+version: '3'
+services:
+  ### MySQL database for users
+  db-users:
+    container_name: db-users
+    image: mysql:8.0.33
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: db_motorsport_predictor_users
+      MYSQL_USER: freddy
+      MYSQL_PASSWORD: Test123
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 3307:3307
+    expose:
+      - 3307
+
+
+  ### MySQL database for predictions
+  db-predictions:
+    container_name: db-predictions
+    image: mysql:8.0.33
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: db_motorsport_predictor_predictions
+      MYSQL_USER: freddy
+      MYSQL_PASSWORD: Test123
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 3308:3308
+    expose:
+      - 3308
+
+  ### Mysql database for Keycloak
+  db-keycloak:
+    container_name: db-keycloak
+    image: mysql:8.0.33
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: db_keycloak
+      MYSQL_USER: freddy
+      MYSQL_PASSWORD: Test123
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 3309:3309
+    expose:
+      - 3309
+
+  ### Keycloak
+  keycloak:
+    container_name: keycloak
+    image: quay.io/keycloak/keycloak:21.0.2
+    command: ["start-dev"]
+    ports:
+      - 9090:9090
+    expose:
+      - 9090
+    depends_on:
+      - db-keycloak
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: db-keycloak
+      DB_DATABASE: db_keycloak
+      DB_PORT: 3309
+      DB_USER: freddy
+      DB_PASSWORD: Test123
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HTTP_PORT: 9090

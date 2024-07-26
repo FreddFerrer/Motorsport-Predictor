@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/Motorsport Predictor.iml" filepath="$PROJECT_DIR$/.idea/Motorsport Predictor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Motorsport-Predictor/Motorsport-Predictor.iml" filepath="$PROJECT_DIR$/Motorsport-Predictor/Motorsport-Predictor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Motorsport-Predictor/users-service/users-service.iml" filepath="$PROJECT_DIR$/Motorsport-Predictor/users-service/users-service.iml" />
+    </modules>
+  </component>
+</project>
