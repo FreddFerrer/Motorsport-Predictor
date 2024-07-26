@@ -4,6 +4,9 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Motorsport Predictor.iml" filepath="$PROJECT_DIR$/.idea/Motorsport Predictor.iml" />
       <module fileurl="file://$PROJECT_DIR$/Motorsport-Predictor/Motorsport-Predictor.iml" filepath="$PROJECT_DIR$/Motorsport-Predictor/Motorsport-Predictor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Motorsport-Predictor/eureka-server/eureka-server.iml" filepath="$PROJECT_DIR$/Motorsport-Predictor/eureka-server/eureka-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Motorsport-Predictor/gateway-server/gateway-server.iml" filepath="$PROJECT_DIR$/Motorsport-Predictor/gateway-server/gateway-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Motorsport-Predictor/predictions-service/predictions-service.iml" filepath="$PROJECT_DIR$/Motorsport-Predictor/predictions-service/predictions-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/Motorsport-Predictor/users-service/users-service.iml" filepath="$PROJECT_DIR$/Motorsport-Predictor/users-service/users-service.iml" />
     </modules>
   </component>

@@ -6,13 +6,26 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="gateway-server" />
+        <module name="predictions-service" />
         <module name="users-service" />
-        <module name="Motorsport-Predictor" />
+        <module name="eureka-server" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="eureka-server" target="17" />
+      <module name="gateway-server" target="17" />
       <module name="Motorsport-Predictor" target="1.5" />
-      <module name="users-service" target="1.5" />
+      <module name="predictions-service" target="17" />
+      <module name="users-service" target="17" />
     </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="eureka-server" options="-parameters" />
+      <module name="gateway-server" options="-parameters" />
+      <module name="predictions-service" options="-parameters" />
+      <module name="users-service" options="-parameters" />
+    </option>
   </component>
 </project>
