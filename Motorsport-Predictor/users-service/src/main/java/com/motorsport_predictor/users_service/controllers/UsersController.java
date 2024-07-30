@@ -41,13 +41,13 @@ public class UsersController {
 
 
     @PostMapping("/create")
-    //@PreAuthorize("hasRole('admin_client_role')")
     public ResponseEntity<?> createUser(@RequestBody CreateUserDTO userDTO) {
         try {
             UserRepresentation response = userService.createUser(userDTO);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(response);
         } catch (Exception e) {
+            System.out.println("ENTRA POR ACA CHE");
             throw new BadRequestException(e.getMessage());
         }
     }

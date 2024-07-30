@@ -83,7 +83,7 @@ public class UserServiceImpl implements IUserService {
             List<RoleRepresentation> rolesRepresentation;
 
             if (userDTO.getRoles() == null || userDTO.getRoles().isEmpty()) {
-                rolesRepresentation = List.of(realmResource.roles().get("user").toRepresentation());
+                rolesRepresentation = List.of(realmResource.roles().get("USER").toRepresentation());
             } else {
                 rolesRepresentation = realmResource.roles()
                         .list()
