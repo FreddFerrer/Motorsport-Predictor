@@ -1,0 +1,10 @@
+package com.motorsport_predictor.f1_service.services;
+
+import com.motorsport_predictor.f1_service.models.Circuit;
+
+import java.util.List;
+
+public interface ICircuitService {
+
+    List<Circuit> findAllCircuit();
+}
