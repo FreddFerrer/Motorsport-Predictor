@@ -11,9 +11,9 @@ services:
       MYSQL_PASSWORD: Test123
       MYSQL_ROOT_PASSWORD: root
     ports:
-      - 3307:3307
+      - 3307:3306
     expose:
-      - 3307
+      - 3306
 
 
   ### MySQL database for predictions
@@ -27,9 +27,9 @@ services:
       MYSQL_PASSWORD: Test123
       MYSQL_ROOT_PASSWORD: root
     ports:
-      - 3308:3308
+      - 3308:3306
     expose:
-      - 3308
+      - 3306
 
   ### Mysql database for Keycloak
   db-keycloak:
@@ -42,9 +42,24 @@ services:
       MYSQL_PASSWORD: Test123
       MYSQL_ROOT_PASSWORD: root
     ports:
-      - 3309:3309
+      - 3309:3306
     expose:
-      - 3309
+      - 3306
+
+  ### MySQL database for F1 service
+  db-f1:
+    container_name: db-f1
+    image: mysql:8.0.33
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: db_motorsport_predictor_f1
+      MYSQL_USER: freddy
+      MYSQL_PASSWORD: Test123
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 3310:3306
+    expose:
+      - 3306
 
   ### Keycloak
   keycloak:
