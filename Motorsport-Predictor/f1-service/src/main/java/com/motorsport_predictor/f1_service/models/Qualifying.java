@@ -7,14 +7,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "Qualifying")
+@Table(name = "qualifying")
 @Getter
 @Setter
 public class Qualifying {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "race_id")

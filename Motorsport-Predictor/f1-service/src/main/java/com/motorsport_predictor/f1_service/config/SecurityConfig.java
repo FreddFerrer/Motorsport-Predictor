@@ -1,4 +1,4 @@
-package com.motorsport_predictor.users_service.config;
+package com.motorsport_predictor.f1_service.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +23,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers(request ->
-                                        request.getRequestURI().contains("/api/users/**")).permitAll()
+                                        request.getRequestURI().contains("/api/f1/circuitsNoAuth")).permitAll()
                                 .anyRequest().authenticated())
                 .oauth2ResourceServer(configure -> configure.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter())));
 

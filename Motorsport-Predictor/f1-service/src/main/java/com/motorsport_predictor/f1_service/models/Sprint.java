@@ -8,14 +8,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "Sprint")
+@Table(name = "sprint")
 @Getter
 @Setter
 public class Sprint {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "race_id")

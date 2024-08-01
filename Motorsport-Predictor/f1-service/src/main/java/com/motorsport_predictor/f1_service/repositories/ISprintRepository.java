@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ISprintRepository extends JpaRepository<Sprint, Integer> {
+public interface ISprintRepository extends JpaRepository<Sprint, Long> {
 }

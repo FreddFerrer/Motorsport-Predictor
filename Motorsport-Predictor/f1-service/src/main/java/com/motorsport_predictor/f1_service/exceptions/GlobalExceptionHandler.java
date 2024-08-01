@@ -2,6 +2,7 @@ package com.motorsport_predictor.f1_service.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -61,5 +62,12 @@ public class GlobalExceptionHandler {
                                                                 WebRequest webRequest) {
         CustomErrorResponse apiResponse = new CustomErrorResponse(exception.getMessage(), webRequest.getDescription(false));
         return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
+    }
+
+    // Controla los errores de acceso denegado
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<CustomErrorResponse> handlerAccessDeniedException(AccessDeniedException exception, WebRequest webRequest) {
+        CustomErrorResponse apiResponse = new CustomErrorResponse("Access denied", webRequest.getDescription(false));
+        return new ResponseEntity<>(apiResponse, HttpStatus.FORBIDDEN);
     }
 }

@@ -16,6 +16,7 @@ public class SecurityConfig {
                 .authorizeExchange(auth -> {
                     auth.pathMatchers("/actuator/**").permitAll();
                     auth.pathMatchers("/api/users/create").permitAll();
+                    auth.pathMatchers("/api/f1/circuitsNoAuth").permitAll();
                     auth.anyExchange().authenticated();
                 })
                 .oauth2Login(Customizer.withDefaults());

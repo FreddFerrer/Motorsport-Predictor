@@ -4,27 +4,29 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Entity
-@Table(name = "Circuit")
+@Table(name = "circuit")
 @Getter
 @Setter
 public class Circuit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-    @Column(name = "circuitShortName")
+    @Column(name = "circuit_short_name")
     private String circuitShortName;
 
-    @Column(name = "circuitName")
+    @Column(name = "circuit_name")
     private String circuitName;
 
-    @Column(precision = 10, scale = 7)
-    private Double lat;
+    @Column(name = "lat")
+    private BigDecimal lat;
 
-    @Column(precision = 10, scale = 7)
-    private Double lon;
+    @Column(name = "lon")
+    private BigDecimal lon;
 
     @Column(name = "locality")
     private String locality;

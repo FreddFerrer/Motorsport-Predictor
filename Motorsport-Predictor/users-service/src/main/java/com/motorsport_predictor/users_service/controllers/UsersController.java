@@ -19,7 +19,7 @@ public class UsersController {
     private IUserService userService;
 
     @GetMapping("/search")
-    //@PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> findAllUsers(){
         try {
             return ResponseEntity.ok(userService.findAllUsers());

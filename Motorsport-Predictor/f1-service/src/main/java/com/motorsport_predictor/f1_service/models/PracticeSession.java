@@ -8,14 +8,14 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
-@Table(name = "PracticeSession")
+@Table(name = "practice_session")
 @Getter
 @Setter
 public class PracticeSession {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "race_id")
