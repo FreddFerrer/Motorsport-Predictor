@@ -45,6 +45,8 @@ services:
       - 3309:3306
     expose:
       - 3306
+    networks:
+      - local_network
 
   ### MySQL database for F1 service
   db-f1:
@@ -73,12 +75,18 @@ services:
     depends_on:
       - db-keycloak
     environment:
-      DB_VENDOR: POSTGRES
+      DB_VENDOR: mysql
       DB_ADDR: db-keycloak
       DB_DATABASE: db_keycloak
-      DB_PORT: 3309
+      DB_PORT: 3306
       DB_USER: freddy
       DB_PASSWORD: Test123
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
       KC_HTTP_PORT: 9090
+    networks:
+      - local_network
+
+networks:
+  local_network:
+    driver: bridge
