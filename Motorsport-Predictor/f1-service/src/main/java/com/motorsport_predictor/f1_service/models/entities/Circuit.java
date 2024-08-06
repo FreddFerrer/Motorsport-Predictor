@@ -1,4 +1,4 @@
-package com.motorsport_predictor.f1_service.models;
+package com.motorsport_predictor.f1_service.models.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;

@@ -14,9 +14,16 @@ public class SecurityConfig {
         http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(auth -> {
+                    //actuator
                     auth.pathMatchers("/actuator/**").permitAll();
+
+                    //users-service
                     auth.pathMatchers("/api/users/create").permitAll();
+                    auth.pathMatchers("/api/groups/list").permitAll();
+
+                    //f1-service
                     auth.pathMatchers("/api/f1/**").permitAll();
+
                     auth.anyExchange().authenticated();
                 })
                 .oauth2Login(Customizer.withDefaults());

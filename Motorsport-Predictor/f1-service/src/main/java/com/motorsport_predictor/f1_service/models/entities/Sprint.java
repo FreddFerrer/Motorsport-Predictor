@@ -1,17 +1,17 @@
-package com.motorsport_predictor.f1_service.models;
-
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+package com.motorsport_predictor.f1_service.models.entities;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import jakarta.persistence.*;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-@Table(name = "practice_session")
+@Table(name = "sprint")
 @Getter
 @Setter
-public class PracticeSession {
+public class Sprint {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,10 +21,10 @@ public class PracticeSession {
     @JoinColumn(name = "race_id")
     private Race race;
 
-    @Column(name = "session_name")
-    private String sessionName;
-
     private LocalDate date;
     private LocalTime time;
+
+
+
 
 }

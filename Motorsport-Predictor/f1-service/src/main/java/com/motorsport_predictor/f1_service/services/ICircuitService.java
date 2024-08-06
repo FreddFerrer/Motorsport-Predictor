@@ -1,6 +1,6 @@
 package com.motorsport_predictor.f1_service.services;
 
-import com.motorsport_predictor.f1_service.models.Circuit;
+import com.motorsport_predictor.f1_service.models.entities.Circuit;
 
 import java.util.List;
 

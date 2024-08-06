@@ -12,6 +12,4 @@ public interface IUserService {
     UserRepresentation createUser(CreateUserDTO createUserDTO);
     void deleteUser(String userId);
     void updateUser(String userId, CreateUserDTO createUserDTO);
-
-    String getLoggedInUserId();
 }

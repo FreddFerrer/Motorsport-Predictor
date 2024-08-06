@@ -137,8 +137,7 @@ public class UserServiceImpl implements IUserService {
         usersResource.update(user);
     }
 
-    @Override
-    public String getLoggedInUserId() {
+    public static String getLoggedInUserId() {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 

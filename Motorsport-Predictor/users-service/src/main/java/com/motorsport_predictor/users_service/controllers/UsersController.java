@@ -18,7 +18,7 @@ public class UsersController {
     @Autowired
     private IUserService userService;
 
-    @GetMapping("/search")
+    @GetMapping()
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> findAllUsers(){
         try {
@@ -27,7 +27,6 @@ public class UsersController {
             throw new BadRequestException(e.getMessage());
         }
     }
-
 
     @GetMapping("/search/{username}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
@@ -39,21 +38,6 @@ public class UsersController {
         }
     }
 
-    @GetMapping("/userId")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
-    public String getUserLogedd(){
-        String userId;
-        try {
-            System.out.println("TRAMBOLIKO");
-            userId = userService.getLoggedInUserId();
-        } catch (Exception e) {
-            System.out.println("ENTRA ACA MAN");
-            throw new BadRequestException(e.getMessage());
-        }
-        return userId;
-    }
-
-
     @PostMapping("/create")
     public ResponseEntity<?> createUser(@RequestBody CreateUserDTO userDTO) {
         try {
@@ -61,7 +45,6 @@ public class UsersController {
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(response);
         } catch (Exception e) {
-            System.out.println("ENTRA POR ACA CHE");
             throw new BadRequestException(e.getMessage());
         }
     }

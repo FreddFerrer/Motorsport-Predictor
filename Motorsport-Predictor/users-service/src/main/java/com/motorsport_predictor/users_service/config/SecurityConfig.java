@@ -22,8 +22,8 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers(request ->
-                                        request.getRequestURI().contains("/api/users/**")).permitAll()
+                        auth.requestMatchers("/api/users/create",
+                                        "/api/groups/list").permitAll()
                                 .anyRequest().authenticated())
                 .oauth2ResourceServer(configure -> configure.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter())));
 

@@ -1,4 +1,4 @@
-package com.motorsport_predictor.f1_service.models;
+package com.motorsport_predictor.f1_service.models.entities;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -7,25 +7,19 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "race")
+@Table(name = "qualifying")
 @Getter
 @Setter
-public class Race {
+public class Qualifying {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-    private String season;
-    private Integer round;
-    private String raceName;
-
     @ManyToOne
-    @JoinColumn(name = "circuit_id")
-    private Circuit circuit;
+    @JoinColumn(name = "race_id")
+    private Race race;
 
     private LocalDate date;
     private LocalTime time;
-
 }
