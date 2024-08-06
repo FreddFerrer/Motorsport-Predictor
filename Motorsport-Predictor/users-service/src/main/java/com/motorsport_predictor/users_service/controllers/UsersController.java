@@ -39,6 +39,20 @@ public class UsersController {
         }
     }
 
+    @GetMapping("/userId")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    public String getUserLogedd(){
+        String userId;
+        try {
+            System.out.println("TRAMBOLIKO");
+            userId = userService.getLoggedInUserId();
+        } catch (Exception e) {
+            System.out.println("ENTRA ACA MAN");
+            throw new BadRequestException(e.getMessage());
+        }
+        return userId;
+    }
+
 
     @PostMapping("/create")
     public ResponseEntity<?> createUser(@RequestBody CreateUserDTO userDTO) {

@@ -3,7 +3,7 @@ services:
   ### MySQL database for users
   db-users:
     container_name: db-users
-    image: mysql:8.0.33
+    image: mysql:latest
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: db_motorsport_predictor_users
@@ -19,7 +19,7 @@ services:
   ### MySQL database for predictions
   db-predictions:
     container_name: db-predictions
-    image: mysql:8.0.33
+    image: mysql:latest
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: db_motorsport_predictor_predictions
@@ -34,7 +34,7 @@ services:
   ### Mysql database for Keycloak
   db-keycloak:
     container_name: db-keycloak
-    image: mysql:8.0.33
+    image: mysql:latest
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: db_keycloak
@@ -51,7 +51,7 @@ services:
   ### MySQL database for F1 service
   db-f1:
     container_name: db-f1
-    image: mysql:8.0.33
+    image: mysql:latest
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: db_motorsport_predictor_f1
@@ -75,14 +75,13 @@ services:
     depends_on:
       - db-keycloak
     environment:
-      DB_VENDOR: mysql
-      DB_ADDR: db-keycloak
-      DB_DATABASE: db_keycloak
-      DB_PORT: 3306
-      DB_USER: freddy
-      DB_PASSWORD: Test123
+      KC_DB: mysql
+      KC_DB_URL: jdbc:mysql://db-keycloak:3306/db_keycloak
+      KC_DB_USERNAME: freddy
+      KC_DB_PASSWORD: Test123
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HOSTNAME: localhost
       KC_HTTP_PORT: 9090
     networks:
       - local_network

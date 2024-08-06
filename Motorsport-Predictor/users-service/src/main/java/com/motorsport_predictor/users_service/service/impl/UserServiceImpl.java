@@ -2,6 +2,7 @@ package com.motorsport_predictor.users_service.service.impl;
 
 import com.motorsport_predictor.users_service.dto.CreateUserDTO;
 import com.motorsport_predictor.users_service.exceptions.BadRequestException;
+import com.motorsport_predictor.users_service.exceptions.ResourceNotFoundException;
 import com.motorsport_predictor.users_service.service.IUserService;
 import com.motorsport_predictor.users_service.util.KeycloakProvider;
 import jakarta.ws.rs.core.Response;
@@ -15,6 +16,8 @@ import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -27,13 +30,8 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public List<UserRepresentation> findAllUsers() {
-        System.out.println("BUSCANDO USERS");
-        List<UserRepresentation> users = KeycloakProvider.getRealmResource()
+        return KeycloakProvider.getRealmResource()
                 .users().list();
-
-
-        System.out.println(users.size());
-        return users;
     }
 
     @Override
@@ -138,4 +136,22 @@ public class UserServiceImpl implements IUserService {
         UserResource usersResource = KeycloakProvider.getUserResource().get(userId);
         usersResource.update(user);
     }
+
+    @Override
+    public String getLoggedInUserId() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new ResourceNotFoundException("User not authenticated");
+        }
+
+        // Obtener el ID del usuario directamente del token JWT
+        String userId = authentication.getName();
+
+        System.out.println("El id del usuario es= " + userId);
+
+        return userId;
+    }
+
 }
