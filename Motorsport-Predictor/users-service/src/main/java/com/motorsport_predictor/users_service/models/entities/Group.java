@@ -1,5 +1,6 @@
 package com.motorsport_predictor.users_service.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,7 +12,10 @@ import java.util.List;
 @Table(name = "`groups`")
 @Getter
 @Setter
-public class Groups {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Group {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +29,7 @@ public class Groups {
     private String description;
 
     @Column(name = "is_public", nullable = false)
+    @JsonProperty("isPublic")
     private boolean isPublic;
 
     @Column(name = "created_at", nullable = false)

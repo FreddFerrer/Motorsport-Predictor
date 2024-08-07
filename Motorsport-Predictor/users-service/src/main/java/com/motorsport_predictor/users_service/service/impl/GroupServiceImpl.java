@@ -1,7 +1,7 @@
 package com.motorsport_predictor.users_service.service.impl;
 
 import com.motorsport_predictor.users_service.dto.CreateGroupDTO;
-import com.motorsport_predictor.users_service.models.entities.Groups;
+import com.motorsport_predictor.users_service.models.entities.Group;
 import com.motorsport_predictor.users_service.models.repositories.IGroupRepository;
 import com.motorsport_predictor.users_service.service.IGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,48 +18,42 @@ public class GroupServiceImpl implements IGroupService {
     private IGroupRepository groupRepository;
 
     @Override
-    public List<Groups> getAllGroups() {
+    public List<Group> getAllGroups() {
         return groupRepository.findAll();
     }
 
     @Override
-    public Groups getGroupById(Long id) {
+    public Group getGroupById(Long id) {
         return groupRepository.findById(id).orElse(null);
     }
 
     @Override
-    public Optional<Groups> getGroupByName(String name) {
+    public Optional<Group> getGroupByName(String name) {
         return groupRepository.findByName(name);
     }
 
     @Override
-    public Optional<Groups> getGroupByDiscipline(String discipline) {
+    public Optional<Group> getGroupByDiscipline(String discipline) {
         return groupRepository.findByDiscipline(discipline);
     }
 
     @Override
-    public Groups createNewGroup(CreateGroupDTO createGroupDTO) {
+    public Group createNewGroup(CreateGroupDTO createGroupDTO) {
 
         String userId = UserServiceImpl.getLoggedInUserId();
 
-        Groups group = new Groups();
-        group.setName(createGroupDTO.getName());
-        group.setDescription(createGroupDTO.getDescription());
-        group.setPublic(createGroupDTO.isPublic());
-        group.setOfficial(false);
-        group.setCreatedAt(LocalDateTime.now());
-        group.setUpdatedAt(LocalDateTime.now());
-        group.setCreatorId(userId);
-        group.setDiscipline(createGroupDTO.getDiscipline());
-
-        System.out.println("EL NAME ES " + group.getName());
-        System.out.println("LA DESCR ES " + group.getDescription());
-        System.out.println("PUBLICO " + group.isPublic());
-        System.out.println("CREADOR " + group.getCreatorId());
-        System.out.println("CREADO " + group.getCreatedAt());
+        Group group = Group.builder()
+                .name(createGroupDTO.getName())
+                .description(createGroupDTO.getDescription())
+                .isPublic(createGroupDTO.isPublic())
+                .isOfficial(false)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .creatorId(userId)
+                .discipline(createGroupDTO.getDiscipline())
+                .build();
 
         return groupRepository.save(group);
-
     }
 
     @Override

@@ -1,13 +1,12 @@
 package com.motorsport_predictor.users_service.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
-@Getter
-@Setter
+@Data
 public class CreateGroupDTO {
     @NotEmpty(message = "Required field")
     @NotNull
@@ -20,7 +19,7 @@ public class CreateGroupDTO {
     @NotNull
     private String discipline;
 
-    @NotEmpty(message = "Required field")
-    @NotNull
+    @NotNull(message = "Required field")
+    @JsonProperty("isPublic")
     private boolean isPublic;
 }
