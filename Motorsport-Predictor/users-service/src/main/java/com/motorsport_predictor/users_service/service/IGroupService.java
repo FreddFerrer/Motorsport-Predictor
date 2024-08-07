@@ -1,15 +1,16 @@
 package com.motorsport_predictor.users_service.service;
 
 import com.motorsport_predictor.users_service.dto.CreateGroupDTO;
-import com.motorsport_predictor.users_service.models.entities.Group;
+import com.motorsport_predictor.users_service.models.entities.Groups;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IGroupService {
-    List<Group> getAllGroups();
-    Group getGroupById(Long groupId);
-    Group getGroupByName(String groupName);
-    Group getGroupByDiscipline(String groupDiscipline);
-    Group createNewGroup(CreateGroupDTO createGroup);
-    Group deleteGroupById(Long groupId);
+    List<Groups> getAllGroups();
+    Groups getGroupById(Long groupId);
+    Optional<Groups> getGroupByName(String groupName);
+    Optional<Groups> getGroupByDiscipline(String groupDiscipline);
+    Groups createNewGroup(CreateGroupDTO createGroup);
+    void deleteGroupById(Long groupId);
 }

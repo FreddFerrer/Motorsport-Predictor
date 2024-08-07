@@ -2,7 +2,7 @@ package com.motorsport_predictor.users_service.controllers;
 
 import com.motorsport_predictor.users_service.dto.CreateGroupDTO;
 import com.motorsport_predictor.users_service.exceptions.BadRequestException;
-import com.motorsport_predictor.users_service.models.entities.Group;
+import com.motorsport_predictor.users_service.models.entities.Groups;
 import com.motorsport_predictor.users_service.service.IGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -61,7 +61,7 @@ public class GroupController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> createGroup(@RequestBody CreateGroupDTO createGroupDTO) {
         try {
-            Group group = groupService.createNewGroup(createGroupDTO);
+            Groups group = groupService.createNewGroup(createGroupDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(group);
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());

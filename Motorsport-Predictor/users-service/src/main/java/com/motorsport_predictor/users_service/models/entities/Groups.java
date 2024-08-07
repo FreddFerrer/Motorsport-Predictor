@@ -8,40 +8,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "groups")
+@Table(name = "`groups`")
 @Getter
 @Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class Group {
+public class Groups {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private Long id;
 
     @Column(nullable = false)
     private String name;
 
-    @Column
+    @Column()
     private String description;
 
-    @Column(name = "is_public")
+    @Column(name = "is_public", nullable = false)
     private boolean isPublic;
 
-    @Column(name = "is_official")
-    private boolean isOfficial;
-
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    @Column(name = "creator_id")
+    @Column(name = "creator_id", nullable = false)
     private String creatorId;
 
-    @Column
+    @Column(name = "is_official", nullable = false)
+    private boolean isOfficial;
+
+    @Column(nullable = false, length = 50)
     private String discipline;
 
     @OneToMany(mappedBy = "group")
