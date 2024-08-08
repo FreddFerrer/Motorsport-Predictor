@@ -1,10 +1,16 @@
 package com.motorsport_predictor.users_service.util;
 
+import com.motorsport_predictor.users_service.exceptions.BadRequestException;
+import com.motorsport_predictor.users_service.exceptions.ResourceNotFoundException;
 import org.jboss.resteasy.client.jaxrs.internal.ResteasyClientBuilderImpl;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.UsersResource;
+import org.keycloak.representations.idm.UserRepresentation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class KeycloakProvider {
     private static final String SERVER_URL = "http://localhost:9090";
@@ -34,5 +40,21 @@ public class KeycloakProvider {
     public static UsersResource getUserResource() {
         RealmResource realmResource = getRealmResource();
         return realmResource.users();
+    }
+
+    public static List<UserRepresentation> getUsersByIds(List<String> userIds) {
+        UsersResource usersResource = getUserResource();
+        List<UserRepresentation> users = new ArrayList<>();
+
+        for (String userId : userIds) {
+            try {
+                UserRepresentation user = usersResource.get(userId).toRepresentation();
+                users.add(user);
+            } catch (ResourceNotFoundException e) {
+                throw  new BadRequestException("Usuario no encontrado");
+            }
+        }
+
+        return users;
     }
 }

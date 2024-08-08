@@ -90,7 +90,7 @@ public class GroupServiceImpl implements IGroupService {
                 .collect(Collectors.toList());
     }
 
-    // Obtener una lista de los grupos mas populares (teniendo en cuenta el numero de miembros)
+    // Obtener una lista de los grupos más populares (teniendo en cuenta el número de miembros)
     @Override
     public List<GroupDTO> getPopularGroups() {
         return null;

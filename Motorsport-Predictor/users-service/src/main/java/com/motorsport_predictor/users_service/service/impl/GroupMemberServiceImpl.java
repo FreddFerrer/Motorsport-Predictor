@@ -2,8 +2,6 @@ package com.motorsport_predictor.users_service.service.impl;
 
 import com.motorsport_predictor.users_service.dto.response.GroupDTO;
 import com.motorsport_predictor.users_service.dto.response.GroupMemberDTO;
-import com.motorsport_predictor.users_service.exceptions.BadRequestException;
-import com.motorsport_predictor.users_service.exceptions.CustomErrorResponse;
 import com.motorsport_predictor.users_service.exceptions.ResourceNotFoundException;
 import com.motorsport_predictor.users_service.models.entities.Group;
 import com.motorsport_predictor.users_service.models.entities.GroupMember;
@@ -17,8 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.security.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,8 +44,7 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
             throw new ResourceNotFoundException("userId " + userId);
         }
 
-        System.out.println("EL ID ESSSSSSSSSSSS:" + user);
-
+        // Busca y comprueba que el Id del grupo exista
         if (!groupRepository.existsById(groupId)) {
             throw new ResourceNotFoundException("groupId" + groupId);
         } else {
@@ -98,12 +99,72 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
 
     @Override
     public void removeMemberFromGroupById(Long groupId, String userId) {
+        Group group;
+        UserResource user;
 
+        //Busca el usuario por el ID
+        try {
+            user = KeycloakProvider.getUserResource()
+                    .get(userId);
+        } catch (Exception e) {
+            throw new ResourceNotFoundException("userId " + userId);
+        }
+
+        // Busca y comprueba que el Id del grupo exista
+        if (!groupRepository.existsById(groupId)) {
+            throw new ResourceNotFoundException("groupId " + groupId);
+        } else {
+            group = groupRepository.getReferenceById(groupId);
+        }
+
+        // Guardo los id correctos
+        Long groupIdObtained = group.getId();
+        String userIdObtained = user.toRepresentation().getId();
+
+        // Verifico si el usuario es miembro del grupo
+        GroupMember groupMember = groupMemberRepository.findByGroupIdAndUserId(groupIdObtained, user.toRepresentation().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User " + userId + " is not a member of group " + groupId));
+
+        // Elimino el miembro del grupo
+        groupMemberRepository.delete(groupMember);
     }
 
     @Override
     public List<GroupMemberDTO> getMembersByGroupId(Long groupId) {
-        return null;
+        // Verificar si el grupo existe
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new ResourceNotFoundException("Group with ID " + groupId + " not found"));
+
+        // Obtener los id de los miembros y sus fechas de ingreso
+        List<Object[]> members = groupMemberRepository.findUserIdAndJoinedAtByGroupId(groupId);
+
+        // Separar los ids de los usuarios
+        List<String> memberIds = members.stream()
+                .map(member -> (String) member[0])
+                .collect(Collectors.toList());
+
+        // Obtener de keycloak la lista de usuarios que corresponden a ese id
+        List<UserRepresentation> keycloakUsers = KeycloakProvider.getUsersByIds(memberIds);
+
+        // Crear un mapa de id de usuario a UserRepresentation para acceso rápido
+        Map<String, UserRepresentation> userMap = keycloakUsers.stream()
+                .collect(Collectors.toMap(UserRepresentation::getId, Function.identity()));
+
+        // Mapear los datos a GroupMemberDTOs
+        return members.stream()
+                .map(member -> {
+                    String userId = (String) member[0];
+                    LocalDateTime joinedAt = (LocalDateTime) member[1];
+                    UserRepresentation user = userMap.get(userId);
+
+
+                    GroupMemberDTO dto = new GroupMemberDTO();
+                    dto.setUserId(userId);
+                    dto.setUsername(user.getUsername());
+                    dto.setJoinedAt(joinedAt);
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 
     @Override

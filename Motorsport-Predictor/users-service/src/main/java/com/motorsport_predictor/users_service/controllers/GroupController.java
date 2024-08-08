@@ -109,4 +109,26 @@ public class GroupController {
             throw new BadRequestException(e.getMessage());
         }
     }
+
+    @DeleteMapping("/{groupId}/deleteMember/{userId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    public ResponseEntity<?> deleteMemberFromGroupById(@PathVariable Long groupId, @PathVariable String userId) {
+        try {
+            groupMemberService.removeMemberFromGroupById(groupId, userId);
+
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("User removed from group");
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
+        }
+    }
+
+    @GetMapping("/{groupId}/getMembers")
+    //@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    public ResponseEntity<?> getMembersByGroup(@PathVariable Long groupId) {
+        try {
+            return ResponseEntity.ok(groupMemberService.getMembersByGroupId(groupId));
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
+        }
+    }
 }
