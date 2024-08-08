@@ -15,7 +15,6 @@ public class GroupMember {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @ManyToOne
     @JoinColumn(name = "group_id")
     private Group group;

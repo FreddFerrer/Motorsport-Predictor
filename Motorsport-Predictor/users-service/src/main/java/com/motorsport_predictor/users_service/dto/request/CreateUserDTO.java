@@ -1,4 +1,4 @@
-package com.motorsport_predictor.users_service.dto;
+package com.motorsport_predictor.users_service.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;

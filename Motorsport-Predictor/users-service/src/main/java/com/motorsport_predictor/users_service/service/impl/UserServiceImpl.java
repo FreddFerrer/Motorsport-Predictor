@@ -1,6 +1,6 @@
 package com.motorsport_predictor.users_service.service.impl;
 
-import com.motorsport_predictor.users_service.dto.CreateUserDTO;
+import com.motorsport_predictor.users_service.dto.request.CreateUserDTO;
 import com.motorsport_predictor.users_service.exceptions.BadRequestException;
 import com.motorsport_predictor.users_service.exceptions.ResourceNotFoundException;
 import com.motorsport_predictor.users_service.service.IUserService;

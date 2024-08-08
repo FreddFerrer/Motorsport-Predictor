@@ -1,8 +1,11 @@
 package com.motorsport_predictor.users_service.controllers;
 
-import com.motorsport_predictor.users_service.dto.CreateGroupDTO;
+import com.motorsport_predictor.users_service.dto.request.AddMemberByIdDTO;
+import com.motorsport_predictor.users_service.dto.request.AddMemberByUsernameDTO;
+import com.motorsport_predictor.users_service.dto.request.CreateGroupDTO;
+import com.motorsport_predictor.users_service.dto.response.GroupDTO;
 import com.motorsport_predictor.users_service.exceptions.BadRequestException;
-import com.motorsport_predictor.users_service.models.entities.Group;
+import com.motorsport_predictor.users_service.service.IGroupMemberService;
 import com.motorsport_predictor.users_service.service.IGroupService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,8 @@ public class GroupController {
 
     @Autowired
     private IGroupService groupService;
+    @Autowired
+    private IGroupMemberService groupMemberService;
 
     @GetMapping("/list")
     public ResponseEntity<?> getAllGroups() {
@@ -52,7 +57,7 @@ public class GroupController {
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<?> getGroupByDiscipline(@PathVariable String discipline) {
         try {
-            return ResponseEntity.ok(groupService.getGroupByDiscipline(discipline));
+            return ResponseEntity.ok(groupService.getGroupsByDiscipline(discipline));
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());
         }
@@ -62,7 +67,7 @@ public class GroupController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> createGroup(@RequestBody @Valid CreateGroupDTO createGroupDTO) {
         try {
-            Group group = groupService.createNewGroup(createGroupDTO);
+            GroupDTO group = groupService.createNewGroup(createGroupDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(group);
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());
@@ -75,6 +80,31 @@ public class GroupController {
         try {
             groupService.deleteGroupById(id);
             return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
+        }
+    }
+
+    @PostMapping("/{groupId}/addMemberById")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    public ResponseEntity<?> addMemberById(@PathVariable Long groupId, @RequestBody @Valid AddMemberByIdDTO newMemberToGroupDTO) {
+        try {
+            groupMemberService.addMemberToGroupById(groupId, newMemberToGroupDTO.getUserId());
+            return ResponseEntity.status(HttpStatus.CREATED).body("en teoria se agrego rey");
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
+        }
+    }
+
+    @PostMapping("/{groupId}/addMemberByUsername")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    public ResponseEntity<?> addMemberByUsername(@PathVariable Long groupId, @RequestBody AddMemberByUsernameDTO newMemberByUsernameDTO) {
+        System.out.println("Y ACA?????");
+        try {
+            System.out.println(("??????Request body: {}" + newMemberByUsernameDTO));
+            groupMemberService.addMemberToGroupByUsername(groupId, newMemberByUsernameDTO.getUsername());
+
+            return ResponseEntity.status(HttpStatus.CREATED).body("en teoria se agrego rey");
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());
         }

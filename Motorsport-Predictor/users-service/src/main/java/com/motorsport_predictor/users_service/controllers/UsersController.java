@@ -1,6 +1,6 @@
 package com.motorsport_predictor.users_service.controllers;
 
-import com.motorsport_predictor.users_service.dto.CreateUserDTO;
+import com.motorsport_predictor.users_service.dto.request.CreateUserDTO;
 import com.motorsport_predictor.users_service.exceptions.BadRequestException;
 import com.motorsport_predictor.users_service.service.IUserService;
 import org.keycloak.representations.idm.UserRepresentation;

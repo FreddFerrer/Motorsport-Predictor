@@ -49,4 +49,9 @@ public class Group {
 
     @OneToMany(mappedBy = "group")
     private List<GroupMember> members = new ArrayList<>();
+
+    @Transient
+    public int getMemberCount() {
+        return members.size(); // Acceso directo al tamaño de la colección
+    }
 }

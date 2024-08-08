@@ -1,5 +1,6 @@
 package com.motorsport_predictor.users_service.exceptions;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -69,5 +70,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<CustomErrorResponse> handlerAccessDeniedException(AccessDeniedException exception, WebRequest webRequest) {
         CustomErrorResponse apiResponse = new CustomErrorResponse("Access denied", webRequest.getDescription(false));
         return new ResponseEntity<>(apiResponse, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<CustomErrorResponse> handlerDataIntegrityException(DataIntegrityViolationException exception, WebRequest webRequest) {
+        CustomErrorResponse apiResponse = new CustomErrorResponse(exception.getMessage(), webRequest.getDescription(false));
+        return new ResponseEntity<>(apiResponse, HttpStatus.CONFLICT);
     }
 }

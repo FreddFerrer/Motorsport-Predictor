@@ -1,8 +1,7 @@
 package com.motorsport_predictor.users_service.service;
 
-import com.motorsport_predictor.users_service.dto.CreateUserDTO;
+import com.motorsport_predictor.users_service.dto.request.CreateUserDTO;
 import org.keycloak.representations.idm.UserRepresentation;
-import org.springframework.security.core.Authentication;
 
 import java.util.List;
 

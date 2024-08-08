@@ -17,7 +17,7 @@ public class ResourceNotFoundException extends RuntimeException{
     }
 
     public ResourceNotFoundException(String resourceName ) {
-        super(String.format("No hay registros de %s en el sistema.", resourceName ));
+        super(String.format("Resource %s not found.", resourceName ));
         this.resourceName = resourceName;
     }
 }
