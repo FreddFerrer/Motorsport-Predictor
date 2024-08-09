@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -169,7 +170,32 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
 
     @Override
     public List<GroupDTO> getGroupsByUserId(String userId) {
-        return null;
+        // Obtener el id del usuario y comprobar si existe.
+        UserRepresentation user = KeycloakProvider.getUserById(userId);
+
+        // Obtener todos los Id de los grupos a los que esta relacionado ese usuario (un usuario puede estar en varios grupos distintos, nunca puede estar 2 veces en un mismo grupo)
+        List<Long> groupIds = groupMemberRepository.findGroupIdsByUserId(userId);
+        if (groupIds.isEmpty()) {
+            return Collections.emptyList(); // Retornar lista vacía si no pertenece a ningún grupo
+        }
+
+        // Consultar datos de los grupos teniendo en cuenta los id obtenidos anteriormente.
+        List<Group> groups = groupRepository.findAllById(groupIds);
+
+        // Mapear los grupos a DTOs
+        return groups.stream()
+                .map(group -> {
+                    GroupDTO dto = new GroupDTO();
+                    dto.setName(group.getName());
+                    dto.setDescription(group.getDescription());
+                    dto.setPublic(group.isPublic());
+                    dto.setDiscipline(group.getDiscipline());
+                    dto.setCreatedAt(group.getCreatedAt());
+                    dto.setCreatorId(group.getCreatorId());
+                    dto.setOfficial(group.isOfficial());
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 
     @Override

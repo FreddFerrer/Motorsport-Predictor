@@ -23,4 +23,6 @@ public interface IGroupMemberRepository extends JpaRepository<GroupMember, Long>
 
 
     GroupMember findByGroupAndUserId(Group group, String id);
+
+    List<Long> findGroupIdsByUserId(String userId);
 }

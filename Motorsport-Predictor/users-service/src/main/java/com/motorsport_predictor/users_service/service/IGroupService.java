@@ -13,7 +13,6 @@ public interface IGroupService {
     List<GroupDTO> getGroupsByDiscipline(String groupDiscipline);
     List<GroupDTO> getPopularGroups(); // Obtener grupos populares (por ejemplo, más miembros)
     List<GroupDTO> searchGroups(String searchTerm); // Buscar grupos por nombre o descripción
-    List<GroupDTO> getGroupsByUserId(String userId); // Obtener grupos de un usuario
     GroupDTO createNewGroup(CreateGroupDTO createGroup);
     void updateGroup(Long groupId, CreateGroupDTO createGroup);
     void deleteGroupById(Long groupId);

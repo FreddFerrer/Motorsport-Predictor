@@ -102,11 +102,6 @@ public class GroupServiceImpl implements IGroupService {
         return null;
     }
 
-    // Obtiene una lista de grupos de los cuales el usuario pertenece.
-    @Override
-    public List<GroupDTO> getGroupsByUserId(String userId) {
-        return null;
-    }
 
     // Crea un nuevo grupo
     @Override

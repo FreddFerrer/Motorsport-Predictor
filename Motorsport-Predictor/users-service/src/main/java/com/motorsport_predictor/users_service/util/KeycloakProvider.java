@@ -42,6 +42,20 @@ public class KeycloakProvider {
         return realmResource.users();
     }
 
+    public static UserRepresentation getUserById(String userId) {
+        UsersResource usersResource = getUserResource();
+        return usersResource.get(userId).toRepresentation();
+    }
+
+    public static UserRepresentation getUserByUsername(String username) {
+        UsersResource usersResource = getUserResource();
+        List<UserRepresentation> users = usersResource.search(username);
+        if (users != null && !users.isEmpty()) {
+            return users.get(0); // Asume que el username es único y devuelve el primer resultado
+        }
+        throw new ResourceNotFoundException("User with username \" + username + \" not found");
+    }
+
     public static List<UserRepresentation> getUsersByIds(List<String> userIds) {
         UsersResource usersResource = getUserResource();
         List<UserRepresentation> users = new ArrayList<>();
@@ -51,7 +65,7 @@ public class KeycloakProvider {
                 UserRepresentation user = usersResource.get(userId).toRepresentation();
                 users.add(user);
             } catch (ResourceNotFoundException e) {
-                throw  new BadRequestException("Usuario no encontrado");
+                throw  new BadRequestException("User not found");
             }
         }
 

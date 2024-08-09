@@ -10,12 +10,6 @@ public interface IGroupMemberService {
     void addMemberToGroupByUsername(Long groupId, String username);
     void removeMemberFromGroupById(Long groupId, String userId);
     List<GroupMemberDTO> getMembersByGroupId(Long groupId);
-    List<GroupDTO> getGroupsByUserId(String userId);
+    List<GroupDTO> getGroupsByUserId(String userId); // Obtener grupos de un usuario
     List<GroupDTO> getGroupsByUsername(String username);
-
-
-    // Acciones del usuario final
-    //void requestToJoinGroup(Long groupId);
-    //void leaveGroup(Long groupId);
-    //void sendMessage(Long groupId, String message);
 }
