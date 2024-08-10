@@ -10,7 +10,6 @@ import com.motorsport_predictor.users_service.models.repositories.IGroupMemberRe
 import com.motorsport_predictor.users_service.models.repositories.IGroupRepository;
 import com.motorsport_predictor.users_service.service.IGroupMemberService;
 import com.motorsport_predictor.users_service.util.KeycloakProvider;
-import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -76,15 +75,7 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
     public void addMemberToGroupByUsername(Long groupId, String username) {
         Group group;
 
-        List<UserRepresentation> users = KeycloakProvider.getUserResource().search(username);
-
-        // Verifica si el usuario existe
-        if (users == null || users.isEmpty()) {
-            throw new ResourceNotFoundException("username: " + username);
-        }
-
-        // Se asume que el username es único y se toma el primer resultado
-        UserRepresentation user = users.get(0);
+        UserRepresentation user = KeycloakProvider.getUserByUsername(username);
 
         if (!groupRepository.existsById(groupId)) {
             throw new ResourceNotFoundException("groupId" + groupId);
@@ -108,15 +99,9 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
     @Override
     public void removeMemberFromGroupById(Long groupId, String userId) {
         Group group;
-        UserResource user;
 
         //Busca el usuario por el ID
-        try {
-            user = KeycloakProvider.getUserResource()
-                    .get(userId);
-        } catch (Exception e) {
-            throw new ResourceNotFoundException("userId " + userId);
-        }
+        UserRepresentation user = KeycloakProvider.getUserById(userId);
 
         // Busca y comprueba que el Id del grupo exista
         if (!groupRepository.existsById(groupId)) {
@@ -127,7 +112,7 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
 
         // Guardo los id correctos
         Long groupIdObtained = group.getId();
-        String userIdObtained = user.toRepresentation().getId();
+        String userIdObtained = user.getId();
 
         // Verifico si el usuario es miembro del grupo
         GroupMember groupMember = groupMemberRepository.findByGroupIdAndUserId(groupIdObtained, userIdObtained)
@@ -188,6 +173,7 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
         // Obtener todos los Id de los grupos a los que está relacionado ese usuario (un usuario puede estar en varios grupos distintos, nunca puede estar 2 veces en un mismo grupo)
         List<Long> groupIds = groupMemberRepository.findGroupIdsByUserId(userId);
         if (groupIds.isEmpty()) {
+
             return Collections.emptyList(); // Retornar lista vacía si no pertenece a ningún grupo
         }
 
@@ -205,6 +191,7 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
                     dto.setCreatedAt(group.getCreatedAt());
                     dto.setCreatorId(group.getCreatorId());
                     dto.setOfficial(group.isOfficial());
+                    dto.setMemberCount(group.getMemberCount());
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -239,7 +226,5 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
                     return dto;
                 })
                 .collect(Collectors.toList());
-
     }
-
 }

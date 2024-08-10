@@ -2,6 +2,7 @@ package com.motorsport_predictor.users_service.util;
 
 import com.motorsport_predictor.users_service.exceptions.BadRequestException;
 import com.motorsport_predictor.users_service.exceptions.ResourceNotFoundException;
+import jakarta.ws.rs.NotFoundException;
 import org.jboss.resteasy.client.jaxrs.internal.ResteasyClientBuilderImpl;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
@@ -44,7 +45,11 @@ public class KeycloakProvider {
 
     public static UserRepresentation getUserById(String userId) {
         UsersResource usersResource = getUserResource();
-        return usersResource.get(userId).toRepresentation();
+        try {
+            return usersResource.get(userId).toRepresentation();
+        } catch (NotFoundException e) {
+            throw new ResourceNotFoundException(userId);
+        }
     }
 
     public static UserRepresentation getUserByUsername(String username) {
@@ -65,10 +70,24 @@ public class KeycloakProvider {
                 UserRepresentation user = usersResource.get(userId).toRepresentation();
                 users.add(user);
             } catch (ResourceNotFoundException e) {
-                throw  new BadRequestException("User not found");
+                throw  new BadRequestException(userId);
             }
         }
+        return users;
+    }
 
+    public static List<UserRepresentation> getUsersByUsernames(List<String> usernames) {
+        UsersResource usersResource = getUserResource();
+        List<UserRepresentation> users = new ArrayList<>();
+
+        for (String username : usernames) {
+            try {
+                UserRepresentation user = (UserRepresentation) usersResource.search(username);
+                users.add(user);
+            } catch (ResourceNotFoundException e) {
+                throw  new BadRequestException(username);
+            }
+        }
         return users;
     }
 }

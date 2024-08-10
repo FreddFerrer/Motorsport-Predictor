@@ -21,6 +21,7 @@ public class SecurityConfig {
                     auth.pathMatchers("/api/users/create").permitAll();
                     auth.pathMatchers("/api/groups/list").permitAll();
                     auth.pathMatchers("/api/groups/{groupId}/getMembers").permitAll();
+                    auth.pathMatchers("/api/groups/getGroupsByUserId/{userId}").permitAll();
 
                     //f1-service
                     auth.pathMatchers("/api/f1/**").permitAll();

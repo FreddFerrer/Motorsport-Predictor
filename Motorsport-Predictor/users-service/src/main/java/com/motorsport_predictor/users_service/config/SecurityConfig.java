@@ -24,7 +24,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/users/create",
                                         "/api/groups/list",
-                                        "/api/groups/{groupId}/getMembers").permitAll()
+                                        "/api/groups/{groupId}/getMembers",
+                                        "/api/groups/getGroupsByUserId/{userId}").permitAll()
                                 .anyRequest().authenticated())
                 .oauth2ResourceServer(configure -> configure.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter())));
 

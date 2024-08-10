@@ -63,6 +63,24 @@ public class GroupController {
         }
     }
 
+    @GetMapping("/popularGroups")
+    public ResponseEntity<?> getPopularGroups() {
+        try {
+            return ResponseEntity.ok(groupService.getPopularGroups());
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
+        }
+    }
+
+    @GetMapping("/search/{searchTerm}")
+    public ResponseEntity<?> searchGroups(@PathVariable String searchTerm) {
+        try {
+            return ResponseEntity.ok(groupService.searchGroups(searchTerm));
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
+        }
+    }
+
     @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> createGroup(@RequestBody @Valid CreateGroupDTO createGroupDTO) {
@@ -99,11 +117,8 @@ public class GroupController {
     @PostMapping("/{groupId}/addMemberByUsername")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<?> addMemberByUsername(@PathVariable Long groupId, @RequestBody AddMemberByUsernameDTO newMemberByUsernameDTO) {
-        System.out.println("Y ACA?????");
         try {
-            System.out.println(("??????Request body: {}" + newMemberByUsernameDTO));
             groupMemberService.addMemberToGroupByUsername(groupId, newMemberByUsernameDTO.getUsername());
-
             return ResponseEntity.status(HttpStatus.CREATED).body("en teoria se agrego rey");
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());
@@ -127,6 +142,26 @@ public class GroupController {
     public ResponseEntity<?> getMembersByGroup(@PathVariable Long groupId) {
         try {
             return ResponseEntity.ok(groupMemberService.getMembersByGroupId(groupId));
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
+        }
+    }
+
+    @GetMapping("/getGroupsByUserId/{userId}")
+    //@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    public ResponseEntity<?> getGroupsByUserId(@PathVariable String userId) {
+        try {
+            return ResponseEntity.ok(groupMemberService.getGroupsByUserId(userId));
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
+        }
+    }
+
+    @GetMapping("/getGroupsByUserId/{username}")
+    //@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    public ResponseEntity<?> getGroupsByUsername(@PathVariable String username) {
+        try {
+            return ResponseEntity.ok(groupMemberService.getGroupsByUsername(username));
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());
         }
