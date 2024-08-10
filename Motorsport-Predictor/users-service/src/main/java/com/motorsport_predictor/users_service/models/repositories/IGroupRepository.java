@@ -13,8 +13,7 @@ import java.util.Optional;
 public interface IGroupRepository extends JpaRepository<Group, Long> {
     Optional<Group> findByName(String name);
     List<Group> findByDiscipline(String discipline);
-    @Query("SELECT g FROM `Group` g ORDER BY memberCount(g) DESC")
-    List<Group> findPopularGroups();
     @Query("SELECT g FROM Group g WHERE g.name LIKE %:searchTerm% OR g.description LIKE %:searchTerm%")
     List<Group> searchGroups(@Param("searchTerm") String searchTerm);
+    List<Group> findTop10ByOrderByMemberCountDesc();
 }

@@ -16,15 +16,11 @@ public class GroupDTO {
     private String name;
     private String description;
     private String discipline;
+    private Integer memberCount;
     @JsonProperty("isPublic")
     private boolean isPublic;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String creatorId;
     private boolean isOfficial;
-
-
-
-    public GroupDTO(Long id, String name, String description) {
-    }
 }

@@ -47,6 +47,8 @@ public class Group {
     @Column(nullable = false, length = 50)
     private String discipline;
 
+    @Column(name = "member_count")
+    private Integer memberCount;
     @OneToMany(mappedBy = "group")
     private List<GroupMember> members = new ArrayList<>();
 

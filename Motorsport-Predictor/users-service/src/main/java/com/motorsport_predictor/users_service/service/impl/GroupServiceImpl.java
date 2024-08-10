@@ -93,13 +93,45 @@ public class GroupServiceImpl implements IGroupService {
     // Obtener una lista de los grupos más populares (teniendo en cuenta el número de miembros)
     @Override
     public List<GroupDTO> getPopularGroups() {
-        return null;
+        // Obtengo los grupos ordenados por 'member_count' en orden descendente
+        List<Group> popularGroups = groupRepository.findTop10ByOrderByMemberCountDesc();
+
+        // Mapea los grupos a DTOs
+        return popularGroups.stream()
+                .map(group -> {
+                    GroupDTO dto = new GroupDTO();
+                    dto.setName(group.getName());
+                    dto.setDescription(group.getDescription());
+                    dto.setPublic(group.isPublic());
+                    dto.setDiscipline(group.getDiscipline());
+                    dto.setCreatedAt(group.getCreatedAt());
+                    dto.setCreatorId(group.getCreatorId());
+                    dto.setOfficial(group.isOfficial());
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 
     // Busca grupos por NOMBRE o DESCRIPTION
     @Override
     public List<GroupDTO> searchGroups(String searchTerm) {
-        return null;
+        // Paso 1: Usar el repositorio para buscar grupos que coincidan con el término de búsqueda
+        List<Group> groups = groupRepository.searchGroups(searchTerm);
+
+        // Paso 2: Mapear los resultados a GroupDTOs
+        return groups.stream()
+                .map(group -> {
+                    GroupDTO dto = new GroupDTO();
+                    dto.setName(group.getName());
+                    dto.setDescription(group.getDescription());
+                    dto.setPublic(group.isPublic());
+                    dto.setDiscipline(group.getDiscipline());
+                    dto.setCreatedAt(group.getCreatedAt());
+                    dto.setCreatorId(group.getCreatorId());
+                    dto.setOfficial(group.isOfficial());
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 
 

@@ -20,6 +20,7 @@ public class SecurityConfig {
                     //users-service
                     auth.pathMatchers("/api/users/create").permitAll();
                     auth.pathMatchers("/api/groups/list").permitAll();
+                    auth.pathMatchers("/api/groups/{groupId}/getMembers").permitAll();
 
                     //f1-service
                     auth.pathMatchers("/api/f1/**").permitAll();

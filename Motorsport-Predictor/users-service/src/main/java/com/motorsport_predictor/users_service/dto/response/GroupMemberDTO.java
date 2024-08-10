@@ -18,5 +18,6 @@ public class GroupMemberDTO {
     private List<GroupDTO> group;
     private String userId;
     private String username;
+    private String nationality;
     private LocalDateTime joinedAt;
 }
