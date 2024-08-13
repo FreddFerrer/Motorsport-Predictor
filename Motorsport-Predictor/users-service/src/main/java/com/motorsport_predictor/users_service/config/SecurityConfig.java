@@ -25,7 +25,10 @@ public class SecurityConfig {
                         auth.requestMatchers("/api/users/create",
                                         "/api/groups/list",
                                         "/api/groups/{groupId}/getMembers",
-                                        "/api/groups/getGroupsByUserId/{userId}").permitAll()
+                                        "/api/groups/getGroupsByUserId/{userId}",
+                                        "/api/groups/popularGroups",
+                                        "/api/groups/search/{searchTerm}",
+                                        "/api/groups/{groupId}/getMembers").permitAll()
                                 .anyRequest().authenticated())
                 .oauth2ResourceServer(configure -> configure.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter())));
 

@@ -31,6 +31,121 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
     private IGroupRepository groupRepository;
 
     @Override
+    public List<GroupMemberDTO> getMembersByGroupId(Long groupId) {
+        // Verificar si el grupo existe
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new ResourceNotFoundException("Group with ID " + groupId + " not found"));
+
+        // Obtener los id de los miembros y sus fechas de ingreso
+        List<Object[]> members = groupMemberRepository.findUserIdAndJoinedAtByGroupId(groupId);
+
+        // Separar los ids de los usuarios
+        List<String> memberIds = members.stream()
+                .map(member -> (String) member[0])
+                .collect(Collectors.toList());
+
+        // Obtener de keycloak la lista de usuarios que corresponden a ese id
+        List<UserRepresentation> keycloakUsers = KeycloakProvider.getUsersByIds(memberIds);
+
+        // Crear un mapa de id de usuario a UserRepresentation para acceso rápido
+        Map<String, UserRepresentation> userMap = keycloakUsers.stream()
+                .collect(Collectors.toMap(UserRepresentation::getId, Function.identity()));
+
+        // Mapear los datos a GroupMemberDTOs
+        return members.stream()
+                .map(member -> {
+                    String userId = (String) member[0];
+                    LocalDateTime joinedAt = (LocalDateTime) member[1];
+                    UserRepresentation user = userMap.get(userId);
+
+                    GroupMemberDTO dto = new GroupMemberDTO();
+                    dto.setUserId(userId);
+                    dto.setUsername(user.getUsername());
+                    dto.setJoinedAt(joinedAt);
+
+                    // Obtengo la nacionalidad del atributo personalizado
+                    String nationality = user.getAttributes() != null && user.getAttributes().get("nationality") != null ?
+                            user.getAttributes().get("nationality").get(0) : "Unknown";
+
+                    dto.setNationality(nationality);
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<GroupDTO> getGroupsByUserId(String userId) {
+        // Obtener el id del usuario y comprobar si existe.
+        UserRepresentation user = KeycloakProvider.getUserById(userId);
+
+        // Obtener todos los Id de los grupos a los que está relacionado ese usuario (un usuario puede estar en varios grupos distintos, nunca puede estar 2 veces en un mismo grupo)
+        List<Long> groupIds = groupMemberRepository.findGroupIdsByUserId(userId);
+        if (groupIds.isEmpty()) {
+
+            return Collections.emptyList(); // Retornar lista vacía si no pertenece a ningún grupo
+        }
+
+        // Consultar datos de los grupos teniendo en cuenta los id obtenidos anteriormente.
+        List<Group> groups = groupRepository.findAllById(groupIds);
+
+        // Mapear los grupos a DTOs
+        return groups.stream()
+                .map(group -> {
+                    GroupDTO dto = new GroupDTO();
+                    dto.setName(group.getName());
+                    dto.setDescription(group.getDescription());
+                    dto.setPublic(group.isPublic());
+                    dto.setDiscipline(group.getDiscipline());
+                    dto.setCreatedAt(group.getCreatedAt());
+                    dto.setCreatorId(group.getCreatorId());
+                    dto.setOfficial(group.isOfficial());
+                    dto.setMemberCount(group.getMemberCount());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<GroupDTO> getGroupsByUser() {
+        // Detectar el id del usuario logeado
+        String userId = UserServiceImpl.getLoggedInUserId();
+
+        // Buscar y devoler los grupos usando el metodo creado en esta misma clase
+        return getGroupsByUserId (userId);
+    }
+
+    @Override
+    public List<GroupDTO> getGroupsByUsername(String username) {
+        // Obtengo el id del usuario basándonos en el username.
+        UserRepresentation user = KeycloakProvider.getUserByUsername(username);
+        String userId = user.getId();
+
+        // Obtener todos los Id de los grupos a los que está relacionado ese usuario (un usuario puede estar en varios grupos distintos, nunca puede estar 2 veces en un mismo grupo)
+        List<Long> groupIds = groupMemberRepository.findGroupIdsByUserId(userId);
+        if (groupIds.isEmpty()) {
+            return Collections.emptyList(); // Retornar lista vacía si no pertenece a ningún grupo
+        }
+
+        // Consultar datos de los grupos teniendo en cuenta los id obtenidos anteriormente.
+        List<Group> groups = groupRepository.findAllById(groupIds);
+
+        // Mapear los grupos a DTOs
+        return groups.stream()
+                .map(group -> {
+                    GroupDTO dto = new GroupDTO();
+                    dto.setName(group.getName());
+                    dto.setDescription(group.getDescription());
+                    dto.setPublic(group.isPublic());
+                    dto.setDiscipline(group.getDiscipline());
+                    dto.setCreatedAt(group.getCreatedAt());
+                    dto.setCreatorId(group.getCreatorId());
+                    dto.setOfficial(group.isOfficial());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public void addMemberToGroupById(Long groupId, String userId) {
         //Busca el usuario por el ID y verifica que el usuario a agregar existe en Keycloak
         UserRepresentation user = KeycloakProvider.getUserById(userId);
@@ -122,109 +237,5 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
         groupMemberRepository.delete(groupMember);
     }
 
-    @Override
-    public List<GroupMemberDTO> getMembersByGroupId(Long groupId) {
-        // Verificar si el grupo existe
-        Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new ResourceNotFoundException("Group with ID " + groupId + " not found"));
 
-        // Obtener los id de los miembros y sus fechas de ingreso
-        List<Object[]> members = groupMemberRepository.findUserIdAndJoinedAtByGroupId(groupId);
-
-        // Separar los ids de los usuarios
-        List<String> memberIds = members.stream()
-                .map(member -> (String) member[0])
-                .collect(Collectors.toList());
-
-        // Obtener de keycloak la lista de usuarios que corresponden a ese id
-        List<UserRepresentation> keycloakUsers = KeycloakProvider.getUsersByIds(memberIds);
-
-        // Crear un mapa de id de usuario a UserRepresentation para acceso rápido
-        Map<String, UserRepresentation> userMap = keycloakUsers.stream()
-                .collect(Collectors.toMap(UserRepresentation::getId, Function.identity()));
-
-        // Mapear los datos a GroupMemberDTOs
-        return members.stream()
-                .map(member -> {
-                    String userId = (String) member[0];
-                    LocalDateTime joinedAt = (LocalDateTime) member[1];
-                    UserRepresentation user = userMap.get(userId);
-
-                    GroupMemberDTO dto = new GroupMemberDTO();
-                    dto.setUserId(userId);
-                    dto.setUsername(user.getUsername());
-                    dto.setJoinedAt(joinedAt);
-
-                    // Obtengo la nacionalidad del atributo personalizado
-                    String nationality = user.getAttributes() != null && user.getAttributes().get("nationality") != null ?
-                            user.getAttributes().get("nationality").get(0) : "Unknown";
-
-                    dto.setNationality(nationality);
-                    return dto;
-                })
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<GroupDTO> getGroupsByUserId(String userId) {
-        // Obtener el id del usuario y comprobar si existe.
-        UserRepresentation user = KeycloakProvider.getUserById(userId);
-
-        // Obtener todos los Id de los grupos a los que está relacionado ese usuario (un usuario puede estar en varios grupos distintos, nunca puede estar 2 veces en un mismo grupo)
-        List<Long> groupIds = groupMemberRepository.findGroupIdsByUserId(userId);
-        if (groupIds.isEmpty()) {
-
-            return Collections.emptyList(); // Retornar lista vacía si no pertenece a ningún grupo
-        }
-
-        // Consultar datos de los grupos teniendo en cuenta los id obtenidos anteriormente.
-        List<Group> groups = groupRepository.findAllById(groupIds);
-
-        // Mapear los grupos a DTOs
-        return groups.stream()
-                .map(group -> {
-                    GroupDTO dto = new GroupDTO();
-                    dto.setName(group.getName());
-                    dto.setDescription(group.getDescription());
-                    dto.setPublic(group.isPublic());
-                    dto.setDiscipline(group.getDiscipline());
-                    dto.setCreatedAt(group.getCreatedAt());
-                    dto.setCreatorId(group.getCreatorId());
-                    dto.setOfficial(group.isOfficial());
-                    dto.setMemberCount(group.getMemberCount());
-                    return dto;
-                })
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<GroupDTO> getGroupsByUsername(String username) {
-        // Obtengo el id del usuario basándonos en el username.
-        UserRepresentation user = KeycloakProvider.getUserByUsername(username);
-        String userId = user.getId();
-
-        // Obtener todos los Id de los grupos a los que está relacionado ese usuario (un usuario puede estar en varios grupos distintos, nunca puede estar 2 veces en un mismo grupo)
-        List<Long> groupIds = groupMemberRepository.findGroupIdsByUserId(userId);
-        if (groupIds.isEmpty()) {
-            return Collections.emptyList(); // Retornar lista vacía si no pertenece a ningún grupo
-        }
-
-        // Consultar datos de los grupos teniendo en cuenta los id obtenidos anteriormente.
-        List<Group> groups = groupRepository.findAllById(groupIds);
-
-        // Mapear los grupos a DTOs
-        return groups.stream()
-                .map(group -> {
-                    GroupDTO dto = new GroupDTO();
-                    dto.setName(group.getName());
-                    dto.setDescription(group.getDescription());
-                    dto.setPublic(group.isPublic());
-                    dto.setDiscipline(group.getDiscipline());
-                    dto.setCreatedAt(group.getCreatedAt());
-                    dto.setCreatorId(group.getCreatorId());
-                    dto.setOfficial(group.isOfficial());
-                    return dto;
-                })
-                .collect(Collectors.toList());
-    }
 }
