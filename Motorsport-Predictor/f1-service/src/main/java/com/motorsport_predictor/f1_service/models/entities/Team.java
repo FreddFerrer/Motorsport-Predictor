@@ -1,30 +1,19 @@
 package com.motorsport_predictor.f1_service.models.entities;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import jakarta.persistence.*;
-
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "sprint")
+@Table(name = "teams")
 @Getter
 @Setter
-public class Sprint {
-
+public class Team {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "race_id")
-    private Race race;
+    private String name;
 
-    private LocalDate date;
-    private LocalTime time;
-
-
-
-
+    private String country;
 }

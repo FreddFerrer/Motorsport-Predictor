@@ -22,8 +22,8 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers(request ->
-                                        request.getRequestURI().contains("/api/f1/circuitsNoAuth")).permitAll()
+                        auth.requestMatchers("/api/f1/races",
+                                                "/api/f1/nextRace").permitAll()
                                 .anyRequest().authenticated())
                 .oauth2ResourceServer(configure -> configure.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter())));
 

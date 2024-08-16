@@ -15,16 +15,13 @@ public class Race {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-
     private String season;
     private Integer round;
+    @JoinColumn(name = "race_name")
     private String raceName;
-
     @ManyToOne
     @JoinColumn(name = "circuit_id")
     private Circuit circuit;
-
     private LocalDate date;
     private LocalTime time;
 

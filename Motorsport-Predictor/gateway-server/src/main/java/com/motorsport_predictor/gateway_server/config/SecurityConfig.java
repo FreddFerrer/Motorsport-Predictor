@@ -27,7 +27,8 @@ public class SecurityConfig {
                     auth.pathMatchers("/api/groups/{groupId}/getMembers").permitAll();
 
                     //f1-service
-                    auth.pathMatchers("/api/f1/**").permitAll();
+                    auth.pathMatchers("/api/f1/races").permitAll();
+                    auth.pathMatchers("/api/f1/nextRace").permitAll();
 
                     auth.anyExchange().authenticated();
                 })

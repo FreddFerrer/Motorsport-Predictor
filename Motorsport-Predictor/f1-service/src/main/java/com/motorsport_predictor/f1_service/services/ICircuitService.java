@@ -1,10 +1,10 @@
 package com.motorsport_predictor.f1_service.services;
 
-import com.motorsport_predictor.f1_service.models.entities.Circuit;
+import com.motorsport_predictor.f1_service.dto.CircuitDTO;
 
 import java.util.List;
 
 public interface ICircuitService {
 
-    List<Circuit> findAllCircuit();
+    List<CircuitDTO> getAllCircuit();
 }
