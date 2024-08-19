@@ -22,7 +22,6 @@ Esta aplicación web permite a los usuarios registrados realizar predicciones so
 
 ### Tecnologías 🤖
 
-- Frontend: Angular...proximamente 😅
 - Backend: Spring Boot, Spring Cloud
 - Base de Datos: MySQL
 - Orquestación: Docker Compose
