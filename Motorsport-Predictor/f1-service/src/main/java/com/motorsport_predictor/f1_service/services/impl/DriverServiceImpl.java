@@ -2,6 +2,7 @@ package com.motorsport_predictor.f1_service.services.impl;
 
 import com.motorsport_predictor.f1_service.dto.DriverDTO;
 import com.motorsport_predictor.f1_service.dto.TeamDTO;
+import com.motorsport_predictor.f1_service.exceptions.ResourceNotFoundException;
 import com.motorsport_predictor.f1_service.models.entities.Driver;
 import com.motorsport_predictor.f1_service.models.entities.Team;
 import com.motorsport_predictor.f1_service.models.repositories.IDriverRepository;
@@ -30,6 +31,11 @@ public class DriverServiceImpl implements IDriverService {
                     .team(mapToTeamDTO(driver.getTeam()))
                     .build())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean existById(Long driverId) {
+        return driverRepository.existsById(driverId);
     }
 
     // Método para mapear Team a TeamDTO

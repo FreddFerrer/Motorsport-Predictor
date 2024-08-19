@@ -106,6 +106,11 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    public String getLoggedInUserId() {
+        return getLoggedUserId();
+    }
+
+    @Override
     public void deleteUser(String userId) {
         try {
             KeycloakProvider.getUserResource()
@@ -137,7 +142,7 @@ public class UserServiceImpl implements IUserService {
         usersResource.update(user);
     }
 
-    public static String getLoggedInUserId() {
+    public static String getLoggedUserId() {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 

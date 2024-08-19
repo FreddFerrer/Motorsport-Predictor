@@ -108,7 +108,7 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
     @Override
     public List<GroupDTO> getGroupsByUser() {
         // Detectar el id del usuario logeado
-        String userId = UserServiceImpl.getLoggedInUserId();
+        String userId = UserServiceImpl.getLoggedUserId();
 
         // Buscar y devoler los grupos usando el metodo creado en esta misma clase
         return getGroupsByUserId (userId);
@@ -151,7 +151,7 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
         UserRepresentation user = KeycloakProvider.getUserById(userId);
 
         //Obtener el id del usuario logeado
-        String loggedInUserId = UserServiceImpl.getLoggedInUserId();
+        String loggedInUserId = UserServiceImpl.getLoggedUserId();
 
         // Busca y comprueba que el Id del grupo exista
         Group group = groupRepository.findById(groupId)

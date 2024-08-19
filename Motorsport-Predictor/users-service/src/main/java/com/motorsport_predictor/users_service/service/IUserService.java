@@ -9,6 +9,7 @@ public interface IUserService {
     List<UserRepresentation> findAllUsers();
     List<UserRepresentation> searchUserByUsername(String username);
     UserRepresentation createUser(CreateUserDTO createUserDTO);
+    String getLoggedInUserId();
     void deleteUser(String userId);
     void updateUser(String userId, CreateUserDTO createUserDTO);
 }

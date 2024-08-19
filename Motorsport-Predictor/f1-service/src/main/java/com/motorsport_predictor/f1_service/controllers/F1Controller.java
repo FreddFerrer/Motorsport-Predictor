@@ -8,10 +8,7 @@ import com.motorsport_predictor.f1_service.services.IRaceService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/f1")
@@ -39,6 +36,16 @@ public class F1Controller {
     public ResponseEntity<?> getAllDrivers(){
         try {
             return ResponseEntity.ok(driverService.getAllDrivers());
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
+        }
+    }
+
+    @GetMapping("/drivers/{driverId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    public ResponseEntity<?> getDriverById(@PathVariable Long driverId){
+        try {
+            return ResponseEntity.ok(driverService.existById(driverId));
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());
         }

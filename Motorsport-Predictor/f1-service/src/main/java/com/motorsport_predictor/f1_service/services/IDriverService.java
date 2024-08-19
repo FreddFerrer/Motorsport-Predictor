@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface IDriverService {
     List<DriverDTO> getAllDrivers();
+    boolean existById(Long driverId);
 }

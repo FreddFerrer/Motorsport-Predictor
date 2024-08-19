@@ -38,6 +38,16 @@ public class UsersController {
         }
     }
 
+    @GetMapping("/getLoggedUser")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    public ResponseEntity<?> getUserLoggedId(){
+        try {
+            return ResponseEntity.ok(userService.getLoggedInUserId());
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
+        }
+    }
+
     @PostMapping("/create")
     public ResponseEntity<?> createUser(@RequestBody CreateUserDTO userDTO) {
         try {

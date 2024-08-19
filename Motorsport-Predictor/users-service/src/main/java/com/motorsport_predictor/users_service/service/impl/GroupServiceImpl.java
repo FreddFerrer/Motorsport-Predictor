@@ -139,7 +139,7 @@ public class GroupServiceImpl implements IGroupService {
     @Override
     public GroupDTO createNewGroup(CreateGroupDTO createGroupDTO) {
 
-        String userId = UserServiceImpl.getLoggedInUserId();
+        String userId = UserServiceImpl.getLoggedUserId();
 
         Group group = Group.builder()
                 .name(createGroupDTO.getName())
