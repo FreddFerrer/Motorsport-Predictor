@@ -9,8 +9,6 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 public class PredictionsRequestDTO {
     private List<PredictionDTO> predictions;
 }

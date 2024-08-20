@@ -30,6 +30,9 @@ public class SecurityConfig {
                     auth.pathMatchers("/api/f1/races").permitAll();
                     auth.pathMatchers("/api/f1/nextRace").permitAll();
 
+                    //predictions-service
+
+
                     auth.anyExchange().authenticated();
                 })
                 .oauth2Login(Customizer.withDefaults());

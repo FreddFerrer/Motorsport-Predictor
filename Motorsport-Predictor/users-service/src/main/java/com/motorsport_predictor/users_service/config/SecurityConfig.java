@@ -30,7 +30,8 @@ public class SecurityConfig {
                                         "/api/groups/search/{searchTerm}",
                                         "/api/groups/{groupId}/getMembers").permitAll()
                                 .anyRequest().authenticated())
-                .oauth2ResourceServer(configure -> configure.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter())));
+                .oauth2ResourceServer(configure ->
+                        configure.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter())));
 
         return http.build();
     }

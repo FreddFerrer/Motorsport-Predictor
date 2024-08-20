@@ -242,7 +242,7 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
         boolean exist = groupMemberRepository.existsByUserIdAndGroupId(userId, groupId);
 
         if (!exist){
-            throw new BadRequestException("User does not belong to the group");
+            throw new ResourceNotFoundException(userId);
         } else {
             return true;
         }

@@ -1,7 +1,6 @@
 package com.motorsport_predictor.f1_service.controllers;
 
 import com.motorsport_predictor.f1_service.exceptions.BadRequestException;
-import com.motorsport_predictor.f1_service.models.repositories.IDriverRepository;
 import com.motorsport_predictor.f1_service.services.ICircuitService;
 import com.motorsport_predictor.f1_service.services.IDriverService;
 import com.motorsport_predictor.f1_service.services.IRaceService;
@@ -43,9 +42,10 @@ public class F1Controller {
 
     @GetMapping("/drivers/{driverId}/exists")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
-    public ResponseEntity<?> getDriverById(@PathVariable Long driverId){
+    public ResponseEntity<Boolean> getDriverById(@PathVariable Long driverId) {
         try {
-            return ResponseEntity.ok(driverService.existById(driverId));
+            boolean exists = driverService.existById(driverId);
+            return ResponseEntity.ok().body(exists);
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());
         }
@@ -60,7 +60,7 @@ public class F1Controller {
         }
     }
 
-    @GetMapping("/races/{raceId}")
+    @GetMapping("/raceById/{raceId}")
     public ResponseEntity<?> getRaceById(@PathVariable Long raceId){
         try {
             return ResponseEntity.ok(raceService.getRaceById(raceId));
@@ -69,7 +69,7 @@ public class F1Controller {
         }
     }
 
-    @GetMapping("/races/{raceId}")
+    @GetMapping("/races/{raceId}/exist")
     public ResponseEntity<?> existRaceId(@PathVariable Long raceId){
         try {
             return ResponseEntity.ok(raceService.existById(raceId));
