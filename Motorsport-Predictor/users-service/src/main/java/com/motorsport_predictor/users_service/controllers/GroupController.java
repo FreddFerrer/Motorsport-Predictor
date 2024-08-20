@@ -120,6 +120,16 @@ public class GroupController {
         }
     }
 
+    @GetMapping("/existUserInGroup/{groupId}/{userId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    public ResponseEntity<?> existUserInGroup(@PathVariable Long groupId, @PathVariable String userId) {
+        try {
+            return ResponseEntity.ok(groupMemberService.isUserInGroup(groupId, userId));
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
+        }
+    }
+
     @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<?> createGroup(@RequestBody @Valid CreateGroupDTO createGroupDTO) {

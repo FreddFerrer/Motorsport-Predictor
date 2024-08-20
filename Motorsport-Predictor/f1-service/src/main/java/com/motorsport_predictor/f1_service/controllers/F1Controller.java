@@ -41,7 +41,7 @@ public class F1Controller {
         }
     }
 
-    @GetMapping("/drivers/{driverId}")
+    @GetMapping("/drivers/{driverId}/exists")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<?> getDriverById(@PathVariable Long driverId){
         try {
@@ -55,6 +55,24 @@ public class F1Controller {
     public ResponseEntity<?> getAllRaces(){
         try {
             return ResponseEntity.ok(raceService.getAllRaces());
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
+        }
+    }
+
+    @GetMapping("/races/{raceId}")
+    public ResponseEntity<?> getRaceById(@PathVariable Long raceId){
+        try {
+            return ResponseEntity.ok(raceService.getRaceById(raceId));
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
+        }
+    }
+
+    @GetMapping("/races/{raceId}")
+    public ResponseEntity<?> existRaceId(@PathVariable Long raceId){
+        try {
+            return ResponseEntity.ok(raceService.existById(raceId));
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());
         }

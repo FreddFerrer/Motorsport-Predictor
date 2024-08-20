@@ -237,5 +237,16 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
         groupMemberRepository.delete(groupMember);
     }
 
+    @Override
+    public boolean isUserInGroup(Long groupId, String userId) {
+        boolean exist = groupMemberRepository.existsByUserIdAndGroupId(userId, groupId);
+
+        if (!exist){
+            throw new BadRequestException("User does not belong to the group");
+        } else {
+            return true;
+        }
+    }
+
 
 }

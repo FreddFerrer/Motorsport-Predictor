@@ -1,6 +1,7 @@
 package com.motorsport_predictor.predictions_service.services.impl;
 
 import com.motorsport_predictor.predictions_service.dto.request.PredictionsRequestDTO;
+import com.motorsport_predictor.predictions_service.exceptions.BadRequestException;
 import com.motorsport_predictor.predictions_service.feign.IF1Client;
 import com.motorsport_predictor.predictions_service.feign.IUserClient;
 import com.motorsport_predictor.predictions_service.services.IF1PredictionService;
@@ -17,12 +18,20 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
 
     @Override
     public void createPrediction(
-            @PathVariable Long groupMemberId,
+            @PathVariable Long memberGroupId,
             @PathVariable Long raceId,
             PredictionsRequestDTO request) {
 
         // Consulta el id del usuario logeado
         String userIdFromService = usersClient.getLoggedInUserId();
+
+        // Verificar si el usuario pertenece al grupo
+        String userId = usersClient.getLoggedInUserId();
+        if (!usersClient.existUserInGroup(memberGroupId, userId)) {
+            throw new BadRequestException("El usuario no pertenece al grupo.");
+        }
+
+        // Verificar si existe race_id
 
         // Validar cantidad de predicciones
         if (request.getPredictions().size() > 10) {

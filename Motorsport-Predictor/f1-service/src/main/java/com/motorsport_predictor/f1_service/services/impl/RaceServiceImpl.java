@@ -7,12 +7,10 @@ import com.motorsport_predictor.f1_service.models.entities.Circuit;
 import com.motorsport_predictor.f1_service.models.entities.Race;
 import com.motorsport_predictor.f1_service.models.repositories.IRaceRepository;
 import com.motorsport_predictor.f1_service.services.IRaceService;
-import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,6 +52,30 @@ public class RaceServiceImpl implements IRaceService {
                 .circuit(mapToCircuitDto(nextRace.getCircuit()))
                 .date(nextRace.getDate())
                 .time(nextRace.getTime())
+                .build();
+    }
+
+    @Override
+    public boolean existById(Long raceId) {
+        boolean race = raceRepository.existsById(raceId);
+
+        if (!race) {
+            throw new ResourceNotFoundException("raceId" + raceId);
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    public RaceDTO getRaceById(Long raceId) {
+        Race race = raceRepository.findById(raceId).orElseThrow(() -> new ResourceNotFoundException("Race does not exist"));
+        return RaceDTO.builder()
+                .season(race.getSeason())
+                .round(race.getRound())
+                .raceName(race.getRaceName())
+                .circuit(mapToCircuitDto(race.getCircuit()))
+                .date(race.getDate())
+                .time(race.getTime())
                 .build();
     }
 }

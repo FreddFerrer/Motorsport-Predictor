@@ -13,5 +13,6 @@ public interface IGroupMemberService {
     void addMemberToGroupById(Long groupId, String userId);
     void addMemberToGroupByUsername(Long groupId, String username);
     void removeMemberFromGroupById(Long groupId, String userId);
+    boolean isUserInGroup(Long groupId, String userId);
 
 }

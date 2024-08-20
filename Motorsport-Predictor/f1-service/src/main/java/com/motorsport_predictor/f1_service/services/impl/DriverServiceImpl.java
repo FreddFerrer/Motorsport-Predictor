@@ -35,7 +35,13 @@ public class DriverServiceImpl implements IDriverService {
 
     @Override
     public boolean existById(Long driverId) {
-        return driverRepository.existsById(driverId);
+        boolean driveId = driverRepository.existsById(driverId);
+
+        if (!driveId) {
+            throw new ResourceNotFoundException("driverId" + driverId);
+        } else {
+            return true;
+        }
     }
 
     // Método para mapear Team a TeamDTO
