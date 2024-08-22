@@ -5,6 +5,8 @@ import com.motorsport_predictor.f1_service.models.entities.Circuit;
 import com.motorsport_predictor.f1_service.models.repositories.ICircuitRepository;
 import com.motorsport_predictor.f1_service.services.ICircuitService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,8 +19,8 @@ public class CircuitServiceImpl implements ICircuitService {
     private ICircuitRepository circuitRepository;
 
     @Override
-    public List<CircuitDTO> getAllCircuit() {
-        List<Circuit> circuits = circuitRepository.findAll();
+    public List<CircuitDTO> getAllCircuit(Pageable pageable) {
+        Page<Circuit> circuits = circuitRepository.findAll(pageable);
         return circuits.stream()
                 .map(circuit -> CircuitDTO.builder()
                         .circuitName(circuit.getCircuitName())
