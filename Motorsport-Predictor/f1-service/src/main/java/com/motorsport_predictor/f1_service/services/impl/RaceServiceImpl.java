@@ -60,7 +60,7 @@ public class RaceServiceImpl implements IRaceService {
         boolean race = raceRepository.existsById(raceId);
 
         if (!race) {
-            throw new ResourceNotFoundException("raceId" + raceId);
+            return false;
         } else {
             return true;
         }

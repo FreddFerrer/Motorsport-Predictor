@@ -239,14 +239,12 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
 
     @Override
     public boolean isUserInGroup(Long groupId, String userId) {
-        boolean exist = groupMemberRepository.existsByUserIdAndGroupId(userId, groupId);
+        boolean exist = groupMemberRepository.existsByUserIdAndGroupMembersId(userId, groupId);
 
         if (!exist){
-            throw new ResourceNotFoundException(userId);
+            return false;
         } else {
             return true;
         }
     }
-
-
 }

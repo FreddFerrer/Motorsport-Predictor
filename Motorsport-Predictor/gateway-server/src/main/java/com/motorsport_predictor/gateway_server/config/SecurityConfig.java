@@ -29,9 +29,10 @@ public class SecurityConfig {
                     //f1-service
                     auth.pathMatchers("/api/f1/races").permitAll();
                     auth.pathMatchers("/api/f1/nextRace").permitAll();
+                    auth.pathMatchers("/api/f1/raceById/{raceId}\"").permitAll();
 
                     //predictions-service
-
+                    auth.pathMatchers("/api/predictions/f1/prueba/{driverId}").permitAll();
 
                     auth.anyExchange().authenticated();
                 })

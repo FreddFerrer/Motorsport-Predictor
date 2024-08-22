@@ -38,7 +38,7 @@ public class DriverServiceImpl implements IDriverService {
         boolean driveId = driverRepository.existsById(driverId);
 
         if (!driveId) {
-            throw new ResourceNotFoundException("driverId" + driverId);
+            return false;
         } else {
             return true;
         }

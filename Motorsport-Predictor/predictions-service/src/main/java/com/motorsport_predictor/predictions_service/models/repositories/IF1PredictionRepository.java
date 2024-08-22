@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface IF1PredictionRepository extends JpaRepository<F1Prediction, Long> {
 
+    int countByGroupMemberIdAndRaceId(Long memberGroupId, Long raceId);
 }

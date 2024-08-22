@@ -40,7 +40,7 @@ public class F1Controller {
         }
     }
 
-    @GetMapping("/drivers/{driverId}/exists")
+    @GetMapping("/drivers/{driverId}/exist")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<Boolean> getDriverById(@PathVariable Long driverId) {
         try {

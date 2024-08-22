@@ -19,11 +19,11 @@ public class F1Prediction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @JoinColumn(name = "driver_id")
+    @Column(name = "driver_id")
     private Long driver;
 
     @Column(name = "race_id", nullable = false)
-    private Long race;
+    private Long raceId;
 
     @Column(name = "group_member_id", nullable = false)
     private Long groupMemberId;

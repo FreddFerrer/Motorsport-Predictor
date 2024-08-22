@@ -26,5 +26,5 @@ public interface IGroupMemberRepository extends JpaRepository<GroupMember, Long>
 
     boolean existsByGroupAndUserId(Group group, String userId);
 
-    boolean existsByUserIdAndGroupId(String userId, Long groupId);
+    boolean existsByUserIdAndGroupMembersId(String userId, Long groupId);
 }

@@ -42,6 +42,12 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
             throw new IllegalArgumentException("La carrera no existe.");
         }
 
+        // Contar cuántas predicciones ya existen para el usuario en esta carrera
+        int existingPredictions = f1PredictionRepository.countByGroupMemberIdAndRaceId(memberGroupId, raceId);
+        if (existingPredictions >= 10) {
+            throw new IllegalArgumentException("El usuario ya ha realizado 10 predicciones para esta carrera.");
+        }
+
         // Validar cantidad de predicciones
         if (request.getPredictions().size() > 10) {
             throw new IllegalArgumentException("Solo se permiten hasta 10 predicciones por solicitud.");
@@ -55,11 +61,19 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
             }
         });
 
-        // Validar duplicados
+        // Validar pilotos duplicados
         Set<Long> driverIds = new HashSet<>();
         for (PredictionDTO prediction : request.getPredictions()) {
             if (!driverIds.add(prediction.getDriverId())) {
                 throw new IllegalArgumentException("No se pueden repetir pilotos en una predicción.");
+            }
+        }
+
+        // Validar puestos duplicados
+        Set<Integer> positions = new HashSet<>();
+        for (PredictionDTO prediction : request.getPredictions()) {
+            if (!positions.add(prediction.getPredictedPosition())) {
+                throw new IllegalArgumentException("No se pueden repetir los puestos.");
             }
         }
 
@@ -68,7 +82,7 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
         for (PredictionDTO predictionDto : request.getPredictions()) {
             F1Prediction individualPrediction = new F1Prediction();
             individualPrediction.setGroupMemberId(memberGroupId);
-            individualPrediction.setRace(raceId);
+            individualPrediction.setRaceId(raceId);
             individualPrediction.setDriver(predictionDto.getDriverId());
             individualPrediction.setPredictedPosition(predictionDto.getPredictedPosition());
             individualPrediction.setCreatedAt(LocalDateTime.now());
