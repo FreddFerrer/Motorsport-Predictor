@@ -2,6 +2,8 @@ package com.motorsport_predictor.users_service.models.repositories;
 
 import com.motorsport_predictor.users_service.models.entities.Group;
 import com.motorsport_predictor.users_service.models.entities.GroupMember;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,11 +18,9 @@ public interface IGroupMemberRepository extends JpaRepository<GroupMember, Long>
 
     Optional<GroupMember> findByGroupIdAndUserId(Long groupId, String userId);
 
-    //List<String> findUserIdByGroupId(Long groupId);
     @Query("SELECT gm.userId, gm.joinedAt FROM GroupMember gm WHERE gm.group.id = :groupId")
-    List<Object[]> findUserIdAndJoinedAtByGroupId(@Param("groupId") Long groupId);
+    Page<Object[]> findUserIdAndJoinedAtByGroupId(@Param("groupId") Long groupId, Pageable pageable);
 
-    //GroupMember findByGroupAndUserId(Group group, String id);
     @Query("SELECT gm.group.id FROM GroupMember gm WHERE gm.userId = :userId")
     List<Long> findGroupIdsByUserId(@Param("userId") String userId);
 

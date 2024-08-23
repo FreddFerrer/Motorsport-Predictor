@@ -19,20 +19,18 @@ public class SecurityConfig {
 
                     //users-service
                     auth.pathMatchers("/api/users/create").permitAll();
-                    auth.pathMatchers("/api/groups/list").permitAll();
-                    auth.pathMatchers("/api/groups/{groupId}/getMembers").permitAll();
-                    auth.pathMatchers("/api/groups/getGroupsByUserId/{userId}").permitAll();
-                    auth.pathMatchers("/api/groups/popularGroups").permitAll();
+                    auth.pathMatchers("/api/groups/").permitAll();
+                    auth.pathMatchers("/api/groups/populars").permitAll();
                     auth.pathMatchers("/api/groups/search/{searchTerm}").permitAll();
-                    auth.pathMatchers("/api/groups/{groupId}/getMembers").permitAll();
+                    auth.pathMatchers("/api/groups/{groupId}/members").permitAll();
 
                     //f1-service
                     auth.pathMatchers("/api/f1/races").permitAll();
-                    auth.pathMatchers("/api/f1/nextRace").permitAll();
-                    auth.pathMatchers("/api/f1/raceById/{raceId}\"").permitAll();
+                    auth.pathMatchers("/api/f1/races/nextRace").permitAll();
+                    auth.pathMatchers("/api/f1/races/{raceId}\"").permitAll();
 
                     //predictions-service
-                    auth.pathMatchers("/api/predictions/f1/prueba/{driverId}").permitAll();
+
 
                     auth.anyExchange().authenticated();
                 })

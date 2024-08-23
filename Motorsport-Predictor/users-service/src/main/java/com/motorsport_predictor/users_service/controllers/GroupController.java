@@ -9,6 +9,8 @@ import com.motorsport_predictor.users_service.service.IGroupMemberService;
 import com.motorsport_predictor.users_service.service.IGroupService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,10 +26,10 @@ public class GroupController {
     @Autowired
     private IGroupMemberService groupMemberService;
 
-    @GetMapping("/list")
-    public ResponseEntity<?> getAllGroups() {
+    @GetMapping("/")
+    public ResponseEntity<?> getAllGroups(@PageableDefault(size = 10) Pageable pageable) {
         try {
-            return ResponseEntity.ok(groupService.getAllGroups());
+            return ResponseEntity.ok(groupService.getAllGroups(pageable));
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());
         }
@@ -53,11 +55,12 @@ public class GroupController {
         }
     }
 
-    @GetMapping("/byUser/{name}")
+    // return all the groups by User logged
+    @GetMapping("/byUser")
     @PreAuthorize("hasRole('ROLE_USER')")
-    public ResponseEntity<?> getGroupByUser() {
+    public ResponseEntity<?> getGroupByUser(Pageable pageable) {
         try {
-            return ResponseEntity.ok(groupMemberService.getGroupsByUser());
+            return ResponseEntity.ok(groupMemberService.getGroupsByUser(pageable));
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());
         }
@@ -65,15 +68,15 @@ public class GroupController {
 
     @GetMapping("/byDiscipline/{discipline}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
-    public ResponseEntity<?> getGroupByDiscipline(@PathVariable String discipline) {
+    public ResponseEntity<?> getGroupByDiscipline(@PathVariable String discipline, @PageableDefault(size = 10) Pageable pageable) {
         try {
-            return ResponseEntity.ok(groupService.getGroupsByDiscipline(discipline));
+            return ResponseEntity.ok(groupService.getGroupsByDiscipline(discipline, pageable));
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());
         }
     }
 
-    @GetMapping("/popularGroups")
+    @GetMapping("/populars")
     public ResponseEntity<?> getPopularGroups() {
         try {
             return ResponseEntity.ok(groupService.getPopularGroups());
@@ -83,43 +86,44 @@ public class GroupController {
     }
 
     @GetMapping("/search/{searchTerm}")
-    public ResponseEntity<?> searchGroups(@PathVariable String searchTerm) {
+    public ResponseEntity<?> searchGroups(@PathVariable String searchTerm, @PageableDefault(size = 10) Pageable pageable) {
         try {
-            return ResponseEntity.ok(groupService.searchGroups(searchTerm));
+            return ResponseEntity.ok(groupService.searchGroups(searchTerm, pageable));
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());
         }
     }
 
-    @GetMapping("/{groupId}/getMembers")
-    public ResponseEntity<?> getMembersByGroup(@PathVariable Long groupId) {
+    @GetMapping("/{groupId}/members")
+    public ResponseEntity<?> getMembersByGroup(@PathVariable Long groupId, @PageableDefault(size = 10) Pageable pageable) {
         try {
-            return ResponseEntity.ok(groupMemberService.getMembersByGroupId(groupId));
+            return ResponseEntity.ok(groupMemberService.getMembersByGroupId(groupId, pageable));
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());
         }
     }
 
-    @GetMapping("/getGroupsByUserId/{userId}")
+    @GetMapping("/byUserId/{userId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
-    public ResponseEntity<?> getGroupsByUserId(@PathVariable String userId) {
+    public ResponseEntity<?> getGroupsByUserId(@PathVariable String userId, @PageableDefault(size = 10) Pageable pageable) {
         try {
-            return ResponseEntity.ok(groupMemberService.getGroupsByUserId(userId));
+            return ResponseEntity.ok(groupMemberService.getGroupsByUserId(userId, pageable));
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());
         }
     }
 
-    @GetMapping("/getGroupsByUserId/{username}")
+    @GetMapping("/byUsername/{username}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
-    public ResponseEntity<?> getGroupsByUsername(@PathVariable String username) {
+    public ResponseEntity<?> getGroupsByUsername(@PathVariable String username, @PageableDefault(size = 10) Pageable pageable) {
         try {
-            return ResponseEntity.ok(groupMemberService.getGroupsByUsername(username));
+            return ResponseEntity.ok(groupMemberService.getGroupsByUsername(username, pageable));
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());
         }
     }
 
+    // Intern endpoint
     @GetMapping("/existUserInGroup/{groupId}/{userId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<?> existUserInGroup(@PathVariable Long groupId, @PathVariable String userId) {
@@ -141,23 +145,23 @@ public class GroupController {
         }
     }
 
-    @PostMapping("/{groupId}/addMemberById")
+    @PostMapping("/{groupId}/newMemberId")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<?> addMemberById(@PathVariable Long groupId, @RequestBody @Valid AddMemberByIdDTO newMemberToGroupDTO) {
         try {
             groupMemberService.addMemberToGroupById(groupId, newMemberToGroupDTO.getUserId());
-            return ResponseEntity.status(HttpStatus.CREATED).body("en teoria se agrego rey");
+            return ResponseEntity.status(HttpStatus.CREATED).body("successfully");
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());
         }
     }
 
-    @PostMapping("/{groupId}/addMemberByUsername")
+    @PostMapping("/{groupId}/newMemberUsername")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<?> addMemberByUsername(@PathVariable Long groupId, @RequestBody AddMemberByUsernameDTO newMemberByUsernameDTO) {
         try {
             groupMemberService.addMemberToGroupByUsername(groupId, newMemberByUsernameDTO.getUsername());
-            return ResponseEntity.status(HttpStatus.CREATED).body("en teoria se agrego rey");
+            return ResponseEntity.status(HttpStatus.CREATED).body("successfully");
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());
         }

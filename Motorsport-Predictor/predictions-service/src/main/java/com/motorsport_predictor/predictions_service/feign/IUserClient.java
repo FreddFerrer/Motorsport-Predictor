@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(value = "users-service")
 public interface IUserClient {
-    @GetMapping("/api/users/getLoggedUser")
+    @GetMapping("/api/users/loggedUser")
     String getLoggedInUserId();
     @GetMapping("/api/groups/existUserInGroup/{groupId}/{userId}")
     boolean existUserInGroup(@PathVariable Long groupId, @PathVariable String userId);

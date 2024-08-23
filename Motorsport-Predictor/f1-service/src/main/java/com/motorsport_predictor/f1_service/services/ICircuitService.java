@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface ICircuitService {
 
-    List<CircuitDTO> getAllCircuit(Pageable pageable);
+    Page<CircuitDTO> getAllCircuit(Pageable pageable);
 }

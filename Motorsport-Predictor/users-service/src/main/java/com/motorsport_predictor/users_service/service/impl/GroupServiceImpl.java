@@ -6,6 +6,8 @@ import com.motorsport_predictor.users_service.models.entities.Group;
 import com.motorsport_predictor.users_service.models.repositories.IGroupRepository;
 import com.motorsport_predictor.users_service.service.IGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,11 +23,10 @@ public class GroupServiceImpl implements IGroupService {
 
     // Listar todos los grupos
     @Override
-    public List<GroupDTO> getAllGroups() {
-        List<Group> groups = groupRepository.findAll();
+    public Page<GroupDTO> getAllGroups(Pageable pageable) {
+        Page<Group> groups = groupRepository.findAll(pageable);
 
-        return groups.stream()
-                .map(group -> GroupDTO.builder()
+        return groups.map(group -> GroupDTO.builder()
                         .name(group.getName())
                         .description(group.getDescription())
                         .isPublic(group.isPublic())
@@ -34,8 +35,7 @@ public class GroupServiceImpl implements IGroupService {
                         .creatorId(group.getCreatorId())
                         .isOfficial(group.isOfficial())
                         .discipline(group.getDiscipline())
-                        .build())
-                .collect(Collectors.toList());
+                        .build());
     }
 
     // Obtener grupo por ID
@@ -73,11 +73,10 @@ public class GroupServiceImpl implements IGroupService {
 
     // Obtener grupo por disciplina
     @Override
-    public List<GroupDTO> getGroupsByDiscipline(String discipline) {
-        List<Group> groups = groupRepository.findByDiscipline(discipline);
+    public Page<GroupDTO> getGroupsByDiscipline(String discipline, Pageable pageable) {
+        Page<Group> groups = groupRepository.findByDiscipline(discipline, pageable);
 
-        return groups.stream()
-                .map(group -> GroupDTO.builder()
+        return groups.map(group -> GroupDTO.builder()
                         .name(group.getName())
                         .description(group.getDescription())
                         .isPublic(group.isPublic())
@@ -86,8 +85,7 @@ public class GroupServiceImpl implements IGroupService {
                         .creatorId(group.getCreatorId())
                         .isOfficial(group.isOfficial())
                         .discipline(group.getDiscipline())
-                        .build())
-                .collect(Collectors.toList());
+                        .build());
     }
 
     // Obtener una lista de los grupos más populares (teniendo en cuenta el número de miembros)
@@ -114,13 +112,12 @@ public class GroupServiceImpl implements IGroupService {
 
     // Busca grupos por NOMBRE o DESCRIPTION
     @Override
-    public List<GroupDTO> searchGroups(String searchTerm) {
+    public Page<GroupDTO> searchGroups(String searchTerm, Pageable pageable) {
         // Paso 1: Usar el repositorio para buscar grupos que coincidan con el término de búsqueda
-        List<Group> groups = groupRepository.searchGroups(searchTerm);
+        Page<Group> groups = groupRepository.searchGroups(searchTerm, pageable);
 
         // Paso 2: Mapear los resultados a GroupDTOs
-        return groups.stream()
-                .map(group -> {
+        return groups.map(group -> {
                     GroupDTO dto = new GroupDTO();
                     dto.setName(group.getName());
                     dto.setDescription(group.getDescription());
@@ -130,8 +127,7 @@ public class GroupServiceImpl implements IGroupService {
                     dto.setCreatorId(group.getCreatorId());
                     dto.setOfficial(group.isOfficial());
                     return dto;
-                })
-                .collect(Collectors.toList());
+                });
     }
 
 

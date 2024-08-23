@@ -13,10 +13,12 @@ import com.motorsport_predictor.users_service.util.KeycloakProvider;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -31,16 +33,16 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
     private IGroupRepository groupRepository;
 
     @Override
-    public List<GroupMemberDTO> getMembersByGroupId(Long groupId) {
+    public Page<GroupMemberDTO> getMembersByGroupId(Long groupId, Pageable pageable) {
         // Verificar si el grupo existe
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new ResourceNotFoundException("Group with ID " + groupId + " not found"));
 
         // Obtener los id de los miembros y sus fechas de ingreso
-        List<Object[]> members = groupMemberRepository.findUserIdAndJoinedAtByGroupId(groupId);
+        Page<Object[]> membersPage = groupMemberRepository.findUserIdAndJoinedAtByGroupId(groupId, pageable);
 
         // Separar los ids de los usuarios
-        List<String> memberIds = members.stream()
+        List<String> memberIds = membersPage.stream()
                 .map(member -> (String) member[0])
                 .collect(Collectors.toList());
 
@@ -52,7 +54,7 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
                 .collect(Collectors.toMap(UserRepresentation::getId, Function.identity()));
 
         // Mapear los datos a GroupMemberDTOs
-        return members.stream()
+        List<GroupMemberDTO> memberDTOs = membersPage.getContent().stream()
                 .map(member -> {
                     String userId = (String) member[0];
                     LocalDateTime joinedAt = (LocalDateTime) member[1];
@@ -63,7 +65,7 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
                     dto.setUsername(user.getUsername());
                     dto.setJoinedAt(joinedAt);
 
-                    // Obtengo la nacionalidad del atributo personalizado
+                    // Obtener la nacionalidad del atributo personalizado
                     String nationality = user.getAttributes() != null && user.getAttributes().get("nationality") != null ?
                             user.getAttributes().get("nationality").get(0) : "Unknown";
 
@@ -71,10 +73,13 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
                     return dto;
                 })
                 .collect(Collectors.toList());
+
+        // Retornar un Page de GroupMemberDTO
+        return new PageImpl<>(memberDTOs, pageable, membersPage.getTotalElements());
     }
 
     @Override
-    public List<GroupDTO> getGroupsByUserId(String userId) {
+    public Page<GroupDTO> getGroupsByUserId(String userId, Pageable pageable) {
         // Obtener el id del usuario y comprobar si existe.
         UserRepresentation user = KeycloakProvider.getUserById(userId);
 
@@ -82,40 +87,39 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
         List<Long> groupIds = groupMemberRepository.findGroupIdsByUserId(userId);
         if (groupIds.isEmpty()) {
 
-            return Collections.emptyList(); // Retornar lista vacía si no pertenece a ningún grupo
+            return Page.empty(); // Retornar lista vacía si no pertenece a ningún grupo
         }
 
         // Consultar datos de los grupos teniendo en cuenta los id obtenidos anteriormente.
-        List<Group> groups = groupRepository.findAllById(groupIds);
+        Page<Group> groupsPage = groupRepository.findByIdIn(groupIds, pageable);
 
         // Mapear los grupos a DTOs
-        return groups.stream()
-                .map(group -> {
-                    GroupDTO dto = new GroupDTO();
-                    dto.setName(group.getName());
-                    dto.setDescription(group.getDescription());
-                    dto.setPublic(group.isPublic());
-                    dto.setDiscipline(group.getDiscipline());
-                    dto.setCreatedAt(group.getCreatedAt());
-                    dto.setCreatorId(group.getCreatorId());
-                    dto.setOfficial(group.isOfficial());
-                    dto.setMemberCount(group.getMemberCount());
-                    return dto;
-                })
-                .collect(Collectors.toList());
+        Page<GroupDTO> groupDTOs = groupsPage.map(group -> GroupDTO.builder()
+                .name(group.getName())
+                .description(group.getDescription())
+                .isPublic(group.isPublic())
+                .discipline(group.getDiscipline())
+                .createdAt(group.getCreatedAt())
+                .creatorId(group.getCreatorId())
+                .isOfficial(group.isOfficial())
+                .memberCount(group.getMemberCount())
+                .build());
+
+        return groupDTOs;
     }
 
+
     @Override
-    public List<GroupDTO> getGroupsByUser() {
+    public Page<GroupDTO> getGroupsByUser(Pageable pageable) {
         // Detectar el id del usuario logeado
         String userId = UserServiceImpl.getLoggedUserId();
 
         // Buscar y devoler los grupos usando el metodo creado en esta misma clase
-        return getGroupsByUserId (userId);
+        return getGroupsByUserId (userId, pageable);
     }
 
     @Override
-    public List<GroupDTO> getGroupsByUsername(String username) {
+    public Page<GroupDTO> getGroupsByUsername(String username, Pageable pageable) {
         // Obtengo el id del usuario basándonos en el username.
         UserRepresentation user = KeycloakProvider.getUserByUsername(username);
         String userId = user.getId();
@@ -123,15 +127,14 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
         // Obtener todos los Id de los grupos a los que está relacionado ese usuario (un usuario puede estar en varios grupos distintos, nunca puede estar 2 veces en un mismo grupo)
         List<Long> groupIds = groupMemberRepository.findGroupIdsByUserId(userId);
         if (groupIds.isEmpty()) {
-            return Collections.emptyList(); // Retornar lista vacía si no pertenece a ningún grupo
+            return Page.empty(); // Retornar lista vacía si no pertenece a ningún grupo
         }
 
         // Consultar datos de los grupos teniendo en cuenta los id obtenidos anteriormente.
-        List<Group> groups = groupRepository.findAllById(groupIds);
+        Page<Group> groups = groupRepository.findByIdIn(groupIds, pageable);
 
         // Mapear los grupos a DTOs
-        return groups.stream()
-                .map(group -> {
+        return groups.map(group -> {
                     GroupDTO dto = new GroupDTO();
                     dto.setName(group.getName());
                     dto.setDescription(group.getDescription());
@@ -141,8 +144,7 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
                     dto.setCreatorId(group.getCreatorId());
                     dto.setOfficial(group.isOfficial());
                     return dto;
-                })
-                .collect(Collectors.toList());
+                });
     }
 
     @Override

@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.*;
 public class F1PredictionController {
 
     private final IF1PredictionService predictionService;
-    private final IF1Client if1Client;
-    private final IUserClient iUserClient;
 
     @PostMapping("/f1/{memberGroupId}/{raceId}/newPrediction")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")

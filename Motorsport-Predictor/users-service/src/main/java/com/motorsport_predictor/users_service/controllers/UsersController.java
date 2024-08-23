@@ -5,6 +5,8 @@ import com.motorsport_predictor.users_service.exceptions.BadRequestException;
 import com.motorsport_predictor.users_service.service.IUserService;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,11 +20,11 @@ public class UsersController {
     @Autowired
     private IUserService userService;
 
-    @GetMapping()
+    @GetMapping("/")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> findAllUsers(){
+    public ResponseEntity<?> findAllUsers(@PageableDefault(size = 10) Pageable pageable){
         try {
-            return ResponseEntity.ok(userService.findAllUsers());
+            return ResponseEntity.ok(userService.findAllUsers(pageable));
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());
         }
@@ -38,7 +40,8 @@ public class UsersController {
         }
     }
 
-    @GetMapping("/getLoggedUser")
+    // Intern endpoint
+    @GetMapping("/loggedUser")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<?> getUserLoggedId(){
         try {

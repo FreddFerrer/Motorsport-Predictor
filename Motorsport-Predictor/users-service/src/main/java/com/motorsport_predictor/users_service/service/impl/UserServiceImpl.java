@@ -16,6 +16,9 @@ import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -29,9 +32,22 @@ import java.util.List;
 public class UserServiceImpl implements IUserService {
 
     @Override
-    public List<UserRepresentation> findAllUsers() {
-        return KeycloakProvider.getRealmResource()
-                .users().list();
+    public Page<UserRepresentation> findAllUsers(Pageable pageable) {
+        // Obtener el recurso de usuarios de Keycloak
+        UsersResource usersResource = KeycloakProvider.getUserResource();
+
+        // La paginación en Keycloak se realiza utilizando `first` y `max` como parámetros para controlar el rango de resultados devueltos.
+        int firstResult = pageable.getPageNumber() * pageable.getPageSize();
+        int maxResults = pageable.getPageSize();
+
+        // Obtener la lista de usuarios con la paginación aplicada
+        List<UserRepresentation> users = usersResource.list(firstResult, maxResults);
+
+        // Contar el total de usuarios para poder calcular el total de páginas
+        int totalUsers = usersResource.count();
+
+        // Retornar los resultados como una instancia de `Page`
+        return new PageImpl<>(users, pageable, totalUsers);
     }
 
     @Override

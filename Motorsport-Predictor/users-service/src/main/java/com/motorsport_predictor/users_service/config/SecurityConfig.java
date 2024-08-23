@@ -23,12 +23,10 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/users/create",
-                                        "/api/groups/list",
-                                        "/api/groups/{groupId}/getMembers",
-                                        "/api/groups/getGroupsByUserId/{userId}",
-                                        "/api/groups/popularGroups",
+                                        "/api/groups/",
+                                        "/api/groups/populars",
                                         "/api/groups/search/{searchTerm}",
-                                        "/api/groups/{groupId}/getMembers").permitAll()
+                                        "/api/groups/{groupId}/members").permitAll()
                                 .anyRequest().authenticated())
                 .oauth2ResourceServer(configure ->
                         configure.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter())));

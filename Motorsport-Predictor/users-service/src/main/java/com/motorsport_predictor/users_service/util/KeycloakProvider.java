@@ -75,19 +75,4 @@ public class KeycloakProvider {
         }
         return users;
     }
-
-    public static List<UserRepresentation> getUsersByUsernames(List<String> usernames) {
-        UsersResource usersResource = getUserResource();
-        List<UserRepresentation> users = new ArrayList<>();
-
-        for (String username : usernames) {
-            try {
-                UserRepresentation user = (UserRepresentation) usersResource.search(username);
-                users.add(user);
-            } catch (ResourceNotFoundException e) {
-                throw  new BadRequestException(username);
-            }
-        }
-        return users;
-    }
 }

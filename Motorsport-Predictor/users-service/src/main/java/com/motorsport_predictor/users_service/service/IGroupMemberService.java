@@ -2,14 +2,17 @@ package com.motorsport_predictor.users_service.service;
 
 import com.motorsport_predictor.users_service.dto.response.GroupDTO;
 import com.motorsport_predictor.users_service.dto.response.GroupMemberDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
+
 public interface IGroupMemberService {
-    List<GroupMemberDTO> getMembersByGroupId(Long groupId);
-    List<GroupDTO> getGroupsByUserId(String userId); // Obtener grupos de un usuario
-    List<GroupDTO> getGroupsByUser();
-    List<GroupDTO> getGroupsByUsername(String username);
+    Page<GroupMemberDTO> getMembersByGroupId(Long groupId, Pageable pageable);
+    Page<GroupDTO> getGroupsByUserId(String userId, Pageable pageable);
+    Page<GroupDTO> getGroupsByUser(Pageable pageable);
+    Page<GroupDTO> getGroupsByUsername(String username,Pageable pageable);
     void addMemberToGroupById(Long groupId, String userId);
     void addMemberToGroupByUsername(Long groupId, String username);
     void removeMemberFromGroupById(Long groupId, String userId);

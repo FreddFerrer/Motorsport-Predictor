@@ -9,9 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 public class CircuitServiceImpl implements ICircuitService {
 
@@ -19,14 +16,13 @@ public class CircuitServiceImpl implements ICircuitService {
     private ICircuitRepository circuitRepository;
 
     @Override
-    public List<CircuitDTO> getAllCircuit(Pageable pageable) {
+    public Page<CircuitDTO> getAllCircuit(Pageable pageable) {
         Page<Circuit> circuits = circuitRepository.findAll(pageable);
-        return circuits.stream()
-                .map(circuit -> CircuitDTO.builder()
-                        .circuitName(circuit.getCircuitName())
-                        .locality(circuit.getLocality())
-                        .country(circuit.getCountry())
-                        .build())
-                .collect(Collectors.toList());
+
+        return circuits.map(circuit -> CircuitDTO.builder()
+                .circuitName(circuit.getCircuitName())
+                .locality(circuit.getLocality())
+                .country(circuit.getCountry())
+                .build());
     }
 }
