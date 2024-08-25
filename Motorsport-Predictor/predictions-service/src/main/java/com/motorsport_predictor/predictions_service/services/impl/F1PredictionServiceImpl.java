@@ -2,6 +2,7 @@ package com.motorsport_predictor.predictions_service.services.impl;
 
 import com.motorsport_predictor.predictions_service.dto.PredictionDTO;
 import com.motorsport_predictor.predictions_service.dto.request.PredictionsRequestDTO;
+import com.motorsport_predictor.predictions_service.dto.request.ResultRequestDTO;
 import com.motorsport_predictor.predictions_service.exceptions.BadRequestException;
 import com.motorsport_predictor.predictions_service.feign.IF1Client;
 import com.motorsport_predictor.predictions_service.feign.IUserClient;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -87,6 +89,18 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
             individualPrediction.setPredictedPosition(predictionDto.getPredictedPosition());
             individualPrediction.setCreatedAt(LocalDateTime.now());
             f1PredictionRepository.save(individualPrediction);
+        }
+
+    }
+
+    @Override
+    public void uploadF1RaceResults(Long raceId, List<ResultRequestDTO> results) {
+        // Verificar que el usuario que llama es un administrador
+        // (Lógica de autenticación y autorización aquí)
+
+        // Recorrer la lista de resultados y actualizar la posición real en f1_predictions
+        for (ResultRequestDTO result : results) {
+            f1PredictionRepository.updateActualPosition(result.getPosition(), raceId, result.getDriverId());
         }
 
     }
