@@ -2,9 +2,12 @@ package com.motorsport_predictor.f1_service.services.impl;
 
 import com.motorsport_predictor.f1_service.dto.CircuitDTO;
 import com.motorsport_predictor.f1_service.dto.RaceDTO;
+import com.motorsport_predictor.f1_service.dto.request.RaceResultRequestDTO;
 import com.motorsport_predictor.f1_service.exceptions.ResourceNotFoundException;
+import com.motorsport_predictor.f1_service.feign.IPredictionsClient;
 import com.motorsport_predictor.f1_service.models.entities.Circuit;
 import com.motorsport_predictor.f1_service.models.entities.Race;
+import com.motorsport_predictor.f1_service.models.repositories.IDriverRepository;
 import com.motorsport_predictor.f1_service.models.repositories.IRaceRepository;
 import com.motorsport_predictor.f1_service.services.IRaceService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +20,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RaceServiceImpl implements IRaceService {
     private final IRaceRepository raceRepository;
+    private final IPredictionsClient predictionsClient;
+    private final IDriverRepository driverRepository;
 
     @Override
     public List<RaceDTO> getAllRaces() {
@@ -77,5 +82,29 @@ public class RaceServiceImpl implements IRaceService {
                 .date(race.getDate())
                 .time(race.getTime())
                 .build();
+    }
+
+    @Override
+    public void uploadRaceResults(Long raceId, RaceResultRequestDTO results) {
+
+
+        // Verificar si existe el piloto
+        results.getRaceResult().forEach(result -> {
+            boolean driverExists = driverRepository.existsById(result.getDriverId());
+            if (!driverExists) {
+                throw new IllegalArgumentException("El piloto con ID " + result.getDriverId() + " no existe.");
+            }
+        });
+
+        results.getRaceResult().forEach(result -> {
+            int position = result.getPosition();
+            if (position < 1 || position > 10) {
+                throw new IllegalArgumentException("La posición " + position + " es inválida. Debe estar entre 1 y 10.");
+            }
+
+        });
+
+
+        //predictionsClient.sendRaceResults(raceId, results);
     }
 }

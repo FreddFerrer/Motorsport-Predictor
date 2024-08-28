@@ -1,8 +1,8 @@
 package com.motorsport_predictor.predictions_service.services.impl;
 
 import com.motorsport_predictor.predictions_service.dto.PredictionDTO;
+import com.motorsport_predictor.predictions_service.dto.RaceResultDTO;
 import com.motorsport_predictor.predictions_service.dto.request.PredictionsRequestDTO;
-import com.motorsport_predictor.predictions_service.dto.request.ResultRequestDTO;
 import com.motorsport_predictor.predictions_service.exceptions.BadRequestException;
 import com.motorsport_predictor.predictions_service.feign.IF1Client;
 import com.motorsport_predictor.predictions_service.feign.IUserClient;
@@ -94,14 +94,9 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
     }
 
     @Override
-    public void uploadF1RaceResults(Long raceId, List<ResultRequestDTO> results) {
-        // Verificar que el usuario que llama es un administrador
-        // (Lógica de autenticación y autorización aquí)
-
-        // Recorrer la lista de resultados y actualizar la posición real en f1_predictions
-        for (ResultRequestDTO result : results) {
+    public void updateF1RaceResults(Long raceId, List<RaceResultDTO> results) {
+        for (RaceResultDTO result : results) {
             f1PredictionRepository.updateActualPosition(result.getPosition(), raceId, result.getDriverId());
         }
-
     }
 }

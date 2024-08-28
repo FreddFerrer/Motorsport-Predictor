@@ -1,12 +1,16 @@
 package com.motorsport_predictor.f1_service.controllers;
 
+import com.motorsport_predictor.f1_service.dto.RaceResultDTO;
+import com.motorsport_predictor.f1_service.dto.request.RaceResultRequestDTO;
 import com.motorsport_predictor.f1_service.exceptions.BadRequestException;
 import com.motorsport_predictor.f1_service.services.ICircuitService;
 import com.motorsport_predictor.f1_service.services.IDriverService;
 import com.motorsport_predictor.f1_service.services.IRaceService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -86,6 +90,16 @@ public class F1Controller {
     public ResponseEntity<?> getNextRace(){
         try {
             return ResponseEntity.ok(raceService.getNextRace());
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
+        }
+    }
+
+    @PostMapping("/races/{raceId}/results")
+    public ResponseEntity<?> uploadF1RaceResult(@PathVariable Long raceId, @RequestBody @Valid RaceResultRequestDTO raceResult){
+        try {
+            raceService.uploadRaceResults(raceId, raceResult);
+            return ResponseEntity.status(HttpStatus.CREATED).body("successfully");
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());
         }
