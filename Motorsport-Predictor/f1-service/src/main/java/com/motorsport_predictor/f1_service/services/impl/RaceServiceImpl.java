@@ -101,10 +101,9 @@ public class RaceServiceImpl implements IRaceService {
             if (position < 1 || position > 10) {
                 throw new IllegalArgumentException("La posición " + position + " es inválida. Debe estar entre 1 y 10.");
             }
-
         });
 
 
-        //predictionsClient.sendRaceResults(raceId, results);
+        predictionsClient.sendRaceResults(raceId, results);
     }
 }

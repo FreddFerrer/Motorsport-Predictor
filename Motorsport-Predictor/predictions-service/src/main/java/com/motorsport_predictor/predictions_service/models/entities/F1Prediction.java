@@ -20,7 +20,7 @@ public class F1Prediction {
     private Long id;
     
     @Column(name = "driver_id")
-    private Long driver;
+    private Long driverId;
 
     @Column(name = "race_id", nullable = false)
     private Long raceId;

@@ -3,6 +3,7 @@ package com.motorsport_predictor.predictions_service.services.impl;
 import com.motorsport_predictor.predictions_service.dto.PredictionDTO;
 import com.motorsport_predictor.predictions_service.dto.RaceResultDTO;
 import com.motorsport_predictor.predictions_service.dto.request.PredictionsRequestDTO;
+import com.motorsport_predictor.predictions_service.dto.request.RaceResultRequestDTO;
 import com.motorsport_predictor.predictions_service.exceptions.BadRequestException;
 import com.motorsport_predictor.predictions_service.feign.IF1Client;
 import com.motorsport_predictor.predictions_service.feign.IUserClient;
@@ -11,6 +12,7 @@ import com.motorsport_predictor.predictions_service.models.repositories.IF1Predi
 import com.motorsport_predictor.predictions_service.services.IF1PredictionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDateTime;
@@ -85,7 +87,7 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
             F1Prediction individualPrediction = new F1Prediction();
             individualPrediction.setGroupMemberId(memberGroupId);
             individualPrediction.setRaceId(raceId);
-            individualPrediction.setDriver(predictionDto.getDriverId());
+            individualPrediction.setDriverId(predictionDto.getDriverId());
             individualPrediction.setPredictedPosition(predictionDto.getPredictedPosition());
             individualPrediction.setCreatedAt(LocalDateTime.now());
             f1PredictionRepository.save(individualPrediction);
@@ -94,9 +96,11 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
     }
 
     @Override
-    public void updateF1RaceResults(Long raceId, List<RaceResultDTO> results) {
-        for (RaceResultDTO result : results) {
-            f1PredictionRepository.updateActualPosition(result.getPosition(), raceId, result.getDriverId());
-        }
+    @Transactional
+    public void updateF1RaceResults(Long raceId, RaceResultRequestDTO results) {
+        // Recorrer la lista de resultados en RaceResultRequestDTO
+        results.getResult().forEach(raceResult -> {
+            f1PredictionRepository.updateActualPosition(raceResult.getPosition(), raceId, raceResult.getDriverId());
+        });
     }
 }

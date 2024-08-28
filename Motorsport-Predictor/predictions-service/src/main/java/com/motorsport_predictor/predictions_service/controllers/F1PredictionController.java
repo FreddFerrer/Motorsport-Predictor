@@ -1,9 +1,8 @@
 package com.motorsport_predictor.predictions_service.controllers;
 
 import com.motorsport_predictor.predictions_service.dto.request.PredictionsRequestDTO;
+import com.motorsport_predictor.predictions_service.dto.request.RaceResultRequestDTO;
 import com.motorsport_predictor.predictions_service.exceptions.BadRequestException;
-import com.motorsport_predictor.predictions_service.feign.IF1Client;
-import com.motorsport_predictor.predictions_service.feign.IUserClient;
 import com.motorsport_predictor.predictions_service.services.IF1PredictionService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -27,6 +26,19 @@ public class F1PredictionController {
                                             @RequestBody @Valid PredictionsRequestDTO predictionsRequestDTO) {
         try {
             predictionService.createPrediction(memberGroupId, raceId, predictionsRequestDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body("successfully");
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
+        }
+    }
+
+    // internal endpoint
+    @PostMapping("/f1/predictions/upload-results/{raceId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> uploadF1RaceResult(@PathVariable Long raceId,
+                                                @RequestBody @Valid RaceResultRequestDTO results) {
+        try {
+            predictionService.updateF1RaceResults(raceId, results);
             return ResponseEntity.status(HttpStatus.CREATED).body("successfully");
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());

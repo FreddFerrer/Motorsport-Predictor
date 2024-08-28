@@ -96,6 +96,7 @@ public class F1Controller {
     }
 
     @PostMapping("/races/{raceId}/results")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> uploadF1RaceResult(@PathVariable Long raceId, @RequestBody @Valid RaceResultRequestDTO raceResult){
         try {
             raceService.uploadRaceResults(raceId, raceResult);
