@@ -7,5 +7,5 @@ import java.util.List;
 
 @Data
 public class RaceResultRequestDTO {
-    private List<RaceResultDTO> result;
+    private List<RaceResultDTO> raceResult;
 }

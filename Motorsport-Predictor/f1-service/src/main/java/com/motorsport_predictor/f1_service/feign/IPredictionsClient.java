@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(name = "predictions-service")
 public interface IPredictionsClient {
-    @PostMapping("/api/predictions/upload-results/{raceId}")
+    @PostMapping("/api/predictions/f1/upload-results/{raceId}")
     void sendRaceResults(@PathVariable Long raceId, @RequestBody @Valid RaceResultRequestDTO results);
 }

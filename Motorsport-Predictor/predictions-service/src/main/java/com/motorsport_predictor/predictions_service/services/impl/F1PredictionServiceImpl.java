@@ -99,8 +99,13 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
     @Transactional
     public void updateF1RaceResults(Long raceId, RaceResultRequestDTO results) {
         // Recorrer la lista de resultados en RaceResultRequestDTO
-        results.getResult().forEach(raceResult -> {
+        results.getRaceResult().forEach(raceResult -> {
             f1PredictionRepository.updateActualPosition(raceResult.getPosition(), raceId, raceResult.getDriverId());
+        });
+
+        results.getRaceResult().forEach(result -> {
+            System.out.println("PREDICTIONS SERVICE____DRIVER ID : " + result.getDriverId());
+            System.out.println("PREDICTIONS SERVICE____POSITION : " + result.getPosition());
         });
     }
 }

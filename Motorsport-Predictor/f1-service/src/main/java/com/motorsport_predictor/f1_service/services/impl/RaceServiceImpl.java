@@ -13,7 +13,9 @@ import com.motorsport_predictor.f1_service.services.IRaceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -88,21 +90,34 @@ public class RaceServiceImpl implements IRaceService {
     public void uploadRaceResults(Long raceId, RaceResultRequestDTO results) {
 
 
-        // Verificar si existe el piloto
+        // Verificar si existe el piloto y que no se repitan los driverId
+        Set<Long> driverIds = new HashSet<>();
         results.getRaceResult().forEach(result -> {
             boolean driverExists = driverRepository.existsById(result.getDriverId());
             if (!driverExists) {
                 throw new IllegalArgumentException("El piloto con ID " + result.getDriverId() + " no existe.");
             }
+            if (!driverIds.add(result.getDriverId())) {
+                throw new IllegalArgumentException("El piloto con ID " + result.getDriverId() + " ya ha sido asignado a una posición.");
+            }
         });
 
+        // Verificar que las posiciones estén en el rango válido y que no se repitan
+        Set<Integer> positions = new HashSet<>();
         results.getRaceResult().forEach(result -> {
             int position = result.getPosition();
             if (position < 1 || position > 10) {
                 throw new IllegalArgumentException("La posición " + position + " es inválida. Debe estar entre 1 y 10.");
             }
+            if (!positions.add(position)) {
+                throw new IllegalArgumentException("La posición " + position + " ya ha sido asignada a otro piloto.");
+            }
         });
 
+        results.getRaceResult().forEach(result -> {
+            System.out.println("F1 SERVICE____DRIVER ID : " + result.getDriverId());
+            System.out.println("F1 SERVICE____POSITION : " + result.getPosition());
+        });
 
         predictionsClient.sendRaceResults(raceId, results);
     }

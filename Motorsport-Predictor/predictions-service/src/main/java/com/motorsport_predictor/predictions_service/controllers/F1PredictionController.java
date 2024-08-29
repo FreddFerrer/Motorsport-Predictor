@@ -33,7 +33,7 @@ public class F1PredictionController {
     }
 
     // internal endpoint
-    @PostMapping("/f1/predictions/upload-results/{raceId}")
+    @PostMapping("/f1/upload-results/{raceId}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> uploadF1RaceResult(@PathVariable Long raceId,
                                                 @RequestBody @Valid RaceResultRequestDTO results) {
