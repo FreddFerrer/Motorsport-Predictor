@@ -102,7 +102,7 @@ public class RaceServiceImpl implements IRaceService {
             }
         });
 
-        // Verificar que las posiciones estén en el rango válido y que no se repitan
+        // Verificar que las posiciones no se repitan
         Set<Integer> positions = new HashSet<>();
         results.getRaceResult().forEach(result -> {
             int position = result.getPosition();
@@ -112,11 +112,6 @@ public class RaceServiceImpl implements IRaceService {
             if (!positions.add(position)) {
                 throw new IllegalArgumentException("La posición " + position + " ya ha sido asignada a otro piloto.");
             }
-        });
-
-        results.getRaceResult().forEach(result -> {
-            System.out.println("F1 SERVICE____DRIVER ID : " + result.getDriverId());
-            System.out.println("F1 SERVICE____POSITION : " + result.getPosition());
         });
 
         predictionsClient.sendRaceResults(raceId, results);

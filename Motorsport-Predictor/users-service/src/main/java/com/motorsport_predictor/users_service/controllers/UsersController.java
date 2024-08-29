@@ -51,6 +51,17 @@ public class UsersController {
         }
     }
 
+    // Intern endpoint
+    @GetMapping("/{userId}/email")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    public ResponseEntity<?> getUserEmail(){
+        try {
+            return ResponseEntity.ok(userService.getUserEmail());
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
+        }
+    }
+
     @PostMapping("/create")
     public ResponseEntity<?> createUser(@RequestBody CreateUserDTO userDTO) {
         try {

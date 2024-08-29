@@ -10,4 +10,6 @@ public interface IUserClient {
     String getLoggedInUserId();
     @GetMapping("/api/groups/existUserInGroup/{groupId}/{userId}")
     boolean existUserInGroup(@PathVariable Long groupId, @PathVariable String userId);
+    @GetMapping("/api/users/{userId}/email")
+    String getUserEmail(@PathVariable String userId);
 }

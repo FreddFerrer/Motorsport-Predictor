@@ -127,6 +127,11 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    public String getUserEmail() {
+        return null;
+    }
+
+    @Override
     public void deleteUser(String userId) {
         try {
             KeycloakProvider.getUserResource()

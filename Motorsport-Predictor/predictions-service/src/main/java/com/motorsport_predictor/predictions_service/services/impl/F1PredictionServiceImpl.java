@@ -1,7 +1,7 @@
 package com.motorsport_predictor.predictions_service.services.impl;
 
 import com.motorsport_predictor.predictions_service.dto.PredictionDTO;
-import com.motorsport_predictor.predictions_service.dto.RaceResultDTO;
+import com.motorsport_predictor.predictions_service.dto.PredictionNotificationDTO;
 import com.motorsport_predictor.predictions_service.dto.request.PredictionsRequestDTO;
 import com.motorsport_predictor.predictions_service.dto.request.RaceResultRequestDTO;
 import com.motorsport_predictor.predictions_service.exceptions.BadRequestException;
@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,6 +28,7 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
     private final IUserClient usersClient;
     private final IF1Client f1Client;
     private final IF1PredictionRepository f1PredictionRepository;
+    private final KafkaProducer kafkaProducer;
 
     @Override
     public void createPrediction(
@@ -82,6 +84,7 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
         }
 
         // Guardar las predicciónes
+        List<PredictionDTO> savedPredictions = new ArrayList<>();
         // Iterar sobre las predicciones individuales y guardarlas
         for (PredictionDTO predictionDto : request.getPredictions()) {
             F1Prediction individualPrediction = new F1Prediction();
@@ -91,8 +94,20 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
             individualPrediction.setPredictedPosition(predictionDto.getPredictedPosition());
             individualPrediction.setCreatedAt(LocalDateTime.now());
             f1PredictionRepository.save(individualPrediction);
+            savedPredictions.add(predictionDto);
         }
 
+        //TODO: Send message to predictions topic
+        // Obtener el email del usuario
+        String userEmail = usersClient.getUserEmail(userId);
+
+        // Crear el DTO para enviar a Kafka
+        PredictionNotificationDTO notificationDTO = new PredictionNotificationDTO();
+        notificationDTO.setEmail(userEmail);
+        notificationDTO.setPredictions(savedPredictions);
+
+        // Enviar el mensaje a Kafka
+        kafkaProducer.sendPredictionNotification(notificationDTO);
     }
 
     @Override
@@ -101,11 +116,6 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
         // Recorrer la lista de resultados en RaceResultRequestDTO
         results.getRaceResult().forEach(raceResult -> {
             f1PredictionRepository.updateActualPosition(raceResult.getPosition(), raceId, raceResult.getDriverId());
-        });
-
-        results.getRaceResult().forEach(result -> {
-            System.out.println("PREDICTIONS SERVICE____DRIVER ID : " + result.getDriverId());
-            System.out.println("PREDICTIONS SERVICE____POSITION : " + result.getPosition());
         });
     }
 }
