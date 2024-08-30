@@ -21,6 +21,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -128,7 +129,13 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public String getUserEmail() {
-        return null;
+        // Obtén el ID del usuario logueado
+        String userId = getLoggedInUserId();
+
+        // Obtén la representación del usuario desde Keycloak
+        UserRepresentation userRepresentation = KeycloakProvider.getUserById(userId);
+
+        return userRepresentation.getEmail();
     }
 
     @Override
@@ -171,12 +178,6 @@ public class UserServiceImpl implements IUserService {
             throw new ResourceNotFoundException("User not authenticated");
         }
 
-        // Obtener el ID del usuario directamente del token JWT
-        String userId = authentication.getName();
-
-        System.out.println("El id del usuario es= " + userId);
-
-        return userId;
+        return authentication.getName();
     }
-
 }

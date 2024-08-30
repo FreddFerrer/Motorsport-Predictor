@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class KafkaProducer {
-    private final KafkaTemplate<String, PredictionNotificationDTO> kafkaTemplate;
+    private final KafkaTemplate<String, String> kafkaTemplate;
     @Value("${kafka.topic.prediction-notifications}")
     private String topicName;
 
-    public void sendPredictionNotification(PredictionNotificationDTO message) {
-        kafkaTemplate.send(topicName, message);
+    public void sendPredictionNotification() {
+        kafkaTemplate.send(topicName, "HOLAAAAAAAAA");
     }
 }

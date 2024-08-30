@@ -19,6 +19,16 @@ public class F1PredictionController {
 
     private final IF1PredictionService predictionService;
 
+    @GetMapping("/userEmail")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    public ResponseEntity<?> getUserEmail() {
+        try {
+            return ResponseEntity.ok(predictionService.getUserEmail());
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
+        }
+    }
+
     @PostMapping("/f1/{memberGroupId}/{raceId}/newPrediction")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<?> newPredictions(@PathVariable Long memberGroupId,

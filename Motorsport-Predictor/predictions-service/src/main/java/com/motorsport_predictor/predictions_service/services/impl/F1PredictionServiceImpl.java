@@ -99,15 +99,21 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
 
         //TODO: Send message to predictions topic
         // Obtener el email del usuario
-        String userEmail = usersClient.getUserEmail(userId);
+        String userEmail = usersClient.getUserEmail();
 
         // Crear el DTO para enviar a Kafka
-        PredictionNotificationDTO notificationDTO = new PredictionNotificationDTO();
+        /*PredictionNotificationDTO notificationDTO = new PredictionNotificationDTO();
         notificationDTO.setEmail(userEmail);
-        notificationDTO.setPredictions(savedPredictions);
+        notificationDTO.setPredictions(savedPredictions);*/
 
         // Enviar el mensaje a Kafka
-        kafkaProducer.sendPredictionNotification(notificationDTO);
+
+    }
+
+    @Override
+    public String getUserEmail() {
+        kafkaProducer.sendPredictionNotification();
+        return usersClient.getUserEmail();
     }
 
     @Override

@@ -52,7 +52,7 @@ public class UsersController {
     }
 
     // Intern endpoint
-    @GetMapping("/{userId}/email")
+    @GetMapping("/email")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<?> getUserEmail(){
         try {
