@@ -2,15 +2,17 @@ package com.motorsport_predictor.notification_service.services;
 
 import com.motorsport_predictor.notification_service.dto.PredictionDTO;
 import com.motorsport_predictor.notification_service.dto.PredictionNotificationDTO;
+import com.motorsport_predictor.notification_service.utils.JsonUtils;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-@Service
+@Component
 public class KafkaConsumer {
     @KafkaListener(topics = "${kafka.topic.prediction-notifications}", groupId = "${spring.kafka.consumer.group-id}")
-    public void consume() {
+    public void consume(String notification) {
 
-
+        sendEmail(JsonUtils.fromJson(notification, PredictionNotificationDTO.class));
         System.out.println("mensaje de prueba");
 
     }

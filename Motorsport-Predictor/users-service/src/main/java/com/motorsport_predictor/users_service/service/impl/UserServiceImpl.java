@@ -5,6 +5,7 @@ import com.motorsport_predictor.users_service.exceptions.BadRequestException;
 import com.motorsport_predictor.users_service.exceptions.ResourceNotFoundException;
 import com.motorsport_predictor.users_service.service.IUserService;
 import com.motorsport_predictor.users_service.util.KeycloakProvider;
+import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -75,7 +76,7 @@ public class UserServiceImpl implements IUserService {
         userRepresentation.setEmail(userDTO.getEmail());
         userRepresentation.setUsername(userDTO.getUsername());
         userRepresentation.setEnabled(true);
-        userRepresentation.setEmailVerified(true);
+        userRepresentation.setEmailVerified(false);
         userRepresentation.singleAttribute("nationality", userDTO.getNationality());
 
         Response response = usersResource.create(userRepresentation);
@@ -111,6 +112,8 @@ public class UserServiceImpl implements IUserService {
 
             realmResource.users().get(userId).roles().realmLevel().add(rolesRepresentation);
 
+            emailVerification(userId);
+
             return userRepresentation;
 
         } else if (status == 409) {
@@ -121,6 +124,21 @@ public class UserServiceImpl implements IUserService {
             throw new BadRequestException("Error creating user, please contact with the administrator!");
         }
     }
+
+    public void emailVerification(String userId){
+        UsersResource usersResource = KeycloakProvider.getUserResource();
+        try {
+            usersResource.get(userId).sendVerifyEmail();
+            log.info("Email de verificación enviado exitosamente al usuario con ID: " + userId);
+        } catch (WebApplicationException e) {
+            // Manejar el caso de error en el envío del email
+            log.error("No se pudo enviar el email de verificación al usuario con ID: " + userId, e);
+
+            // Puedes lanzar una excepción personalizada si lo deseas
+            throw new ResourceNotFoundException("email");
+        }
+    }
+
 
     @Override
     public String getLoggedInUserId() {

@@ -13,7 +13,7 @@ public class KafkaProducer {
     @Value("${kafka.topic.prediction-notifications}")
     private String topicName;
 
-    public void sendPredictionNotification() {
-        kafkaTemplate.send(topicName, "HOLAAAAAAAAA");
+    public void sendPredictionNotification(String message) {
+        kafkaTemplate.send(topicName, message);
     }
 }

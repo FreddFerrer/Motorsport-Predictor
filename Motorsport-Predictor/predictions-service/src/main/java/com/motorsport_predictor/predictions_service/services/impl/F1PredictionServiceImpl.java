@@ -10,6 +10,7 @@ import com.motorsport_predictor.predictions_service.feign.IUserClient;
 import com.motorsport_predictor.predictions_service.models.entities.F1Prediction;
 import com.motorsport_predictor.predictions_service.models.repositories.IF1PredictionRepository;
 import com.motorsport_predictor.predictions_service.services.IF1PredictionService;
+import com.motorsport_predictor.predictions_service.utils.JsonUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -102,17 +103,17 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
         String userEmail = usersClient.getUserEmail();
 
         // Crear el DTO para enviar a Kafka
-        /*PredictionNotificationDTO notificationDTO = new PredictionNotificationDTO();
+        PredictionNotificationDTO notificationDTO = new PredictionNotificationDTO();
         notificationDTO.setEmail(userEmail);
-        notificationDTO.setPredictions(savedPredictions);*/
+        notificationDTO.setPredictions(savedPredictions);
 
         // Enviar el mensaje a Kafka
+        kafkaProducer.sendPredictionNotification(JsonUtils.toJson(notificationDTO));
 
     }
 
     @Override
     public String getUserEmail() {
-        kafkaProducer.sendPredictionNotification();
         return usersClient.getUserEmail();
     }
 
