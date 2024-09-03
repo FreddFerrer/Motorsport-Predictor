@@ -2,6 +2,7 @@ package com.motorsport_predictor.predictions_service.services.impl;
 
 import com.motorsport_predictor.predictions_service.dto.PredictionDTO;
 import com.motorsport_predictor.predictions_service.dto.PredictionNotificationDTO;
+import com.motorsport_predictor.predictions_service.dto.RaceDTO;
 import com.motorsport_predictor.predictions_service.dto.request.PredictionsRequestDTO;
 import com.motorsport_predictor.predictions_service.dto.request.RaceResultRequestDTO;
 import com.motorsport_predictor.predictions_service.exceptions.BadRequestException;
@@ -99,12 +100,11 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
         String userEmail = usersClient.getUserEmail();
 
         // Create DTO to send to kafka
-        PredictionNotificationDTO notificationDTO = new PredictionNotificationDTO();
-        notificationDTO.setEmail(userEmail);
-        notificationDTO.setPredictions(savedPredictions);
+        RaceDTO raceInfo = f1Client.getRaceInfo(raceId);
+        raceInfo.setEmail(userEmail);
 
         // Send to kafka
-        kafkaProducer.sendPredictionNotification(JsonUtils.toJson(notificationDTO));
+        kafkaProducer.sendPredictionNotification(JsonUtils.toJson(raceInfo));
     }
 
     @Override

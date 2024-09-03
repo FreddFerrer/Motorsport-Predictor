@@ -102,5 +102,4 @@ public class F1Controller {
             throw new BadRequestException(e.getMessage());
         }
     }
-
 }

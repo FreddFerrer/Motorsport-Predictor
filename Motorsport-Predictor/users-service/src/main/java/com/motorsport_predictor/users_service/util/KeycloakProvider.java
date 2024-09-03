@@ -56,7 +56,7 @@ public class KeycloakProvider {
         UsersResource usersResource = getUserResource();
         List<UserRepresentation> users = usersResource.search(username);
         if (users != null && !users.isEmpty()) {
-            return users.get(0); // Asume que el username es único y devuelve el primer resultado
+            return users.get(0); // Assuming the username is unique
         }
         throw new ResourceNotFoundException(username);
     }
