@@ -25,7 +25,6 @@ public class GroupServiceImpl implements IGroupService {
     private final IGroupRepository groupRepository;
     private final IGroupMemberRepository groupMemberRepository;
 
-    // Listar todos los grupos
     @Override
     public Page<GroupDTO> getAllGroups(Pageable pageable) {
         Page<Group> groups = groupRepository.findAll(pageable);
@@ -42,7 +41,6 @@ public class GroupServiceImpl implements IGroupService {
                         .build());
     }
 
-    // Obtener grupo por ID
     @Override
     public Optional<GroupDTO> getGroupById(Long id) {
 
@@ -59,7 +57,6 @@ public class GroupServiceImpl implements IGroupService {
                         .build());
     }
 
-    // Obtener grupo por nombre
     @Override
     public Optional<GroupDTO> getGroupByName(String name) {
         return groupRepository.findByName(name)
@@ -75,7 +72,6 @@ public class GroupServiceImpl implements IGroupService {
                         .build());
     }
 
-    // Obtener grupo por disciplina
     @Override
     public Page<GroupDTO> getGroupsByDiscipline(String discipline, Pageable pageable) {
         Page<Group> groups = groupRepository.findByDiscipline(discipline, pageable);
@@ -92,13 +88,12 @@ public class GroupServiceImpl implements IGroupService {
                         .build());
     }
 
-    // Obtener una lista de los grupos más populares (teniendo en cuenta el número de miembros)
     @Override
     public List<GroupDTO> getPopularGroups() {
-        // Obtengo los grupos ordenados por 'member_count' en orden descendente
+        // Get groups order by 'member_count' decreasing
         List<Group> popularGroups = groupRepository.findTop10ByOrderByMemberCountDesc();
 
-        // Mapea los grupos a DTOs
+        // Mapping
         return popularGroups.stream()
                 .map(group -> {
                     GroupDTO dto = new GroupDTO();
@@ -114,13 +109,11 @@ public class GroupServiceImpl implements IGroupService {
                 .collect(Collectors.toList());
     }
 
-    // Busca grupos por NOMBRE o DESCRIPTION
+    // Get groups by NAME or DESCRIPTION
     @Override
     public Page<GroupDTO> searchGroups(String searchTerm, Pageable pageable) {
-        // Paso 1: Usar el repositorio para buscar grupos que coincidan con el término de búsqueda
         Page<Group> groups = groupRepository.searchGroups(searchTerm, pageable);
 
-        // Paso 2: Mapear los resultados a GroupDTOs
         return groups.map(group -> {
                     GroupDTO dto = new GroupDTO();
                     dto.setName(group.getName());
@@ -134,11 +127,8 @@ public class GroupServiceImpl implements IGroupService {
                 });
     }
 
-
-    // Crea un nuevo grupo
     @Override
     public GroupDTO createNewGroup(CreateGroupDTO createGroupDTO) {
-
         String userId = UserServiceImpl.getLoggedUserId();
 
         Group group = Group.builder()
@@ -154,7 +144,7 @@ public class GroupServiceImpl implements IGroupService {
 
         groupRepository.save(group);
 
-        // Agrega al grupo creado teniendo en cuenta el usuario logeado
+        // Add the creator user to the new group
         GroupMember groupMember = new GroupMember();
         groupMember.setGroup(group);
         groupMember.setUserId(userId);
@@ -163,7 +153,7 @@ public class GroupServiceImpl implements IGroupService {
         try {
             groupMemberRepository.save(groupMember);
         } catch (DataIntegrityViolationException e) {
-            // Manejar error de restricción de unicidad
+            // Unicidad error handler
             throw new DataIntegrityViolationException("Error saving group");
         }
 
@@ -179,13 +169,11 @@ public class GroupServiceImpl implements IGroupService {
                 .build();
     }
 
-    // Actualiza un grupo por ID
     @Override
     public void updateGroup(Long groupId, CreateGroupDTO createGroup) {
 
     }
 
-    // Borra un grupo por ID
     @Override
     public void deleteGroupById(Long groupId) {
     }

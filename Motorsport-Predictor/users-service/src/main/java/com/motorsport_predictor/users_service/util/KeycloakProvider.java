@@ -58,7 +58,7 @@ public class KeycloakProvider {
         if (users != null && !users.isEmpty()) {
             return users.get(0); // Asume que el username es único y devuelve el primer resultado
         }
-        throw new ResourceNotFoundException("User with username \" + username + \" not found");
+        throw new ResourceNotFoundException(username);
     }
 
     public static List<UserRepresentation> getUsersByIds(List<String> userIds) {

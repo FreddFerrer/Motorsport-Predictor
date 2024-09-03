@@ -35,20 +35,17 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public Page<UserRepresentation> findAllUsers(Pageable pageable) {
-        // Obtener el recurso de usuarios de Keycloak
+
         UsersResource usersResource = KeycloakProvider.getUserResource();
 
-        // La paginación en Keycloak se realiza utilizando `first` y `max` como parámetros para controlar el rango de resultados devueltos.
+        // Pagination in Keycloak is implemented using `first` and `max` as parameters to control the range of results returned.
         int firstResult = pageable.getPageNumber() * pageable.getPageSize();
         int maxResults = pageable.getPageSize();
 
-        // Obtener la lista de usuarios con la paginación aplicada
         List<UserRepresentation> users = usersResource.list(firstResult, maxResults);
 
-        // Contar el total de usuarios para poder calcular el total de páginas
         int totalUsers = usersResource.count();
 
-        // Retornar los resultados como una instancia de `Page`
         return new PageImpl<>(users, pageable, totalUsers);
     }
 
@@ -147,10 +144,8 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public String getUserEmail() {
-        // Obtén el ID del usuario logueado
         String userId = getLoggedInUserId();
 
-        // Obtén la representación del usuario desde Keycloak
         UserRepresentation userRepresentation = KeycloakProvider.getUserById(userId);
 
         return userRepresentation.getEmail();

@@ -10,6 +10,7 @@ import com.motorsport_predictor.users_service.models.repositories.IGroupMemberRe
 import com.motorsport_predictor.users_service.models.repositories.IGroupRepository;
 import com.motorsport_predictor.users_service.service.IGroupMemberService;
 import com.motorsport_predictor.users_service.util.KeycloakProvider;
+import lombok.RequiredArgsConstructor;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -25,35 +26,33 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class GroupMemberServiceImpl implements IGroupMemberService {
-
-    @Autowired
-    private IGroupMemberRepository groupMemberRepository;
-    @Autowired
-    private IGroupRepository groupRepository;
+    private final IGroupMemberRepository groupMemberRepository;
+    private final IGroupRepository groupRepository;
 
     @Override
     public Page<GroupMemberDTO> getMembersByGroupId(Long groupId, Pageable pageable) {
-        // Verificar si el grupo existe
-        Group group = groupRepository.findById(groupId)
+        // Check if group exists
+        groupRepository.findById(groupId)
                 .orElseThrow(() -> new ResourceNotFoundException("Group with ID " + groupId + " not found"));
 
-        // Obtener los id de los miembros y sus fechas de ingreso
+        // Get members id's and his joined dates
         Page<Object[]> membersPage = groupMemberRepository.findUserIdAndJoinedAtByGroupId(groupId, pageable);
 
-        // Separar los ids de los usuarios
+        // Separate user id's
         List<String> memberIds = membersPage.stream()
                 .map(member -> (String) member[0])
                 .collect(Collectors.toList());
 
-        // Obtener de keycloak la lista de usuarios que corresponden a ese id
+        // Get from keycloak the list of users that correspond to that id
         List<UserRepresentation> keycloakUsers = KeycloakProvider.getUsersByIds(memberIds);
 
-        // Crear un mapa de id de usuario a UserRepresentation para acceso rápido
+        // Create a user id map to UserRepresentation for quick access
         Map<String, UserRepresentation> userMap = keycloakUsers.stream()
                 .collect(Collectors.toMap(UserRepresentation::getId, Function.identity()));
 
-        // Mapear los datos a GroupMemberDTOs
+        // mapping
         List<GroupMemberDTO> memberDTOs = membersPage.getContent().stream()
                 .map(member -> {
                     String userId = (String) member[0];
@@ -74,26 +73,25 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
                 })
                 .collect(Collectors.toList());
 
-        // Retornar un Page de GroupMemberDTO
         return new PageImpl<>(memberDTOs, pageable, membersPage.getTotalElements());
     }
 
     @Override
     public Page<GroupDTO> getGroupsByUserId(String userId, Pageable pageable) {
-        // Obtener el id del usuario y comprobar si existe.
+        // Get user by id and check if exists
         UserRepresentation user = KeycloakProvider.getUserById(userId);
 
-        // Obtener todos los Id de los grupos a los que está relacionado ese usuario (un usuario puede estar en varios grupos distintos, nunca puede estar 2 veces en un mismo grupo)
+        // Obtain all the IDs of the groups to which this user is related
+        // (a user can be in many groups, but never can be in the same group twice).
         List<Long> groupIds = groupMemberRepository.findGroupIdsByUserId(userId);
         if (groupIds.isEmpty()) {
-
-            return Page.empty(); // Retornar lista vacía si no pertenece a ningún grupo
+            return Page.empty(); // Return empty page if it not has any group
         }
 
-        // Consultar datos de los grupos teniendo en cuenta los id obtenidos anteriormente.
+        // Consult data of the groups taking into consideration the previously obtained ids.
         Page<Group> groupsPage = groupRepository.findByIdIn(groupIds, pageable);
 
-        // Mapear los grupos a DTOs
+        // Mapping
         Page<GroupDTO> groupDTOs = groupsPage.map(group -> GroupDTO.builder()
                 .name(group.getName())
                 .description(group.getDescription())
@@ -108,32 +106,29 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
         return groupDTOs;
     }
 
-
     @Override
     public Page<GroupDTO> getGroupsByUser(Pageable pageable) {
-        // Detectar el id del usuario logeado
         String userId = UserServiceImpl.getLoggedUserId();
-
-        // Buscar y devoler los grupos usando el metodo creado en esta misma clase
         return getGroupsByUserId (userId, pageable);
     }
 
     @Override
     public Page<GroupDTO> getGroupsByUsername(String username, Pageable pageable) {
-        // Obtengo el id del usuario basándonos en el username.
+        // Get user id from username
         UserRepresentation user = KeycloakProvider.getUserByUsername(username);
         String userId = user.getId();
 
-        // Obtener todos los Id de los grupos a los que está relacionado ese usuario (un usuario puede estar en varios grupos distintos, nunca puede estar 2 veces en un mismo grupo)
+        // Obtain all the IDs of the groups to which this user is related
+        // (a user can be in many groups, but never can be in the same group twice).
         List<Long> groupIds = groupMemberRepository.findGroupIdsByUserId(userId);
         if (groupIds.isEmpty()) {
-            return Page.empty(); // Retornar lista vacía si no pertenece a ningún grupo
+            return Page.empty(); // Return empty page if it not has any group
         }
 
-        // Consultar datos de los grupos teniendo en cuenta los id obtenidos anteriormente.
+        // Consult data of the groups taking into consideration the previously obtained ids.
         Page<Group> groups = groupRepository.findByIdIn(groupIds, pageable);
 
-        // Mapear los grupos a DTOs
+        // Mapping
         return groups.map(group -> {
                     GroupDTO dto = new GroupDTO();
                     dto.setName(group.getName());
@@ -149,32 +144,31 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
 
     @Override
     public void addMemberToGroupById(Long groupId, String userId) {
-        //Busca el usuario por el ID y verifica que el usuario a agregar existe en Keycloak
         UserRepresentation user = KeycloakProvider.getUserById(userId);
 
-        //Obtener el id del usuario logeado
+        // Get logged user id
         String loggedInUserId = UserServiceImpl.getLoggedUserId();
 
-        // Busca y comprueba que el Id del grupo exista
+        // Check if group Id exist
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new ResourceNotFoundException("Group with ID " + groupId + " not found"));
 
-        // Verificar que el usuario logeado es el creador del grupo
+        // Check if logged user is the creator of the group
         if (!group.getCreatorId().equals(loggedInUserId)) {
             throw new BadRequestException("Only the creator of the group can add members.");
         }
 
-        // Evitar que el usuario se agregue a sí mismo
+        // Avoid user self-adding
         if (loggedInUserId.equals(userId)) {
             throw new BadRequestException("You cannot add yourself to the group.");
         }
 
-        // Verificar si el usuario ya es miembro del grupo
+        // Check if the user is already a member of the group
         if (groupMemberRepository.existsByGroupAndUserId(group, userId)) {
             throw new BadRequestException("User is already a member of the group.");
         }
 
-        // Agregar el miembro al grupo
+        // Add member
         GroupMember groupMember = new GroupMember();
         groupMember.setGroup(group);
         groupMember.setUserId(user.getId());
@@ -183,7 +177,7 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
         try {
             groupMemberRepository.save(groupMember);
         } catch (DataIntegrityViolationException e) {
-            // Manejar error de restricción de unicidad
+            // Unicidad error handler
             throw new DataIntegrityViolationException("Error saving group");
         }
     }
@@ -208,7 +202,6 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
         try {
             groupMemberRepository.save(groupMember);
         } catch (DataIntegrityViolationException e) {
-            // Manejar error de restricción de unicidad
             throw new DataIntegrityViolationException("Error saving group");
         }
     }
@@ -217,36 +210,29 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
     public void removeMemberFromGroupById(Long groupId, String userId) {
         Group group;
 
-        //Busca el usuario por el ID
         UserRepresentation user = KeycloakProvider.getUserById(userId);
 
-        // Busca y comprueba que el Id del grupo exista
+        // Check if group id exists
         if (!groupRepository.existsById(groupId)) {
             throw new ResourceNotFoundException("groupId " + groupId);
         } else {
             group = groupRepository.getReferenceById(groupId);
         }
 
-        // Guardo los id correctos
+        // Take corrects ids
         Long groupIdObtained = group.getId();
         String userIdObtained = user.getId();
 
-        // Verifico si el usuario es miembro del grupo
+        // Check if the user is a member of the group
         GroupMember groupMember = groupMemberRepository.findByGroupIdAndUserId(groupIdObtained, userIdObtained)
                 .orElseThrow(() -> new ResourceNotFoundException("User " + userId + " is not a member of group " + groupId));
 
-        // Elimino el miembro del grupo
+        // Delete group member
         groupMemberRepository.delete(groupMember);
     }
 
     @Override
     public boolean isUserInGroup(Long groupId, String userId) {
-        boolean exist = groupMemberRepository.existsByUserIdAndGroupMembersId(userId, groupId);
-
-        if (!exist){
-            return false;
-        } else {
-            return true;
-        }
+        return groupMemberRepository.existsByUserIdAndGroupMembersId(userId, groupId);
     }
 }

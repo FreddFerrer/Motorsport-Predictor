@@ -3,6 +3,7 @@ package com.motorsport_predictor.users_service.controllers;
 import com.motorsport_predictor.users_service.dto.request.CreateUserDTO;
 import com.motorsport_predictor.users_service.exceptions.BadRequestException;
 import com.motorsport_predictor.users_service.service.IUserService;
+import lombok.RequiredArgsConstructor;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -14,11 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin
+@RequiredArgsConstructor
 public class UsersController {
-
-    @Autowired
-    private IUserService userService;
+    private final IUserService userService;
 
     @GetMapping("/")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -84,7 +83,6 @@ public class UsersController {
             throw new BadRequestException(e.getMessage());
         }
     }
-
 
     @DeleteMapping("/delete/{userId}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")

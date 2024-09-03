@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/groups")
 @CrossOrigin
 public class GroupController {
-
     @Autowired
     private IGroupService groupService;
     @Autowired

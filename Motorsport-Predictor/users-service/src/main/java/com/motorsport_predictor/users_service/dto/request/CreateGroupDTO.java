@@ -12,13 +12,10 @@ public class CreateGroupDTO {
     @NotNull
     @Length(min = 5, max = 32, message = "must have between 6 and 32 characters")
     private String name;
-
     private String description;
-
     @NotEmpty(message = "Required field")
     @NotNull
     private String discipline;
-
     @NotNull(message = "Required field")
     @JsonProperty("isPublic")
     private boolean isPublic;
