@@ -1,6 +1,5 @@
 package com.motorsport_predictor.predictions_service.services.impl;
 
-import com.motorsport_predictor.predictions_service.dto.PredictionNotificationDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;

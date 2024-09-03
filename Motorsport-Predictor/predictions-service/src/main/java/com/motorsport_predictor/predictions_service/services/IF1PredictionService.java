@@ -6,6 +6,5 @@ import com.motorsport_predictor.predictions_service.dto.request.RaceResultReques
 public interface IF1PredictionService {
     void createPrediction(Long groupMemberId, Long raceId, PredictionsRequestDTO request);
     String getUserEmail();
-
     void updateF1RaceResults(Long raceId, RaceResultRequestDTO results);
 }

@@ -11,10 +11,7 @@ import org.springframework.stereotype.Service;
 public class KafkaConsumer {
     @KafkaListener(topics = "${kafka.topic.prediction-notifications}", groupId = "${spring.kafka.consumer.group-id}")
     public void consume(String notification) {
-
         sendEmail(JsonUtils.fromJson(notification, PredictionNotificationDTO.class));
-        System.out.println("mensaje de prueba");
-
     }
 
     private void sendEmail(PredictionNotificationDTO notification) {

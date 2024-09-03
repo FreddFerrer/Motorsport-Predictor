@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 @AllArgsConstructor
 public class F1PredictionController {
-
     private final IF1PredictionService predictionService;
 
     @GetMapping("/userEmail")

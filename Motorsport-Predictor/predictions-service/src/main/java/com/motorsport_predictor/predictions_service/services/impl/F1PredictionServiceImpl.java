@@ -25,7 +25,6 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class F1PredictionServiceImpl implements IF1PredictionService {
-
     private final IUserClient usersClient;
     private final IF1Client f1Client;
     private final IF1PredictionRepository f1PredictionRepository;
@@ -37,30 +36,30 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
             @PathVariable Long raceId,
             PredictionsRequestDTO request) {
 
-        // Verificar si el usuario pertenece al grupo
+        // Check if user exist in the group
         String userId = usersClient.getLoggedInUserId();
         if (!usersClient.existUserInGroup(memberGroupId, userId)) {
             throw new BadRequestException("El usuario no pertenece al grupo.");
         }
 
-        // Verificar si existe race_id
+        // Check if race_id exist
         boolean raceExists = f1Client.existsRacesById(raceId);
         if (!raceExists) {
             throw new IllegalArgumentException("La carrera no existe.");
         }
 
-        // Contar cuántas predicciones ya existen para el usuario en esta carrera
+        // Count how many predictions already exist for the user in this race
         int existingPredictions = f1PredictionRepository.countByGroupMemberIdAndRaceId(memberGroupId, raceId);
         if (existingPredictions >= 10) {
             throw new IllegalArgumentException("El usuario ya ha realizado 10 predicciones para esta carrera.");
         }
 
-        // Validar cantidad de predicciones
+        // Validate number of predictions
         if (request.getPredictions().size() > 10) {
             throw new IllegalArgumentException("Solo se permiten hasta 10 predicciones por solicitud.");
         }
 
-        // Verificar si existe el piloto
+        // Check if driver exists
         request.getPredictions().forEach(prediction -> {
             boolean driverExists = f1Client.existsById(prediction.getDriverId());
             if (!driverExists) {
@@ -68,7 +67,7 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
             }
         });
 
-        // Validar pilotos duplicados
+        // Check for duplicate drivers
         Set<Long> driverIds = new HashSet<>();
         for (PredictionDTO prediction : request.getPredictions()) {
             if (!driverIds.add(prediction.getDriverId())) {
@@ -76,7 +75,7 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
             }
         }
 
-        // Validar puestos duplicados
+        // Check for duplicate positions
         Set<Integer> positions = new HashSet<>();
         for (PredictionDTO prediction : request.getPredictions()) {
             if (!positions.add(prediction.getPredictedPosition())) {
@@ -84,9 +83,8 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
             }
         }
 
-        // Guardar las predicciónes
+        // Save each prediction
         List<PredictionDTO> savedPredictions = new ArrayList<>();
-        // Iterar sobre las predicciones individuales y guardarlas
         for (PredictionDTO predictionDto : request.getPredictions()) {
             F1Prediction individualPrediction = new F1Prediction();
             individualPrediction.setGroupMemberId(memberGroupId);
@@ -98,18 +96,15 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
             savedPredictions.add(predictionDto);
         }
 
-        //TODO: Send message to predictions topic
-        // Obtener el email del usuario
         String userEmail = usersClient.getUserEmail();
 
-        // Crear el DTO para enviar a Kafka
+        // Create DTO to send to kafka
         PredictionNotificationDTO notificationDTO = new PredictionNotificationDTO();
         notificationDTO.setEmail(userEmail);
         notificationDTO.setPredictions(savedPredictions);
 
-        // Enviar el mensaje a Kafka
+        // Send to kafka
         kafkaProducer.sendPredictionNotification(JsonUtils.toJson(notificationDTO));
-
     }
 
     @Override
@@ -120,7 +115,6 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
     @Override
     @Transactional
     public void updateF1RaceResults(Long raceId, RaceResultRequestDTO results) {
-        // Recorrer la lista de resultados en RaceResultRequestDTO
         results.getRaceResult().forEach(raceResult -> {
             f1PredictionRepository.updateActualPosition(raceResult.getPosition(), raceId, raceResult.getDriverId());
         });
