@@ -15,16 +15,11 @@ import java.util.Optional;
 
 @Repository
 public interface IGroupMemberRepository extends JpaRepository<GroupMember, Long> {
-
     Optional<GroupMember> findByGroupIdAndUserId(Long groupId, String userId);
-
     @Query("SELECT gm.userId, gm.joinedAt FROM GroupMember gm WHERE gm.group.id = :groupId")
     Page<Object[]> findUserIdAndJoinedAtByGroupId(@Param("groupId") Long groupId, Pageable pageable);
-
     @Query("SELECT gm.group.id FROM GroupMember gm WHERE gm.userId = :userId")
     List<Long> findGroupIdsByUserId(@Param("userId") String userId);
-
     boolean existsByGroupAndUserId(Group group, String userId);
-
     boolean existsByUserIdAndGroupMembersId(String userId, Long groupId);
 }

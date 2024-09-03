@@ -1,6 +1,5 @@
 package com.motorsport_predictor.f1_service.controllers;
 
-import com.motorsport_predictor.f1_service.dto.RaceResultDTO;
 import com.motorsport_predictor.f1_service.dto.request.RaceResultRequestDTO;
 import com.motorsport_predictor.f1_service.exceptions.BadRequestException;
 import com.motorsport_predictor.f1_service.services.ICircuitService;
@@ -20,11 +19,9 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 @AllArgsConstructor
 public class F1Controller {
-
     private final ICircuitService circuitService;
     private final IDriverService driverService;
     private final IRaceService raceService;
-
 
     @GetMapping("/circuits")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")

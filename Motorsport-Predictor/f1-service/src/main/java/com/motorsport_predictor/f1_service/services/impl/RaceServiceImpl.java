@@ -40,6 +40,7 @@ public class RaceServiceImpl implements IRaceService {
                 .collect(Collectors.toList());
     }
 
+    // mapping method
     private CircuitDTO mapToCircuitDto(Circuit circuit) {
         return CircuitDTO.builder()
                 .circuitName(circuit.getCircuitName())
@@ -88,9 +89,7 @@ public class RaceServiceImpl implements IRaceService {
 
     @Override
     public void uploadRaceResults(Long raceId, RaceResultRequestDTO results) {
-
-
-        // Verificar si existe el piloto y que no se repitan los driverId
+        // Check if the driver exists and that the driver IDs are not repeated.
         Set<Long> driverIds = new HashSet<>();
         results.getRaceResult().forEach(result -> {
             boolean driverExists = driverRepository.existsById(result.getDriverId());
@@ -102,7 +101,7 @@ public class RaceServiceImpl implements IRaceService {
             }
         });
 
-        // Verificar que las posiciones no se repitan
+        // Check if positions are not repeated.
         Set<Integer> positions = new HashSet<>();
         results.getRaceResult().forEach(result -> {
             int position = result.getPosition();

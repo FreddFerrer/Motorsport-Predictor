@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class DriverServiceImpl implements IDriverService {
-
     private final IDriverRepository driverRepository;
 
     @Override
@@ -35,16 +34,10 @@ public class DriverServiceImpl implements IDriverService {
 
     @Override
     public boolean existById(Long driverId) {
-        boolean driveId = driverRepository.existsById(driverId);
-
-        if (!driveId) {
-            return false;
-        } else {
-            return true;
-        }
+        return driverRepository.existsById(driverId);
     }
 
-    // Método para mapear Team a TeamDTO
+    // mapping method
     private TeamDTO mapToTeamDTO(Team team) {
         return TeamDTO.builder()
                 .name(team.getName())

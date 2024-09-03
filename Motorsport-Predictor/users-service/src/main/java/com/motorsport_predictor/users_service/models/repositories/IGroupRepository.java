@@ -18,7 +18,5 @@ public interface IGroupRepository extends JpaRepository<Group, Long> {
     @Query("SELECT g FROM Group g WHERE g.name LIKE %:searchTerm% OR g.description LIKE %:searchTerm%")
     Page<Group> searchGroups(@Param("searchTerm") String searchTerm, Pageable pageable);
     List<Group> findTop10ByOrderByMemberCountDesc();
-
     Page<Group> findByIdIn(List<Long> groupIds, Pageable pageable);
-
 }

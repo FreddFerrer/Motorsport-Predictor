@@ -3,9 +3,13 @@ package com.motorsport_predictor.users_service.service.impl;
 import com.motorsport_predictor.users_service.dto.request.CreateGroupDTO;
 import com.motorsport_predictor.users_service.dto.response.GroupDTO;
 import com.motorsport_predictor.users_service.models.entities.Group;
+import com.motorsport_predictor.users_service.models.entities.GroupMember;
+import com.motorsport_predictor.users_service.models.repositories.IGroupMemberRepository;
 import com.motorsport_predictor.users_service.models.repositories.IGroupRepository;
 import com.motorsport_predictor.users_service.service.IGroupService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,10 +20,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class GroupServiceImpl implements IGroupService {
-
-    @Autowired
-    private IGroupRepository groupRepository;
+    private final IGroupRepository groupRepository;
+    private final IGroupMemberRepository groupMemberRepository;
 
     // Listar todos los grupos
     @Override
@@ -149,6 +153,19 @@ public class GroupServiceImpl implements IGroupService {
                 .build();
 
         groupRepository.save(group);
+
+        // Agrega al grupo creado teniendo en cuenta el usuario logeado
+        GroupMember groupMember = new GroupMember();
+        groupMember.setGroup(group);
+        groupMember.setUserId(userId);
+        groupMember.setJoinedAt(LocalDateTime.now());
+
+        try {
+            groupMemberRepository.save(groupMember);
+        } catch (DataIntegrityViolationException e) {
+            // Manejar error de restricción de unicidad
+            throw new DataIntegrityViolationException("Error saving group");
+        }
 
         return GroupDTO.builder()
                 .name(group.getName())

@@ -8,7 +8,6 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 
 @Configuration
 public class FeignClientConfiguration {
-
     @Bean
     public RequestInterceptor requestTokenBearerInterceptor() {
         return requestTemplate -> {

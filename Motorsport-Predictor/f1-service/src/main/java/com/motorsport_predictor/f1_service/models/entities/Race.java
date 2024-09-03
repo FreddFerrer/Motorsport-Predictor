@@ -11,7 +11,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Race {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,5 +23,4 @@ public class Race {
     private Circuit circuit;
     private LocalDate date;
     private LocalTime time;
-
 }
