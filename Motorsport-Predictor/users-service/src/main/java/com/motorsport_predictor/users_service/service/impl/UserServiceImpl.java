@@ -11,9 +11,12 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.OAuth2Constants;
+import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.admin.client.resource.UsersResource;
+import org.keycloak.representations.AccessTokenResponse;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -22,7 +25,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -119,6 +121,26 @@ public class UserServiceImpl implements IUserService {
         } else {
             log.error("Error creating user, please contact with the administrator.");
             throw new BadRequestException("Error creating user, please contact with the administrator!");
+        }
+    }
+
+    @Override
+    public AccessTokenResponse login(String username, String password) {
+        Keycloak keycloak = KeycloakBuilder.builder()
+                .serverUrl(KeycloakProvider.SERVER_URL)
+                .realm(keycloakProvider.REALM_NAME)
+                .clientId(keycloakProvider.CLIENT_ID)
+                .clientSecret(keycloakProvider.CLIENT_SECRET)
+                .grantType(OAuth2Constants.PASSWORD)
+                .username(username)
+                .password(password)
+                .build();
+
+        try {
+            return keycloak.tokenManager().getAccessTokenResponse();
+        } catch (Exception e) {
+            log.error("Error durante el login: ", e);
+            throw new BadRequestException("Invalid username or password");
         }
     }
 
