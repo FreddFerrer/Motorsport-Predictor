@@ -1,6 +1,7 @@
 package com.motorsport_predictor.users_service.controllers;
 
 import com.motorsport_predictor.users_service.dto.request.CreateUserDTO;
+import com.motorsport_predictor.users_service.dto.request.LoginRequestDTO;
 import com.motorsport_predictor.users_service.exceptions.BadRequestException;
 import com.motorsport_predictor.users_service.service.IUserService;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users")
@@ -69,6 +73,25 @@ public class UsersController {
                     .body(response);
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequest) {
+        try {
+            System.out.println("Access token: NI MADRESSSSSSSSSSSSS");
+            String accessToken = userService.login(loginRequest);
+            System.out.println("Access token: " + accessToken);
+
+            // Retornamos el token si la autenticación fue exitosa
+            Map<String, String> response = new HashMap<>();
+            response.put("access_token", accessToken);
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            System.out.println("mmmmmmmmmmmm error cheeeeeeeeeeeeeee");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
     }
 

@@ -19,6 +19,7 @@ public class SecurityConfig {
 
                     //users-service
                     auth.pathMatchers("/api/users/create").permitAll();
+                    auth.pathMatchers("/api/users/login").permitAll();
                     auth.pathMatchers("/api/groups/").permitAll();
                     auth.pathMatchers("/api/groups/populars").permitAll();
                     auth.pathMatchers("/api/groups/search/{searchTerm}").permitAll();
