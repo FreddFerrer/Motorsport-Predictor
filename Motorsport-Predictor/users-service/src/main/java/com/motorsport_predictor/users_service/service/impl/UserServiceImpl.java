@@ -128,45 +128,35 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public String login(LoginRequestDTO loginRequestDTO) {
-        String TOKEN_URL = "http://localhost:9090/realms/microservices-motorsport-predictor-realm/protocol/openid-connect/token";
+    public Map<String, String> login(LoginRequestDTO loginRequestDTO) {
+        String url = "http://localhost:9090/realms/microservices-motorsport-predictor-realm/protocol/openid-connect/token";
 
-        RestTemplate restTemplate = new RestTemplate();
+        String body = "client_id=microservices-motorsport-client" +
+                "&client_secret=cKqUA6aHPFAU4kaZjXe7FY1mw1VwVxxh" +
+                "&grant_type=password" +
+                "&username=" + loginRequestDTO.getUsername() +
+                "&password=" + loginRequestDTO.getPassword() +
+                "&scope=openid";
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        // Cuerpo de la solicitud con parámetros del formulario
-        Map<String, String> params = new HashMap<>();
-        params.put("client_id", "microservices-motorsport-client");
-        params.put("grant_type", "password");  // Cambiamos a password
-        params.put("client_secret", "cKqUA6aHPFAU4kaZjXe7FY1mw1VwVxxh");
-        params.put("username", loginRequestDTO.getUsername());
-        params.put("password", loginRequestDTO.getPassword());
-        params.put("scope", "openid");
+        HttpEntity<String> request = new HttpEntity<>(body, headers);
 
-        HttpEntity<Map<String, String>> entity = new HttpEntity<>(params, headers);
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, request, Map.class);
 
-        try {
-            // Realizar la solicitud POST a la API de Keycloak
-            ResponseEntity<Map> response = restTemplate.exchange(TOKEN_URL, HttpMethod.POST, entity, Map.class);
+        // Verificar el estado de la respuesta
+        if (response.getStatusCode() == HttpStatus.OK) {
+            Map<String, Object> responseBody = response.getBody();
+            String accessToken = (String) responseBody.get("access_token");
 
-            // Extraer el token de la respuesta
-            Map<String, String> responseBody = response.getBody();
-            if (responseBody != null && responseBody.containsKey("access_token")) {
-                System.out.println("NO ENTRA NI ACÁ CHE 0");
-                return responseBody.get("access_token");
-            } else {
-                System.out.println("NO ENTRA NI ACÁ CHE 1");
-                throw new RuntimeException("No se pudo obtener el token de acceso");
-            }
-        } catch (HttpStatusCodeException e) {
-            // Esto capturará cualquier error en la solicitud HTTP
-            System.out.println("NO ENTRA NI ACÁ CHE 1111111");
-            throw new RuntimeException("Error al autenticar: " + e.getResponseBodyAsString());
-        } catch (Exception e) {
-            // Cualquier otro tipo de excepción
-            System.out.println("NO ENTRA NI ACÁ CHE 22222");
-            throw new RuntimeException("Error inesperado: " + e.getMessage());
+            // Retornar el token como un mapa
+            Map<String, String> result = new HashMap<>();
+            result.put("access_token", accessToken);
+            return result;
+        } else {
+            throw new RuntimeException("Error en la autenticación: " + response.getStatusCode());
         }
     }
 
@@ -176,10 +166,8 @@ public class UserServiceImpl implements IUserService {
             usersResource.get(userId).sendVerifyEmail();
             log.info("Email de verificación enviado exitosamente al usuario con ID: " + userId);
         } catch (WebApplicationException e) {
-            // Manejar el caso de error en el envío del email
+            // Error email sender handler
             log.error("No se pudo enviar el email de verificación al usuario con ID: " + userId, e);
-
-            // Puedes lanzar una excepción personalizada si lo deseas
             throw new ResourceNotFoundException("email");
         }
     }

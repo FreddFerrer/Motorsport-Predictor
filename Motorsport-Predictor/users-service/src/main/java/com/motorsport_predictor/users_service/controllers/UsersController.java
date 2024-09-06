@@ -79,18 +79,9 @@ public class UsersController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequest) {
         try {
-            System.out.println("Access token: NI MADRESSSSSSSSSSSSS");
-            String accessToken = userService.login(loginRequest);
-            System.out.println("Access token: " + accessToken);
-
-            // Retornamos el token si la autenticación fue exitosa
-            Map<String, String> response = new HashMap<>();
-            response.put("access_token", accessToken);
-
+            Map<String, String> response = userService.login(loginRequest);
             return ResponseEntity.ok(response);
-
         } catch (Exception e) {
-            System.out.println("mmmmmmmmmmmm error cheeeeeeeeeeeeeee");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
     }
