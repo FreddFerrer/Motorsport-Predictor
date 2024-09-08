@@ -23,7 +23,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/f1/races",
                                         "/api/f1/races/{raceId}",
-                                        "/api/f1/nextRace").permitAll()
+                                        "/api/f1/nextRace",
+                                        "/v3/api-docs/**",
+                                        "/f1-service/v3/api-docs",
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html").permitAll()
                                 .anyRequest().authenticated())
                 .oauth2ResourceServer(configure -> configure.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter())));
 

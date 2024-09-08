@@ -13,7 +13,7 @@ public interface IUserService {
     Page<UserRepresentation> findAllUsers(Pageable pageable);
     List<UserRepresentation> searchUserByUsername(String username);
     UserRepresentation createUser(CreateUserDTO createUserDTO);
-    Map<String, String> login(LoginRequestDTO loginRequestDTO);
+    Map<String, Object> login(LoginRequestDTO loginRequestDTO);
     String getLoggedInUserId();
     String getUserEmail();
     void deleteUser(String userId);

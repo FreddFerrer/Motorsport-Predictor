@@ -128,7 +128,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public Map<String, String> login(LoginRequestDTO loginRequestDTO) {
+    public Map<String, Object> login(LoginRequestDTO loginRequestDTO) {
         String url = "http://localhost:9090/realms/microservices-motorsport-predictor-realm/protocol/openid-connect/token";
 
         String body = "client_id=microservices-motorsport-client" +
@@ -149,12 +149,12 @@ public class UserServiceImpl implements IUserService {
         // Verificar el estado de la respuesta
         if (response.getStatusCode() == HttpStatus.OK) {
             Map<String, Object> responseBody = response.getBody();
-            String accessToken = (String) responseBody.get("access_token");
+            //String accessToken = (String) responseBody.get("access_token");
 
             // Retornar el token como un mapa
-            Map<String, String> result = new HashMap<>();
-            result.put("access_token", accessToken);
-            return result;
+            //Map<String, String> result = new HashMap<>();
+            //result.put("access_token", accessToken);
+            return responseBody;
         } else {
             throw new RuntimeException("Error en la autenticación: " + response.getStatusCode());
         }

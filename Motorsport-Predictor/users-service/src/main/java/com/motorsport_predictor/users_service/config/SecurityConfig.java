@@ -26,7 +26,11 @@ public class SecurityConfig {
                                         "/api/groups/",
                                         "/api/groups/populars",
                                         "/api/groups/search/{searchTerm}",
-                                        "/api/groups/{groupId}/members").permitAll()
+                                        "/api/groups/{groupId}/members",
+                                        "/v3/api-docs/**",
+                                        "/users-service/v3/api-docs/**",
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html").permitAll()
                                 .anyRequest().authenticated())
                 .oauth2ResourceServer(configure ->
                         configure.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter())));

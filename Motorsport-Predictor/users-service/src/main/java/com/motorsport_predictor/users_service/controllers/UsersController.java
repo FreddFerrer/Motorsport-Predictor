@@ -4,6 +4,8 @@ import com.motorsport_predictor.users_service.dto.request.CreateUserDTO;
 import com.motorsport_predictor.users_service.dto.request.LoginRequestDTO;
 import com.motorsport_predictor.users_service.exceptions.BadRequestException;
 import com.motorsport_predictor.users_service.service.IUserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import java.util.Map;
 public class UsersController {
     private final IUserService userService;
 
+    @Operation(summary = "Endpoint protegido", security = @SecurityRequirement(name = "Bearer Authentication"))
     @GetMapping("/")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> findAllUsers(@PageableDefault(size = 10) Pageable pageable){
@@ -33,6 +36,7 @@ public class UsersController {
         }
     }
 
+    @Operation(summary = "Endpoint protegido", security = @SecurityRequirement(name = "Bearer Authentication"))
     @GetMapping("/search/{username}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<?> searchUserByUsername(@PathVariable String username){
@@ -79,7 +83,7 @@ public class UsersController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequest) {
         try {
-            Map<String, String> response = userService.login(loginRequest);
+            Map<String, Object> response = userService.login(loginRequest);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
@@ -87,6 +91,7 @@ public class UsersController {
     }
 
 
+    @Operation(summary = "Endpoint protegido", security = @SecurityRequirement(name = "Bearer Authentication"))
     @PutMapping("/update/{userId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<?> updateUser(@PathVariable String userId, @RequestBody CreateUserDTO userDTO){
@@ -98,6 +103,7 @@ public class UsersController {
         }
     }
 
+    @Operation(summary = "Endpoint protegido", security = @SecurityRequirement(name = "Bearer Authentication"))
     @DeleteMapping("/delete/{userId}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> deleteUser(@PathVariable String userId){

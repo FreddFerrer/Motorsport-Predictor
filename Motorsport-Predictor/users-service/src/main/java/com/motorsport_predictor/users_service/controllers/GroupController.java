@@ -7,6 +7,8 @@ import com.motorsport_predictor.users_service.dto.response.GroupDTO;
 import com.motorsport_predictor.users_service.exceptions.BadRequestException;
 import com.motorsport_predictor.users_service.service.IGroupMemberService;
 import com.motorsport_predictor.users_service.service.IGroupService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +36,7 @@ public class GroupController {
         }
     }
 
+    @Operation(summary = "Endpoint protegido", security = @SecurityRequirement(name = "Bearer Authentication"))
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> getGroupById(@PathVariable Long id) {
@@ -44,6 +47,7 @@ public class GroupController {
         }
     }
 
+    @Operation(summary = "Endpoint protegido", security = @SecurityRequirement(name = "Bearer Authentication"))
     @GetMapping("/byName/{name}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<?> getGroupByName(@PathVariable String name) {
@@ -55,6 +59,7 @@ public class GroupController {
     }
 
     // return all the groups by User logged
+    @Operation(summary = "Endpoint protegido", security = @SecurityRequirement(name = "Bearer Authentication"))
     @GetMapping("/byUser")
     @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<?> getGroupByUser(Pageable pageable) {
@@ -65,6 +70,7 @@ public class GroupController {
         }
     }
 
+    @Operation(summary = "Endpoint protegido", security = @SecurityRequirement(name = "Bearer Authentication"))
     @GetMapping("/byDiscipline/{discipline}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<?> getGroupByDiscipline(@PathVariable String discipline, @PageableDefault(size = 10) Pageable pageable) {
@@ -102,6 +108,7 @@ public class GroupController {
         }
     }
 
+    @Operation(summary = "Endpoint protegido", security = @SecurityRequirement(name = "Bearer Authentication"))
     @GetMapping("/byUserId/{userId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<?> getGroupsByUserId(@PathVariable String userId, @PageableDefault(size = 10) Pageable pageable) {
@@ -112,6 +119,7 @@ public class GroupController {
         }
     }
 
+    @Operation(summary = "Endpoint protegido", security = @SecurityRequirement(name = "Bearer Authentication"))
     @GetMapping("/byUsername/{username}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<?> getGroupsByUsername(@PathVariable String username, @PageableDefault(size = 10) Pageable pageable) {
@@ -133,6 +141,7 @@ public class GroupController {
         }
     }
 
+    @Operation(summary = "Endpoint protegido", security = @SecurityRequirement(name = "Bearer Authentication"))
     @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<?> createGroup(@RequestBody @Valid CreateGroupDTO createGroupDTO) {
@@ -144,6 +153,7 @@ public class GroupController {
         }
     }
 
+    @Operation(summary = "Endpoint protegido", security = @SecurityRequirement(name = "Bearer Authentication"))
     @PostMapping("/{groupId}/newMemberId")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<?> addMemberById(@PathVariable Long groupId, @RequestBody @Valid AddMemberByIdDTO newMemberToGroupDTO) {
@@ -155,6 +165,7 @@ public class GroupController {
         }
     }
 
+    @Operation(summary = "Endpoint protegido", security = @SecurityRequirement(name = "Bearer Authentication"))
     @PostMapping("/{groupId}/newMemberUsername")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<?> addMemberByUsername(@PathVariable Long groupId, @RequestBody AddMemberByUsernameDTO newMemberByUsernameDTO) {
@@ -166,6 +177,7 @@ public class GroupController {
         }
     }
 
+    @Operation(summary = "Endpoint protegido", security = @SecurityRequirement(name = "Bearer Authentication"))
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<?> deleteGroupById(@PathVariable Long id) {
@@ -177,6 +189,7 @@ public class GroupController {
         }
     }
 
+    @Operation(summary = "Endpoint protegido", security = @SecurityRequirement(name = "Bearer Authentication"))
     @DeleteMapping("/{groupId}/deleteMember/{userId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<?> deleteMemberFromGroupById(@PathVariable Long groupId, @PathVariable String userId) {
