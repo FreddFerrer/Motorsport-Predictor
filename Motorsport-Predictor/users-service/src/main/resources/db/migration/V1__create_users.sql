@@ -3,13 +3,13 @@ use db_motorsport_predictor_users;
 CREATE TABLE IF NOT EXISTS `groups` (
     `id` bigint NOT NULL AUTO_INCREMENT,
     `name` varchar(255) NOT NULL,
-    `description` varchar(255) NOT NULL,
+    `description` varchar(255) NULL,
     `is_public` tinyint(1) DEFAULT 0,
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `creator_id` varchar(255) NOT NULL,
     `is_official` tinyint(1) DEFAULT 0,
-    `discipline` varchar(50) DEFAULT NULL,
+    `discipline` varchar(50) NOT NULL,
     `member_count` int NOT NULL DEFAULT 0,
     PRIMARY KEY (`id`)
 );
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS `group_members` (
     `joined_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     UNIQUE KEY `ux_group_members_group_id_user_id` (`group_id`,`user_id`),
-    CONSTRAINT `FKrpgq4bl4kui39wk9mlkl26ib` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`)
+    CONSTRAINT `FKrpgq4bl4kui39wk9mlkl26ib` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE
 );
 
 

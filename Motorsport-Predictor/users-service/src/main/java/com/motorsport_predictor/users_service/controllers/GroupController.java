@@ -7,7 +7,9 @@ import com.motorsport_predictor.users_service.dto.response.GroupDTO;
 import com.motorsport_predictor.users_service.exceptions.BadRequestException;
 import com.motorsport_predictor.users_service.service.IGroupMemberService;
 import com.motorsport_predictor.users_service.service.IGroupService;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +30,7 @@ public class GroupController {
     private IGroupMemberService groupMemberService;
 
     @GetMapping("/")
-    public ResponseEntity<?> getAllGroups(@PageableDefault(size = 10) Pageable pageable) {
+    public ResponseEntity<?> getAllGroups(@Parameter(hidden = true) @PageableDefault(size = 10) Pageable pageable) {
         try {
             return ResponseEntity.ok(groupService.getAllGroups(pageable));
         } catch (Exception e) {
@@ -183,7 +185,7 @@ public class GroupController {
     public ResponseEntity<?> deleteGroupById(@PathVariable Long id) {
         try {
             groupService.deleteGroupById(id);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Group deleted successfully");
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());
         }

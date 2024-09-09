@@ -21,7 +21,6 @@ public class KeycloakProvider {
     private static final String USER_CONSOLE = "admin";
     private static final String PASSWORD_CONSOLE = "admin";
     private static final String CLIENT_SECRET = "cKqUA6aHPFAU4kaZjXe7FY1mw1VwVxxh";
-    private static final String CLIENT_ID = "microservices-motorsport-client";
 
     public static RealmResource getRealmResource() {
         Keycloak keycloak = KeycloakBuilder.builder()

@@ -10,9 +10,9 @@ import com.motorsport_predictor.users_service.models.repositories.IGroupMemberRe
 import com.motorsport_predictor.users_service.models.repositories.IGroupRepository;
 import com.motorsport_predictor.users_service.service.IGroupMemberService;
 import com.motorsport_predictor.users_service.util.KeycloakProvider;
+import jakarta.ws.rs.ForbiddenException;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.representations.idm.UserRepresentation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -35,7 +35,7 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
     public Page<GroupMemberDTO> getMembersByGroupId(Long groupId, Pageable pageable) {
         // Check if group exists
         groupRepository.findById(groupId)
-                .orElseThrow(() -> new ResourceNotFoundException("Group with ID " + groupId + " not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("group " + groupId));
 
         // Get members id's and his joined dates
         Page<Object[]> membersPage = groupMemberRepository.findUserIdAndJoinedAtByGroupId(groupId, pageable);
@@ -64,7 +64,7 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
                     dto.setUsername(user.getUsername());
                     dto.setJoinedAt(joinedAt);
 
-                    // Obtener la nacionalidad del atributo personalizado
+                    // Get nationality
                     String nationality = user.getAttributes() != null && user.getAttributes().get("nationality") != null ?
                             user.getAttributes().get("nationality").get(0) : "Unknown";
 
@@ -85,7 +85,7 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
         // (a user can be in many groups, but never can be in the same group twice).
         List<Long> groupIds = groupMemberRepository.findGroupIdsByUserId(userId);
         if (groupIds.isEmpty()) {
-            return Page.empty(); // Return empty page if it not has any group
+            throw new BadRequestException("User " + userId + " is not a member of any group"); // Return empty page if it not has any group
         }
 
         // Consult data of the groups taking into consideration the previously obtained ids.
@@ -122,7 +122,7 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
         // (a user can be in many groups, but never can be in the same group twice).
         List<Long> groupIds = groupMemberRepository.findGroupIdsByUserId(userId);
         if (groupIds.isEmpty()) {
-            return Page.empty(); // Return empty page if it not has any group
+            throw new BadRequestException("User " + username + " is not a member of any group"); // Return empty page if it not has any group
         }
 
         // Consult data of the groups taking into consideration the previously obtained ids.
@@ -184,14 +184,31 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
 
     @Override
     public void addMemberToGroupByUsername(Long groupId, String username) {
-        Group group;
-
         UserRepresentation user = KeycloakProvider.getUserByUsername(username);
 
-        if (!groupRepository.existsById(groupId)) {
-            throw new ResourceNotFoundException("groupId" + groupId);
-        } else {
-            group = groupRepository.getReferenceById(groupId);
+        // Check if group Id exist
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new ResourceNotFoundException("Group with ID " + groupId + " not found"));
+
+        // Get logged user id
+        String loggedInUserId = UserServiceImpl.getLoggedUserId();
+
+
+        // Check if the logged user is the creator of the group
+        if (!group.getCreatorId().equals(loggedInUserId)) {
+            throw new ForbiddenException("Only the group founder can add members");
+        }
+
+        // Get username of the group creator
+        String creatorId = group.getCreatorId();
+
+        // Get user creator
+        UserRepresentation userCreator = KeycloakProvider.getUserById(creatorId);
+        String usernameCreator = userCreator.getUsername();
+
+        // Check if the creating user is trying to add himself
+        if (usernameCreator.equals(username)) {
+            throw new BadRequestException("The group founder can not add himself :)");
         }
 
         GroupMember groupMember = new GroupMember();
@@ -208,15 +225,24 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
 
     @Override
     public void removeMemberFromGroupById(Long groupId, String userId) {
-        Group group;
 
         UserRepresentation user = KeycloakProvider.getUserById(userId);
 
         // Check if group id exists
-        if (!groupRepository.existsById(groupId)) {
-            throw new ResourceNotFoundException("groupId " + groupId);
-        } else {
-            group = groupRepository.getReferenceById(groupId);
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new ResourceNotFoundException("groupID" + groupId));
+
+        // Get logged user id
+        String loggedInUserId = UserServiceImpl.getLoggedUserId();
+
+        // Check if the logged user is the creator of the group
+        if (!group.getCreatorId().equals(loggedInUserId)) {
+            throw new ForbiddenException("Only the group founder can remove members");
+        }
+
+        // Check if the creating user is trying to delete himself
+        if (group.getCreatorId().equals(userId)) {
+            throw new BadRequestException("The group founder can not delete himself :)");
         }
 
         // Take corrects ids

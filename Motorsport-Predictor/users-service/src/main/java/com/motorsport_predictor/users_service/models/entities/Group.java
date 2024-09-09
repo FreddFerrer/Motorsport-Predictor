@@ -25,7 +25,7 @@ public class Group {
     @Column(nullable = false)
     private String name;
 
-    @Column()
+    @Column(nullable = true)
     private String description;
 
     @Column(name = "is_public", nullable = false)

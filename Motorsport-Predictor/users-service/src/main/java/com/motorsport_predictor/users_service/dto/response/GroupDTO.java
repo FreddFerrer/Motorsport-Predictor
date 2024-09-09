@@ -15,8 +15,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class GroupDTO {
     private String name;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String description;
     private String discipline;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer memberCount;
     @JsonProperty("isPublic")
     private boolean isPublic;

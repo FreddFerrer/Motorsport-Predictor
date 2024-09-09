@@ -224,7 +224,7 @@ public class UserServiceImpl implements IUserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !authentication.isAuthenticated()) {
-            throw new ResourceNotFoundException("User not authenticated");
+            throw new BadRequestException("User not authenticated");
         }
 
         return authentication.getName();

@@ -76,7 +76,7 @@ public class RaceServiceImpl implements IRaceService {
 
     @Override
     public RaceDTO getRaceById(Long raceId) {
-        Race race = raceRepository.findById(raceId).orElseThrow(() -> new ResourceNotFoundException("Race does not exist"));
+        Race race = raceRepository.findById(raceId).orElseThrow(() -> new ResourceNotFoundException("raceId " + raceId));
         return RaceDTO.builder()
                 .season(race.getSeason())
                 .round(race.getRound())
