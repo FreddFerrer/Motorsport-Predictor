@@ -37,7 +37,8 @@ public class SecurityConfig {
 
                     //swagger
                     auth.pathMatchers("/f1-service/v3/api-docs/**").permitAll();
-                    auth.pathMatchers("/users-service/v3/api-docs/**").permitAll();  // Esta línea asegura que se permita el acceso
+                    auth.pathMatchers("/users-service/v3/api-docs/**").permitAll();
+                    auth.pathMatchers("/predictions-service/v3/api-docs/**").permitAll();
                     auth.pathMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll();
                     auth.pathMatchers("/webjars/swagger-ui/**").permitAll();
 
@@ -55,6 +56,7 @@ public class SecurityConfig {
                 .routes()
                 .route(r -> r.path("/f1-service/v3/api-docs").and().method(HttpMethod.GET).uri("lb://f1-service"))
                 .route(r -> r.path("/users-service/v3/api-docs").and().method(HttpMethod.GET).uri("lb://users-service"))
+                .route(r -> r.path("/predictions-service/v3/api-docs").and().method(HttpMethod.GET).uri("lb://predictions-service"))
     .build();
     }
 }
