@@ -149,11 +149,7 @@ public class UserServiceImpl implements IUserService {
         // Verificar el estado de la respuesta
         if (response.getStatusCode() == HttpStatus.OK) {
             Map<String, Object> responseBody = response.getBody();
-            //String accessToken = (String) responseBody.get("access_token");
 
-            // Retornar el token como un mapa
-            //Map<String, String> result = new HashMap<>();
-            //result.put("access_token", accessToken);
             return responseBody;
         } else {
             throw new RuntimeException("Error en la autenticación: " + response.getStatusCode());
