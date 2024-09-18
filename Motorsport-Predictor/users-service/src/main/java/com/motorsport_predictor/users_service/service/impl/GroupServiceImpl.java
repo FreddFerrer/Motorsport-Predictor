@@ -51,6 +51,12 @@ public class GroupServiceImpl implements IGroupService {
     @Override
     public Optional<GroupDTO> getGroupById(Long id) {
 
+        Optional<Group> groupFound = groupRepository.findById(id);
+
+        if (groupFound.isEmpty()) {
+            throw new ResourceNotFoundException("group " + id);
+        }
+
         return groupRepository.findById(id)
                 .map(group -> GroupDTO.builder()
                         .name(group.getName())

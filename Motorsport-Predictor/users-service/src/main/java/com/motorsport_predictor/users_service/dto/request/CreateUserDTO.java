@@ -28,7 +28,7 @@ public class CreateUserDTO {
 
     @NotEmpty(message = "Required field")
     @NotNull
-    private String userNationality;
+    private String nationality;
 
     @Email
     @NotEmpty(message = "Required field")
@@ -41,8 +41,6 @@ public class CreateUserDTO {
             message = "The password must be at least 5 characters long and include a lowercase letter, an uppercase letter, a number, and a special character.")
     @Length(min = 5, max = 32, message = "must have between 6 and 32 characters")
     private String password;
-
-    private String nationality;
 
     private Set<String> roles;
 }

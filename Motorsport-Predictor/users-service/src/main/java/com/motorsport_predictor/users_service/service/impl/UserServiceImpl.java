@@ -1,7 +1,6 @@
 package com.motorsport_predictor.users_service.service.impl;
 
 import com.motorsport_predictor.users_service.dto.request.CreateUserDTO;
-import com.motorsport_predictor.users_service.dto.request.LoginRequestDTO;
 import com.motorsport_predictor.users_service.exceptions.BadRequestException;
 import com.motorsport_predictor.users_service.exceptions.ResourceNotFoundException;
 import com.motorsport_predictor.users_service.service.IUserService;
@@ -21,17 +20,12 @@ import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpStatusCodeException;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -60,7 +54,7 @@ public class UserServiceImpl implements IUserService {
                 .searchByUsername(username, true);
 
         if (user.isEmpty()) {
-            throw new BadRequestException("Invalid user");
+            throw new BadRequestException("Invalid user: " + username);
         }
 
         return user;
@@ -124,35 +118,6 @@ public class UserServiceImpl implements IUserService {
         } else {
             log.error("Error creating user, please contact with the administrator.");
             throw new BadRequestException("Error creating user, please contact with the administrator!");
-        }
-    }
-
-    @Override
-    public Map<String, Object> login(LoginRequestDTO loginRequestDTO) {
-        String url = "http://localhost:9090/realms/microservices-motorsport-predictor-realm/protocol/openid-connect/token";
-
-        String body = "client_id=microservices-motorsport-client" +
-                "&client_secret=cKqUA6aHPFAU4kaZjXe7FY1mw1VwVxxh" +
-                "&grant_type=password" +
-                "&username=" + loginRequestDTO.getUsername() +
-                "&password=" + loginRequestDTO.getPassword() +
-                "&scope=openid";
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
-        HttpEntity<String> request = new HttpEntity<>(body, headers);
-
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, request, Map.class);
-
-        // Verificar el estado de la respuesta
-        if (response.getStatusCode() == HttpStatus.OK) {
-            Map<String, Object> responseBody = response.getBody();
-
-            return responseBody;
-        } else {
-            throw new RuntimeException("Error en la autenticación: " + response.getStatusCode());
         }
     }
 

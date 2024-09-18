@@ -3,11 +3,17 @@ package com.motorsport_predictor.gateway_server.config;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverter;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import reactor.core.publisher.Mono;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 public class SecurityConfig {
@@ -20,9 +26,11 @@ public class SecurityConfig {
                     //actuator
                     auth.pathMatchers("/actuator/**").permitAll();
 
+                    //login
+                    auth.pathMatchers("/api/auth/login").permitAll();
+
                     //users-service
                     auth.pathMatchers("/api/users/create").permitAll();
-                    auth.pathMatchers("/api/users/login").permitAll();
                     auth.pathMatchers("/api/groups/").permitAll();
                     auth.pathMatchers("/api/groups/populars").permitAll();
                     auth.pathMatchers("/api/groups/search/{searchTerm}").permitAll();
@@ -45,9 +53,18 @@ public class SecurityConfig {
 
                     auth.anyExchange().authenticated();
                 })
-                .oauth2Login(Customizer.withDefaults());
+                .oauth2Login(withDefaults())
+                .oauth2ResourceServer(configure ->
+                        configure.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter())));
 
         return http.build();
+    }
+
+    private Converter<Jwt, Mono<AbstractAuthenticationToken>> jwtAuthConverter() {
+        ReactiveJwtAuthenticationConverter converter = new ReactiveJwtAuthenticationConverter();
+        converter.setJwtGrantedAuthoritiesConverter(new KeycloakRealmRoleConverter());
+
+        return converter;
     }
 
     @Bean
@@ -57,6 +74,6 @@ public class SecurityConfig {
                 .route(r -> r.path("/f1-service/v3/api-docs").and().method(HttpMethod.GET).uri("lb://f1-service"))
                 .route(r -> r.path("/users-service/v3/api-docs").and().method(HttpMethod.GET).uri("lb://users-service"))
                 .route(r -> r.path("/predictions-service/v3/api-docs").and().method(HttpMethod.GET).uri("lb://predictions-service"))
-    .build();
+                .build();
     }
 }
