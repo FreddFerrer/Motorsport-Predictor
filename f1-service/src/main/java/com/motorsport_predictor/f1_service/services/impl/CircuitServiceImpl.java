@@ -5,7 +5,6 @@ import com.motorsport_predictor.f1_service.models.entities.Circuit;
 import com.motorsport_predictor.f1_service.models.repositories.ICircuitRepository;
 import com.motorsport_predictor.f1_service.services.ICircuitService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

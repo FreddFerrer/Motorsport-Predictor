@@ -5,7 +5,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(value = "f1-service")
+@FeignClient(value = "f1-service", url = "${f1-service.url}")
 public interface IF1Client {
     @GetMapping("/api/f1/drivers/{driverId}/exist")
     boolean existsById(@PathVariable Long driverId);

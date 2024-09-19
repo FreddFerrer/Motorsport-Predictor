@@ -3,7 +3,6 @@ package com.motorsport_predictor.predictions_service.models.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.security.Timestamp;
 import java.time.LocalDateTime;
 
 @Getter

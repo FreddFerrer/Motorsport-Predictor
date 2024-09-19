@@ -1,10 +1,8 @@
 package com.motorsport_predictor.predictions_service.services.impl;
 
 import com.motorsport_predictor.predictions_service.dto.PredictionDTO;
-import com.motorsport_predictor.predictions_service.dto.PredictionNotificationDTO;
 import com.motorsport_predictor.predictions_service.dto.RaceDTO;
 import com.motorsport_predictor.predictions_service.dto.request.PredictionsRequestDTO;
-import com.motorsport_predictor.predictions_service.dto.request.RaceResultRequestDTO;
 import com.motorsport_predictor.predictions_service.exceptions.BadRequestException;
 import com.motorsport_predictor.predictions_service.feign.IF1Client;
 import com.motorsport_predictor.predictions_service.feign.IUserClient;
@@ -14,7 +12,6 @@ import com.motorsport_predictor.predictions_service.services.IF1PredictionServic
 import com.motorsport_predictor.predictions_service.utils.JsonUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDateTime;

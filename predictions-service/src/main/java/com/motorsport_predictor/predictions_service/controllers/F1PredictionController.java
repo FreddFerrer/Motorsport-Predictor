@@ -1,18 +1,15 @@
 package com.motorsport_predictor.predictions_service.controllers;
 
 import com.motorsport_predictor.predictions_service.dto.request.PredictionsRequestDTO;
-import com.motorsport_predictor.predictions_service.dto.request.RaceResultRequestDTO;
 import com.motorsport_predictor.predictions_service.exceptions.BadRequestException;
 import com.motorsport_predictor.predictions_service.services.IF1PredictionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

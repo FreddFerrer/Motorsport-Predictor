@@ -5,8 +5,6 @@ import com.motorsport_predictor.users_service.dto.response.GroupMemberDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-
 
 public interface IGroupMemberService {
     Page<GroupMemberDTO> getMembersByGroupId(Long groupId, Pageable pageable);

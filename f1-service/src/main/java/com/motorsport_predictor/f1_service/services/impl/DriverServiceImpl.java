@@ -2,7 +2,6 @@ package com.motorsport_predictor.f1_service.services.impl;
 
 import com.motorsport_predictor.f1_service.dto.DriverDTO;
 import com.motorsport_predictor.f1_service.dto.TeamDTO;
-import com.motorsport_predictor.f1_service.exceptions.ResourceNotFoundException;
 import com.motorsport_predictor.f1_service.models.entities.Driver;
 import com.motorsport_predictor.f1_service.models.entities.Team;
 import com.motorsport_predictor.f1_service.models.repositories.IDriverRepository;
