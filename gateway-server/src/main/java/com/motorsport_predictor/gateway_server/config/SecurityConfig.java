@@ -71,9 +71,9 @@ public class SecurityConfig {
     public RouteLocator routeLocator(RouteLocatorBuilder builder) {
         return builder
                 .routes()
-                .route(r -> r.path("/f1-service/v3/api-docs").and().method(HttpMethod.GET).uri("lb://f1-service"))
-                .route(r -> r.path("/users-service/v3/api-docs").and().method(HttpMethod.GET).uri("lb://users-service"))
-                .route(r -> r.path("/predictions-service/v3/api-docs").and().method(HttpMethod.GET).uri("lb://predictions-service"))
+                .route(r -> r.path("/f1-service/v3/api-docs").and().method(HttpMethod.GET).uri("http://f1-service:8083"))
+                .route(r -> r.path("/users-service/v3/api-docs").and().method(HttpMethod.GET).uri("http://users-service:8081"))
+                .route(r -> r.path("/predictions-service/v3/api-docs").and().method(HttpMethod.GET).uri("http://predictions-service:8082"))
                 .build();
     }
 }
