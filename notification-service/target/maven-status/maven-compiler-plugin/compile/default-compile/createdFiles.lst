@@ -1,0 +1,9 @@
+com\motorsport_predictor\notification_service\dto\RaceDTO.class
+com\motorsport_predictor\notification_service\dto\PredictionDTO.class
+com\motorsport_predictor\notification_service\dto\PredictionNotificationDTO.class
+com\motorsport_predictor\notification_service\dto\CircuitDTO$CircuitDTOBuilder.class
+com\motorsport_predictor\notification_service\NotificationServiceApplication.class
+com\motorsport_predictor\notification_service\services\KafkaConsumer.class
+com\motorsport_predictor\notification_service\dto\RaceDTO$RaceDTOBuilder.class
+com\motorsport_predictor\notification_service\dto\CircuitDTO.class
+com\motorsport_predictor\notification_service\utils\JsonUtils.class

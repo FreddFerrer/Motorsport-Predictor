@@ -711,7 +711,7 @@
       "clientId": "microservices-motorsport-client",
       "name": "microservices-motorsport-client",
       "description": "",
-      "rootUrl": "http://keycloak:8080/",
+      "rootUrl": "http://keycloak:9090/",
       "adminUrl": "",
       "baseUrl": "",
       "surrogateAuthRequired": false,
@@ -721,8 +721,8 @@
       "secret": "**********",
       "redirectUris": [
         "https://oauth.pstmn.io/v1/browser-callback",
-        "http://keycloak:8080/*",
-        "http://keycloak:8080/login/oauth2/code/keycloak",
+        "http://keycloak:9090/*",
+        "http://keycloak:9090/login/oauth2/code/keycloak",
         "http://keycloak"
       ],
       "webOrigins": [
@@ -740,7 +740,7 @@
       "frontchannelLogout": true,
       "protocol": "openid-connect",
       "attributes": {
-        "oidc.ciba.grant.enabled": "false",
+        "oidc.ciba.grant.enabled": "true",
         "client.secret.creation.time": "1722863366",
         "backchannel.logout.session.required": "true",
         "login_theme": "keycloak",

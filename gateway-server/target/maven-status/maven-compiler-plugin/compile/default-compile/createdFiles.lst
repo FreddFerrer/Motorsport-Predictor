@@ -1,0 +1,13 @@
+com\motorsport_predictor\gateway_server\service\impl\UserServiceImpl.class
+com\motorsport_predictor\gateway_server\exceptions\GlobalExceptionHandler.class
+com\motorsport_predictor\gateway_server\auth\controller\AuthController.class
+com\motorsport_predictor\gateway_server\config\KeycloakRealmRoleConverter.class
+com\motorsport_predictor\gateway_server\config\SecurityConfig.class
+com\motorsport_predictor\gateway_server\config\OpenApiConfig.class
+com\motorsport_predictor\gateway_server\dto\request\LoginRequestDTO$LoginRequestDTOBuilder.class
+com\motorsport_predictor\gateway_server\exceptions\ResourceNotFoundException.class
+com\motorsport_predictor\gateway_server\GatewayServerApplication.class
+com\motorsport_predictor\gateway_server\exceptions\BadRequestException.class
+com\motorsport_predictor\gateway_server\service\IUserService.class
+com\motorsport_predictor\gateway_server\dto\request\LoginRequestDTO.class
+com\motorsport_predictor\gateway_server\exceptions\CustomErrorResponse.class
