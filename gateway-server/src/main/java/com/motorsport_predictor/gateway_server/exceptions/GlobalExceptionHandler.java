@@ -62,4 +62,14 @@ public class GlobalExceptionHandler {
         CustomErrorResponse apiResponse = new CustomErrorResponse("Access denied", webRequest.getDescription(false));
         return new ResponseEntity<>(apiResponse, HttpStatus.FORBIDDEN);
     }
+
+    @ExceptionHandler(EmailVerificationException.class)
+    public ResponseEntity<CustomErrorResponse> handleEmailVerificationException(EmailVerificationException exception,
+                                                                                WebRequest webRequest) {
+        CustomErrorResponse errorResponse = new CustomErrorResponse(
+                exception.getMessage(),
+                "User creation failed due to email verification issue.");
+        errorResponse.setPath(webRequest.getDescription(false));
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
 }

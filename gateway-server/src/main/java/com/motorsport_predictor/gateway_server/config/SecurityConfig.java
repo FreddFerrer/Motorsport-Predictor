@@ -11,11 +11,15 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverter;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.CorsWebFilter;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import org.springframework.web.reactive.config.EnableWebFlux;
 import reactor.core.publisher.Mono;
-
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
+@EnableWebFlux
 public class SecurityConfig {
 
     @Bean
@@ -28,9 +32,9 @@ public class SecurityConfig {
 
                     //login
                     auth.pathMatchers("/api/auth/login").permitAll();
+                    auth.pathMatchers("/api/auth/create").permitAll();
 
                     //users-service
-                    auth.pathMatchers("/api/users/create").permitAll();
                     auth.pathMatchers("/api/groups/").permitAll();
                     auth.pathMatchers("/api/groups/populars").permitAll();
                     auth.pathMatchers("/api/groups/search/{searchTerm}").permitAll();
@@ -74,6 +78,27 @@ public class SecurityConfig {
                 .route(r -> r.path("/f1-service/v3/api-docs").and().method(HttpMethod.GET).uri("http://f1-service:8083"))
                 .route(r -> r.path("/users-service/v3/api-docs").and().method(HttpMethod.GET).uri("http://users-service:8081"))
                 .route(r -> r.path("/predictions-service/v3/api-docs").and().method(HttpMethod.GET).uri("http://predictions-service:8082"))
+                .route(r -> r.path("/**").and().method(HttpMethod.POST).uri("http://localhost:8080"))
                 .build();
+    }
+
+    @Bean
+    CorsWebFilter corsFilter() {
+
+        CorsConfiguration config = new CorsConfiguration();
+
+        // Possibly...
+        // config.applyPermitDefaultValues()
+
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("http://localhost:8080/**");
+        config.addAllowedOrigin("http://92.112.178.200:8080/**");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+
+        return new CorsWebFilter(source);
     }
 }
