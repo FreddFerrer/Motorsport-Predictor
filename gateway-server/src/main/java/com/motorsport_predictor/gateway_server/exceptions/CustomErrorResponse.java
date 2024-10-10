@@ -20,6 +20,9 @@ public class CustomErrorResponse {
         this.message = message;
         this.path = path;
     }
+    public CustomErrorResponse(String message) {
+        this.message = message;
+    }
 
     public CustomErrorResponse(String message, Map<String, String> errors) {
         this.message = message;

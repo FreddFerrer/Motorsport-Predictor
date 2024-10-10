@@ -19,7 +19,7 @@ public class LoginRequestDTO {
     @NotNull
     private String username;
 
-    @Schema(example = "Password@UserPrueba")
+    @Schema(example = "Password@123")
     @NotEmpty(message = "Required field")
     @NotNull
     private String password;

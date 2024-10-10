@@ -13,7 +13,6 @@ services:
     networks:
       - local_network
 
-    
 
   ### F1 Service
   f1-service:
@@ -35,7 +34,6 @@ services:
     restart: always
     networks:
       - local_network
-    
 
   ### Users Service
   users-service:
@@ -90,7 +88,7 @@ services:
       EUREKA_USER: eureka
       EUREKA_PASSWORD: password  
       MAIL_USERNAME: ferreirafreddy39@gmail.com
-      MAIL_PASSWORD: arku qlqw zqpg ntjj 
+      MAIL_PASSWORD: arku qlqw zqpg ntjj
     restart: always
     networks:
       - local_network
@@ -115,7 +113,6 @@ services:
     restart: always
     networks:
       - local_network
-    
 
   ### MySQL database for users
   db-users:
@@ -135,7 +132,6 @@ services:
       - 3306
     networks:
       - local_network
-
 
   ### MySQL database for predictions
   db-predictions:
@@ -215,12 +211,11 @@ services:
       KC_HTTP_ENABLED: true
       KC_HOSTNAME_STRICT: false
       KC_HOSTNAME_STRICT_HTTPS: false
-      KC_HOSTNAME_URL: http://localhost:9090
+      KC_HOSTNAME_URL: http://KEYCLOAK:9090
     volumes:
       - ./imports:/opt/keycloak/data/import
     networks:
       - local_network
-
 
   ### Zookeeper
   zookeeper:

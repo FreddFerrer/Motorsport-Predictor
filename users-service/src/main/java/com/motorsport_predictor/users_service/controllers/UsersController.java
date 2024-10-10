@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class UsersController {
     private final IUserService userService;
 
@@ -116,7 +115,6 @@ public class UsersController {
     }
 
     // Intern endpoint
-    @Operation(hidden = true)
     @GetMapping("/loggedUser")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<?> getUserLoggedId(){

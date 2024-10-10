@@ -93,15 +93,6 @@ public class UserServiceImpl implements IUserService {
             String path = response.getLocation().getPath();
             String userId = path.substring(path.lastIndexOf("/") + 1);
 
-            try {
-                // Intentamos enviar el correo de verificación
-                emailVerification(userId);
-            } catch (EmailVerificationException e) {
-                // Si falla la verificación, eliminamos al usuario recién creado
-                usersResource.delete(userId);
-                throw new BadRequestException("Error verifying email, user creation cancelled.");
-            }
-
             CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
             credentialRepresentation.setTemporary(false);
             credentialRepresentation.setType(CredentialRepresentation.PASSWORD);
@@ -126,6 +117,8 @@ public class UserServiceImpl implements IUserService {
             }
 
             realmResource.users().get(userId).roles().realmLevel().add(rolesRepresentation);
+
+            emailVerification(userId);
 
             return userRepresentation;
 

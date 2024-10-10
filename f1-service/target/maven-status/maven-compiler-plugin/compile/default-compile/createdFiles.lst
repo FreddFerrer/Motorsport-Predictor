@@ -18,10 +18,11 @@ com\motorsport_predictor\f1_service\F1ServiceApplication.class
 com\motorsport_predictor\f1_service\dto\TeamDTO.class
 com\motorsport_predictor\f1_service\models\repositories\ICircuitRepository.class
 com\motorsport_predictor\f1_service\dto\CircuitDTO.class
+com\motorsport_predictor\f1_service\config\FeignConfig.class
+com\motorsport_predictor\f1_service\config\WebConfig.class
 com\motorsport_predictor\f1_service\controllers\F1Controller.class
 com\motorsport_predictor\f1_service\exceptions\CustomErrorResponse.class
 com\motorsport_predictor\f1_service\dto\RaceDTO$RaceDTOBuilder.class
-com\motorsport_predictor\f1_service\config\FeignClientConfiguration.class
 com\motorsport_predictor\f1_service\exceptions\ResourceNotFoundException.class
 com\motorsport_predictor\f1_service\exceptions\BadRequestException.class
 com\motorsport_predictor\f1_service\models\repositories\IDriverRepository.class

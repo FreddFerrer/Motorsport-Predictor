@@ -27,9 +27,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/f1")
-@CrossOrigin
 @RequiredArgsConstructor
 public class F1Controller {
     private final ICircuitService circuitService;
@@ -160,12 +161,12 @@ public class F1Controller {
 
     // Internal endpoint
     @Hidden
-    @GetMapping("/drivers/{driverId}/exist")
+    @GetMapping("/drivers/exist")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
-    public ResponseEntity<Boolean> getDriverById(@PathVariable Long driverId) {
+    public ResponseEntity<Boolean> getDriverById(@RequestParam List<Long> driverIds) {
         try {
-            boolean exists = driverService.existById(driverId);
-            return ResponseEntity.ok().body(exists);
+            boolean allDriversExist = driverService.doAllDriversExist(driverIds);
+            return ResponseEntity.ok().body(allDriversExist);
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());
         }

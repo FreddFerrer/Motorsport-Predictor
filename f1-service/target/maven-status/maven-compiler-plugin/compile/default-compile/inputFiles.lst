@@ -1,7 +1,8 @@
-C:\Users\fredd\Desktop\motorsport-predictor\Motorsport-Predictor\f1-service\src\main\java\com\motorsport_predictor\f1_service\config\FeignClientConfiguration.java
+C:\Users\fredd\Desktop\motorsport-predictor\Motorsport-Predictor\f1-service\src\main\java\com\motorsport_predictor\f1_service\config\FeignConfig.java
 C:\Users\fredd\Desktop\motorsport-predictor\Motorsport-Predictor\f1-service\src\main\java\com\motorsport_predictor\f1_service\config\KeycloakRealmRoleConverter.java
 C:\Users\fredd\Desktop\motorsport-predictor\Motorsport-Predictor\f1-service\src\main\java\com\motorsport_predictor\f1_service\config\OpenApiConfig.java
 C:\Users\fredd\Desktop\motorsport-predictor\Motorsport-Predictor\f1-service\src\main\java\com\motorsport_predictor\f1_service\config\SecurityConfig.java
+C:\Users\fredd\Desktop\motorsport-predictor\Motorsport-Predictor\f1-service\src\main\java\com\motorsport_predictor\f1_service\config\WebConfig.java
 C:\Users\fredd\Desktop\motorsport-predictor\Motorsport-Predictor\f1-service\src\main\java\com\motorsport_predictor\f1_service\controllers\F1Controller.java
 C:\Users\fredd\Desktop\motorsport-predictor\Motorsport-Predictor\f1-service\src\main\java\com\motorsport_predictor\f1_service\dto\CircuitDTO.java
 C:\Users\fredd\Desktop\motorsport-predictor\Motorsport-Predictor\f1-service\src\main\java\com\motorsport_predictor\f1_service\dto\DriverDTO.java

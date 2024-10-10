@@ -1,4 +1,5 @@
 com\motorsport_predictor\predictions_service\dto\PredictionDTO$PredictionDTOBuilder.class
+com\motorsport_predictor\predictions_service\config\WebConfig.class
 com\motorsport_predictor\predictions_service\services\IF1PredictionService.class
 com\motorsport_predictor\predictions_service\controllers\F1PredictionController.class
 com\motorsport_predictor\predictions_service\dto\RaceDTO$RaceDTOBuilder.class
@@ -8,6 +9,7 @@ com\motorsport_predictor\predictions_service\exceptions\GlobalExceptionHandler.c
 com\motorsport_predictor\predictions_service\PredictionsServiceApplication.class
 com\motorsport_predictor\predictions_service\dto\PredictionNotificationDTO.class
 com\motorsport_predictor\predictions_service\services\impl\KafkaProducer.class
+com\motorsport_predictor\predictions_service\config\FeignConfig.class
 com\motorsport_predictor\predictions_service\models\repositories\IF1PredictionRepository.class
 com\motorsport_predictor\predictions_service\dto\RaceDTO.class
 com\motorsport_predictor\predictions_service\dto\PredictionDTO.class
@@ -21,7 +23,6 @@ com\motorsport_predictor\predictions_service\models\entities\F1Prediction$F1Pred
 com\motorsport_predictor\predictions_service\services\impl\F1PredictionServiceImpl.class
 com\motorsport_predictor\predictions_service\models\entities\F1Prediction.class
 com\motorsport_predictor\predictions_service\config\KeycloakRealmRoleConverter.class
-com\motorsport_predictor\predictions_service\config\FeignClientConfiguration.class
 com\motorsport_predictor\predictions_service\exceptions\CustomErrorResponse.class
 com\motorsport_predictor\predictions_service\dto\RaceResultDTO.class
 com\motorsport_predictor\predictions_service\dto\request\PredictionsRequestDTO.class

@@ -27,7 +27,6 @@ import java.util.Map;
         "**Usuarios de prueba**:\n\n" +
         "- **usuario_prueba_1** / Password@123\n" +
         "- **usuario_prueba_2** / Password@123")
-@CrossOrigin(origins = "*")
 public class AuthController {
 
     private final IUserService userService;
@@ -84,12 +83,12 @@ public class AuthController {
                             schema = @Schema(implementation = CreateUserDTO.class),
                             examples = @ExampleObject(value = """
                 {
-                    "username": "updatedUser123",
+                    "username": "JohnDoe123",
                     "firstName": "John",
                     "lastName": "Doe",
                     "nationality": "American",
-                    "email": "john.doe_updated@example.com",
-                    "password": "UpdatedPassword@123"
+                    "email": "john.doe@example.com",
+                    "password": "Password@123"
                 }
             """))
             ),

@@ -2,11 +2,7 @@ package com.motorsport_predictor.gateway_server.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @OpenAPIDefinition(
@@ -21,8 +17,8 @@ import org.springframework.web.filter.CorsFilter;
                         "**ACLARACIÓN**:\n\n" +
                         "Después de realizar el login, los usuarios deben obtener el **access_token** y pegarlo en el campo correspondiente de Swagger para acceder a los endpoints protegidos.\n\n" +
                         "**Usuarios de Prueba**:\n\n" +
-                        "- **usuario_prueba_1** / Password@UserPrueba\n" +
-                        "- **usuario_prueba_2** / Password@UserPrueba\n\n" +
+                        "- **usuario_prueba_1** / Password@123\n" +
+                        "- **usuario_prueba_2** / Password@123\n\n" +
                         "**Microservicios del Proyecto**:\n\n" +
                         "- **API Gateway**: Maneja el enrutamiento de las solicitudes a los microservicios correspondientes y expone los endpoints de la API.\n" +
                         "- **Users Service**: Administra la información de los usuarios, incluyendo su registro.\n" +

@@ -32,9 +32,11 @@ public class DriverServiceImpl implements IDriverService {
     }
 
     @Override
-    public boolean existById(Long driverId) {
-        return driverRepository.existsById(driverId);
-    }
+    public boolean doAllDriversExist(List<Long> driverIds) {
+        // Verificar si el número de IDs encontrados coincide con la cantidad solicitada
+        long count = driverRepository.countByIdIn(driverIds);
+        return count == driverIds.size();  // Retorna true si todos los IDs existen, false en caso contrario
+}
 
     // mapping method
     private TeamDTO mapToTeamDTO(Team team) {

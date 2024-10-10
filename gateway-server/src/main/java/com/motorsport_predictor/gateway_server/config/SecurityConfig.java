@@ -7,6 +7,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpMethod;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverter;
@@ -83,21 +84,18 @@ public class SecurityConfig {
     }
 
     @Bean
-    CorsWebFilter corsFilter() {
-
-        CorsConfiguration config = new CorsConfiguration();
-
-        // Possibly...
-        // config.applyPermitDefaultValues()
-
-        config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost:8080/**");
-        config.addAllowedOrigin("http://92.112.178.200:8080/**");
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
+    public CorsWebFilter corsWebFilter() {
+        CorsConfiguration corsConfig = new CorsConfiguration();
+        corsConfig.addAllowedOrigin("http://localhost"); // Permite localhost
+        corsConfig.addAllowedOrigin("http://localhost:8080"); // Permite localhost
+        corsConfig.addAllowedOrigin("http://localhost:9090"); // Permite localhost
+        corsConfig.addAllowedHeader("*");
+        corsConfig.addAllowedMethod("*");
+        corsConfig.setAllowCredentials(true);
+        corsConfig.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
+        source.registerCorsConfiguration("/**", corsConfig);
 
         return new CorsWebFilter(source);
     }

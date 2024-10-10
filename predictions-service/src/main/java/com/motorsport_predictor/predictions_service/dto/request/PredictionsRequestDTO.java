@@ -1,6 +1,5 @@
 package com.motorsport_predictor.predictions_service.dto.request;
 
-import com.motorsport_predictor.predictions_service.dto.PredictionDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,5 +12,5 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PredictionsRequestDTO {
-    private List<PredictionDTO> predictions;
+    private List<Long> driverIds;
 }

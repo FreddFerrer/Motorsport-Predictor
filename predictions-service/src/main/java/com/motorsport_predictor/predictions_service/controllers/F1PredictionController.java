@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/predictions")
-@CrossOrigin
 @RequiredArgsConstructor
 public class F1PredictionController {
     private final IF1PredictionService predictionService;

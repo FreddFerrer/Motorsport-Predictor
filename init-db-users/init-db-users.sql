@@ -59,10 +59,15 @@ DELIMITER ;
 INSERT INTO db_motorsport_predictor_users.groups (name, description, creator_id, is_public, is_official, discipline, member_count)
 VALUES
 ('Formula 1 NO oficial privado', 'Grupo NO oficial y privado de F1 para predecir resultados', '1118d324-b46c-48ef-ac01-01da1404ae84', 0, 0, 'Formula 1', 0),
+('Formula 1 OFICIAL publico', 'Grupo oficial de F1 para predecir resultados', '67de6596-5e38-4b73-9aea-f323e9653681', 1, 0, 'Formula 1', 0),
 ('IndyCar oficial', 'Grupo oficial de IndyCar', '1118d324-b46c-48ef-ac01-01da1404ae84', 1, 1, 'IndyCar', 0);
 
 -- Insertar datos en la tabla group_members
 INSERT INTO group_members (group_id, user_id)
 VALUES
 (1, '1118d324-b46c-48ef-ac01-01da1404ae84'),
-(2, '1118d324-b46c-48ef-ac01-01da1404ae84');
+(1, 'b17f0056-d845-469c-a685-c044c9f1296e'),
+(2, '1118d324-b46c-48ef-ac01-01da1404ae84'),
+(2, '46cdb783-cbca-4163-8df2-5071d1714110'),
+(2, 'ea0b0853-ade4-49ad-8c8a-8da431f57809'),
+(2, 'e420c351-da7f-44ef-beec-56ce812a599f');

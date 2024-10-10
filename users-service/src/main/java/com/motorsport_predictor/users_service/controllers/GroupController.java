@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/groups")
-@CrossOrigin
 @RequiredArgsConstructor
 public class GroupController {
     private final IGroupService groupService;

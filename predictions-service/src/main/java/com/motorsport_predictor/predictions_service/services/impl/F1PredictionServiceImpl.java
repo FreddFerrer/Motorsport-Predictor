@@ -53,45 +53,36 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
         }
 
         // Validate number of predictions
-        if (request.getPredictions().size() > 10) {
-            throw new IllegalArgumentException("Solo se permiten hasta 10 predicciones por solicitud.");
+        if (request.getDriverIds().size() > 10) {
+            throw new IllegalArgumentException("Solo se permiten hasta 10 pilotos por solicitud.");
         }
 
-        // Check if driver exists
-        request.getPredictions().forEach(prediction -> {
-            boolean driverExists = f1Client.existsById(prediction.getDriverId());
-            if (!driverExists) {
-                throw new IllegalArgumentException("El piloto con ID " + prediction.getDriverId() + " no existe.");
-            }
-        });
+        // Check if all drivers exist in a single request
+        boolean allDriversExist = f1Client.doAllDriversExist(request.getDriverIds());
+        if (!allDriversExist) {
+            throw new IllegalArgumentException("Uno o más pilotos no existen.");
+        }
 
         // Check for duplicate drivers
-        Set<Long> driverIds = new HashSet<>();
-        for (PredictionDTO prediction : request.getPredictions()) {
-            if (!driverIds.add(prediction.getDriverId())) {
-                throw new IllegalArgumentException("No se pueden repetir pilotos en una predicción.");
-            }
-        }
-
-        // Check for duplicate positions
-        Set<Integer> positions = new HashSet<>();
-        for (PredictionDTO prediction : request.getPredictions()) {
-            if (!positions.add(prediction.getPredictedPosition())) {
-                throw new IllegalArgumentException("No se pueden repetir los puestos.");
-            }
+        Set<Long> driverIds = new HashSet<>(request.getDriverIds());
+        if (driverIds.size() != request.getDriverIds().size()) {
+            throw new IllegalArgumentException("No se pueden repetir pilotos en una predicción.");
         }
 
         // Save each prediction
         List<PredictionDTO> savedPredictions = new ArrayList<>();
-        for (PredictionDTO predictionDto : request.getPredictions()) {
+        int predictedPosition = 1;  // Start with first position
+        for (Long driverId : request.getDriverIds()) {
             F1Prediction individualPrediction = new F1Prediction();
             individualPrediction.setGroupMemberId(memberGroupId);
             individualPrediction.setRaceId(raceId);
-            individualPrediction.setDriverId(predictionDto.getDriverId());
-            individualPrediction.setPredictedPosition(predictionDto.getPredictedPosition());
+            individualPrediction.setDriverId(driverId);
+            individualPrediction.setPredictedPosition(predictedPosition++);  // Asigna la posición secuencialmente
             individualPrediction.setCreatedAt(LocalDateTime.now());
             f1PredictionRepository.save(individualPrediction);
-            savedPredictions.add(predictionDto);
+
+            // Añadir la predicción a la lista de predicciones guardadas
+            savedPredictions.add(new PredictionDTO(driverId, predictedPosition - 1));
         }
 
         String userEmail = usersClient.getUserEmail();
@@ -103,6 +94,7 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
         // Send to kafka
         kafkaProducer.sendPredictionNotification(JsonUtils.toJson(raceInfo));
     }
+
 
     @Override
     public String getUserEmail() {
