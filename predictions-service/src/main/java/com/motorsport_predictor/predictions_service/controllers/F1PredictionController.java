@@ -1,5 +1,6 @@
 package com.motorsport_predictor.predictions_service.controllers;
 
+import com.motorsport_predictor.predictions_service.dto.RaceResultIdDTO;
 import com.motorsport_predictor.predictions_service.dto.request.PredictionsRequestDTO;
 import com.motorsport_predictor.predictions_service.exceptions.BadRequestException;
 import com.motorsport_predictor.predictions_service.services.IF1PredictionService;
@@ -16,6 +17,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/predictions")
@@ -117,6 +120,20 @@ public class F1PredictionController {
             return ResponseEntity.status(HttpStatus.CREATED).body("successfully");
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());
+        }
+    }
+
+    @PostMapping("/f1/upload-results/{raceId}")
+    public ResponseEntity<?> uploadRaceResults(@PathVariable Long raceId,
+                                               @RequestBody @Valid RaceResultIdDTO raceResultIdDTO) {
+        try {
+            List<Long> driverIds = raceResultIdDTO.getDriverIds();
+
+            predictionService.saveRaceResults(raceId, driverIds);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body("Resultados guardados correctamente");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.motorsport_predictor.predictions_service.services.impl;
 
-import com.motorsport_predictor.predictions_service.dto.PredictionDTO;
 import com.motorsport_predictor.predictions_service.dto.RaceDTO;
 import com.motorsport_predictor.predictions_service.dto.request.PredictionsRequestDTO;
 import com.motorsport_predictor.predictions_service.exceptions.BadRequestException;
@@ -16,10 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -48,6 +44,18 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
             throw new IllegalArgumentException("La carrera " + raceId + " no existe.");
         }
 
+        // Obtener la fecha y hora de la carrera
+        RaceDTO raceDateTime = f1Client.getRaceInfo(raceId);
+
+        // Combinar fecha y hora en un solo objeto LocalDateTime
+        LocalDateTime raceDateTimeCombined = LocalDateTime.of(raceDateTime.getDate(), raceDateTime.getTime());
+
+        // Verificar si el tiempo límite ha pasado (1 hora antes de la carrera)
+        LocalDateTime now = LocalDateTime.now();
+        if (now.isAfter(raceDateTimeCombined.minusHours(1))) {
+            throw new IllegalArgumentException("El límite para hacer predicciones ha pasado. Ya no es posible realizar predicciones para esta carrera.");
+        }
+
         // Count how many predictions already exist for the user in this race
         int existingPredictions = f1PredictionRepository.countByGroupMemberIdAndRaceId(memberGroupId, raceId);
         if (existingPredictions >= 10) {
@@ -65,7 +73,7 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
             throw new IllegalArgumentException("No se pueden repetir pilotos en una predicción.");
         }
 
-        // Convert shortcodes to driverIds and identify invalid shortnames
+        // Convert shortnames to driverIds and identify invalid shortnames
         List<String> shortnames = request.getDriverShortnames();
         List<Long> driverIds = new ArrayList<>();
 
@@ -85,19 +93,15 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
         }
 
         // Save each prediction
-        List<PredictionDTO> savedPredictions = new ArrayList<>();
         int predictedPosition = 1;  // Start with first position
         for (Long driverId : driverIds) {
             F1Prediction individualPrediction = new F1Prediction();
             individualPrediction.setGroupMemberId(memberGroupId);
             individualPrediction.setRaceId(raceId);
             individualPrediction.setDriverId(driverId);
-            individualPrediction.setPredictedPosition(predictedPosition++);  // Asigna la posición secuencialmente
+            individualPrediction.setPredictedPosition(predictedPosition++);
             individualPrediction.setCreatedAt(LocalDateTime.now());
             f1PredictionRepository.save(individualPrediction);
-
-            // Añadir la predicción a la lista de predicciones guardadas
-            savedPredictions.add(new PredictionDTO(driverId, predictedPosition - 1));
         }
 
         String userEmail = usersClient.getUserEmail();
@@ -113,5 +117,38 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
     @Override
     public String getUserEmail() {
         return usersClient.getUserEmail();
+    }
+
+    @Override
+    public void saveRaceResults(Long raceId, List<Long> resultDriverIds) {
+        int actualPosition = 1;
+
+        // Mapeo de los resultados oficiales: driverId -> actualPosition
+        Map<Long, Integer> resultMap = new HashMap<>();
+        for (Long driverId : resultDriverIds) {
+            resultMap.put(driverId, actualPosition);
+            actualPosition++;
+        }
+
+        // Obtener las predicciones para la carrera
+        List<F1Prediction> predictions = f1PredictionRepository.findByRaceId(raceId);
+
+        // Recorrer las predicciones del usuario
+        for (F1Prediction prediction : predictions) {
+            Long driverId = prediction.getDriverId();
+
+            // Asignar la posición real si existe en los resultados oficiales
+            if (resultMap.containsKey(driverId)) {
+                prediction.setActualPosition(resultMap.get(driverId));
+
+            } else {
+                // Si el piloto no está en los resultados oficiales, la posición real es NULL
+                prediction.setActualPosition(null);
+                prediction.setPoints(null);  // No asignar puntos
+            }
+
+            // Guardar la predicción actualizada
+            f1PredictionRepository.save(prediction);
+        }
     }
 }

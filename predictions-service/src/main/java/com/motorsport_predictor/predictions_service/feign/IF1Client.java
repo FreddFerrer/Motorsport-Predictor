@@ -11,8 +11,6 @@ import java.util.List;
 
 @FeignClient(name = "f1-service", url = "http://f1-service:8083", configuration = FeignConfig.class)
 public interface IF1Client {
-    @GetMapping("/api/f1/drivers/ids")
-    List<Long> getDriverIdsByShortnames(@RequestParam List<String> shortnames);
     @GetMapping("/api/f1/drivers/id")
     Long getDriverIdByShortname(@RequestParam String shortname);
     @GetMapping("/api/f1/races/{raceId}/exist")

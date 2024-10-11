@@ -17,6 +17,7 @@ com\motorsport_predictor\predictions_service\dto\request\RaceResultRequestDTO.cl
 com\motorsport_predictor\predictions_service\exceptions\ResourceNotFoundException.class
 com\motorsport_predictor\predictions_service\feign\IUserClient.class
 com\motorsport_predictor\predictions_service\exceptions\BadRequestException.class
+com\motorsport_predictor\predictions_service\dto\RaceResultIdDTO.class
 com\motorsport_predictor\predictions_service\dto\CircuitDTO$CircuitDTOBuilder.class
 com\motorsport_predictor\predictions_service\dto\CircuitDTO.class
 com\motorsport_predictor\predictions_service\models\entities\F1Prediction$F1PredictionBuilder.class
@@ -24,7 +25,6 @@ com\motorsport_predictor\predictions_service\services\impl\F1PredictionServiceIm
 com\motorsport_predictor\predictions_service\models\entities\F1Prediction.class
 com\motorsport_predictor\predictions_service\config\KeycloakRealmRoleConverter.class
 com\motorsport_predictor\predictions_service\exceptions\CustomErrorResponse.class
-com\motorsport_predictor\predictions_service\dto\RaceResultDTO.class
 com\motorsport_predictor\predictions_service\dto\request\PredictionsRequestDTO.class
 com\motorsport_predictor\predictions_service\config\OpenApiConfig.class
 com\motorsport_predictor\predictions_service\utils\JsonUtils.class

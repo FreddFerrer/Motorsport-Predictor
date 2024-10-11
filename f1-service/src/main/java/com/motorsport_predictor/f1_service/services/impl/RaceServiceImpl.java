@@ -2,6 +2,7 @@ package com.motorsport_predictor.f1_service.services.impl;
 
 import com.motorsport_predictor.f1_service.dto.CircuitDTO;
 import com.motorsport_predictor.f1_service.dto.RaceDTO;
+import com.motorsport_predictor.f1_service.dto.RaceResultIdDTO;
 import com.motorsport_predictor.f1_service.dto.request.RaceResultRequestDTO;
 import com.motorsport_predictor.f1_service.exceptions.ResourceNotFoundException;
 import com.motorsport_predictor.f1_service.feign.IPredictionsClient;
@@ -88,30 +89,39 @@ public class RaceServiceImpl implements IRaceService {
 
     @Override
     public void uploadRaceResults(Long raceId, RaceResultRequestDTO results) {
-        List<String> driverShortnames = results.getResults();
+        List<String> driverShortnames = results.getDriverShortnames();
 
+        // Validar que haya exactamente 10 pilotos
         if (driverShortnames.size() != 10) {
             throw new IllegalArgumentException("Debe haber exactamente 10 pilotos en los resultados.");
         }
 
+        // Verificar que no haya pilotos repetidos
         Set<String> uniqueShortnames = new HashSet<>(driverShortnames);
         if (uniqueShortnames.size() != 10) {
             throw new IllegalArgumentException("Los pilotos no deben repetirse en los resultados.");
         }
 
-
+        List<Long> driverIds = new ArrayList<>();
+        // Validar que los shortnames estén en mayúsculas
         for (String shortcode : driverShortnames) {
+            if (!shortcode.equals(shortcode.toUpperCase())) {
+                throw new IllegalArgumentException("El piloto " + shortcode + " debe ser ingresado en mayúsculas.");
+            }
+
+            // Verificar si el piloto existe en la base de datos
             Optional<Driver> driver = driverRepository.findByShortname(shortcode);
             if (!driver.isPresent()) {
                 throw new IllegalArgumentException("El piloto con shortcode " + shortcode + " no existe.");
             }
+            driverIds.add(driver.get().getId());
         }
 
         // Crea el objeto RaceResultRequestDTO para enviar al servicio de predicciones
-        RaceResultRequestDTO raceResultRequestDTO = new RaceResultRequestDTO();
-        raceResultRequestDTO.setResults(driverShortnames);
+        RaceResultIdDTO raceResultIdDTO = new RaceResultIdDTO();
+        raceResultIdDTO.setDriverIds(driverIds);
 
-        // Envía los resultados
-        predictionsClient.sendRaceResults(raceId, raceResultRequestDTO);
+        // Envía los resultados al servicio de predicciones
+        predictionsClient.sendRaceResults(raceId, raceResultIdDTO);
     }
 }

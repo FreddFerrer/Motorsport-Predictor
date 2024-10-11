@@ -7,6 +7,7 @@ C:\Users\fredd\Desktop\motorsport-predictor\Motorsport-Predictor\f1-service\src\
 C:\Users\fredd\Desktop\motorsport-predictor\Motorsport-Predictor\f1-service\src\main\java\com\motorsport_predictor\f1_service\dto\CircuitDTO.java
 C:\Users\fredd\Desktop\motorsport-predictor\Motorsport-Predictor\f1-service\src\main\java\com\motorsport_predictor\f1_service\dto\DriverDTO.java
 C:\Users\fredd\Desktop\motorsport-predictor\Motorsport-Predictor\f1-service\src\main\java\com\motorsport_predictor\f1_service\dto\RaceDTO.java
+C:\Users\fredd\Desktop\motorsport-predictor\Motorsport-Predictor\f1-service\src\main\java\com\motorsport_predictor\f1_service\dto\RaceResultIdDTO.java
 C:\Users\fredd\Desktop\motorsport-predictor\Motorsport-Predictor\f1-service\src\main\java\com\motorsport_predictor\f1_service\dto\request\RaceResultRequestDTO.java
 C:\Users\fredd\Desktop\motorsport-predictor\Motorsport-Predictor\f1-service\src\main\java\com\motorsport_predictor\f1_service\dto\TeamDTO.java
 C:\Users\fredd\Desktop\motorsport-predictor\Motorsport-Predictor\f1-service\src\main\java\com\motorsport_predictor\f1_service\exceptions\BadRequestException.java

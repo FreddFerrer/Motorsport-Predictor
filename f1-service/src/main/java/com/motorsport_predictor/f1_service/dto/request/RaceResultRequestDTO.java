@@ -8,5 +8,5 @@ import java.util.List;
 @Data
 public class RaceResultRequestDTO {
     @NotNull(message = "La lista de resultados no puede ser nula")
-    private List<String> results;  // Lista de shortcodes o nombres de pilotos
+    private List<String> driverShortnames;
 }
