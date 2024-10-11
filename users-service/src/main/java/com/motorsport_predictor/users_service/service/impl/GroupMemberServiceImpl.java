@@ -259,6 +259,6 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
 
     @Override
     public boolean isUserInGroup(Long groupId, String userId) {
-        return groupMemberRepository.existsByUserIdAndGroupMembersId(userId, groupId);
+        return groupMemberRepository.existsByUserIdAndGroupId(userId, groupId);
     }
 }

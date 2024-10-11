@@ -37,13 +37,13 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
         // Check if user exist in the group
         String userId = usersClient.getLoggedInUserId();
         if (!usersClient.existUserInGroup(memberGroupId, userId)) {
-            throw new BadRequestException("El usuario no pertenece al grupo.");
+            throw new BadRequestException("El usuario " + userId + " no pertenece al grupo.");
         }
 
         // Check if race_id exist
         boolean raceExists = f1Client.existsRacesById(raceId);
         if (!raceExists) {
-            throw new IllegalArgumentException("La carrera no existe.");
+            throw new IllegalArgumentException("La carrera " + raceId + " no existe.");
         }
 
         // Count how many predictions already exist for the user in this race

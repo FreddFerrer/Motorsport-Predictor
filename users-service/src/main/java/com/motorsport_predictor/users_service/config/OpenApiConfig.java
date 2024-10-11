@@ -47,12 +47,16 @@ import java.util.List;
               **Disciplina:** IndyCar
 
             #### Miembros de los Grupos:
-            - **Grupo 1:** usuario_prueba_1 (ID: 1118d324-b46c-48ef-ac01-01da1404ae84)
-            - **Grupo 2:** usuario_prueba_1 (ID: 1118d324-b46c-48ef-ac01-01da1404ae84)
+            - **Grupo 1:** usuario_prueba_1, usuario_prueba_2
+            
+            - **Grupo 2:** usuario_prueba_1, usuario_prueba_3, usuario_prueba_4 , usuario_prueba_5
 
-            #### Usuarios:
+            #### ID Usuarios:
             - **usuario_prueba_1:** 1118d324-b46c-48ef-ac01-01da1404ae84
             - **usuario_prueba_2:** b17f0056-d845-469c-a685-c044c9f1296e
+            - **usuario_prueba_3:** 46cdb783-cbca-4163-8df2-5071d1714110
+            - **usuario_prueba_4:** ea0b0853-ade4-49ad-8c8a-8da431f57809
+            - **usuario_prueba_5:** e420c351-da7f-44ef-beec-56ce812a599f
             """
         )
 )public class OpenApiConfig {

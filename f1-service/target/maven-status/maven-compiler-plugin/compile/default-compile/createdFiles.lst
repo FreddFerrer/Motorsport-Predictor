@@ -8,7 +8,6 @@ com\motorsport_predictor\f1_service\exceptions\GlobalExceptionHandler.class
 com\motorsport_predictor\f1_service\services\impl\CircuitServiceImpl.class
 com\motorsport_predictor\f1_service\services\ICircuitService.class
 com\motorsport_predictor\f1_service\models\entities\Race.class
-com\motorsport_predictor\f1_service\dto\RaceResultDTO.class
 com\motorsport_predictor\f1_service\dto\TeamDTO$TeamDTOBuilder.class
 com\motorsport_predictor\f1_service\config\KeycloakRealmRoleConverter.class
 com\motorsport_predictor\f1_service\config\SecurityConfig.class

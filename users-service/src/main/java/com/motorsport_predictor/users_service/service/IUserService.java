@@ -10,7 +10,6 @@ import java.util.List;
 public interface IUserService {
     Page<UserRepresentation> findAllUsers(Pageable pageable);
     List<UserRepresentation> searchUserByUsername(String username);
-    UserRepresentation createUser(CreateUserDTO createUserDTO);
     String getLoggedInUserId();
     String getUserEmail();
     void deleteUser(String userId);

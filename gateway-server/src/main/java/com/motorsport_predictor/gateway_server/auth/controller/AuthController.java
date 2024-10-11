@@ -25,8 +25,12 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Tag(name = "Authentication", description = "Controlador para autenticación de usuarios. \n\n" +
         "**Usuarios de prueba**:\n\n" +
+        "- **admin_user** / Password@123\n" +
         "- **usuario_prueba_1** / Password@123\n" +
-        "- **usuario_prueba_2** / Password@123")
+        "- **usuario_prueba_2** / Password@123\n" +
+        "- **usuario_prueba_3** / Password@123\n" +
+        "- **usuario_prueba_4** / Password@123\n" +
+        "- **usuario_prueba_5** / Password@123")
 public class AuthController {
 
     private final IUserService userService;
@@ -77,6 +81,7 @@ public class AuthController {
     }
 
     @Operation(summary = "Create a new user",
+            description = "**Si ingresa un correo valido, se le enviará un email de confirmación al mismo**",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     required = true,
                     content = @Content(mediaType = "application/json",

@@ -43,7 +43,7 @@ public class UserServiceImpl implements IUserService {
             throw new IllegalArgumentException("Password field is required and cannot be empty.");
         }
 
-        String url = "http://keycloak-server:9090/realms/microservices-motorsport-predictor-realm/protocol/openid-connect/token";
+        String url = "http://keycloak-server:8080/realms/microservices-motorsport-predictor-realm/protocol/openid-connect/token";
 
         String body = "client_id=" + clientId +
                 "&client_secret=" + clientSecret +

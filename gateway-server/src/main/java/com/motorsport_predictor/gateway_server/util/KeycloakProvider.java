@@ -1,20 +1,13 @@
 package com.motorsport_predictor.gateway_server.util;
 
-import com.motorsport_predictor.gateway_server.exceptions.BadRequestException;
-import com.motorsport_predictor.gateway_server.exceptions.ResourceNotFoundException;
-import jakarta.ws.rs.NotFoundException;
 import org.jboss.resteasy.client.jaxrs.internal.ResteasyClientBuilderImpl;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.UsersResource;
-import org.keycloak.representations.idm.UserRepresentation;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class KeycloakProvider {
-    private static final String SERVER_URL = "http://keycloak-server:9090";
+    private static final String SERVER_URL = "http://keycloak-server:8080";
     private static final String REALM_NAME = "microservices-motorsport-predictor-realm";
     private static final String REALM_MASTER = "master";
     private static final String ADMIN_CLI = "admin-cli";

@@ -42,7 +42,8 @@ public class UsersController {
                 }
             """)))
             }
-    )    @GetMapping("/")
+    )
+    @GetMapping("/")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> findAllUsers(@PageableDefault(size = 10) @Parameter(hidden = true) Pageable pageable){
         try {
