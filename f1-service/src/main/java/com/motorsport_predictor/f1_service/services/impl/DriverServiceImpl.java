@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,11 +33,14 @@ public class DriverServiceImpl implements IDriverService {
     }
 
     @Override
-    public boolean doAllDriversExist(List<Long> driverIds) {
-        // Verificar si el número de IDs encontrados coincide con la cantidad solicitada
-        long count = driverRepository.countByIdIn(driverIds);
-        return count == driverIds.size();  // Retorna true si todos los IDs existen, false en caso contrario
-}
+    public List<Long> getDriverIdsByShortname(List<String> shortnames) {
+        return driverRepository.findIdByShortname(shortnames);
+    }
+
+    @Override
+    public Optional<Driver> getDriverIdByShortname(String shortname) {
+        return driverRepository.findByShortname(shortname);
+    }
 
     // mapping method
     private TeamDTO mapToTeamDTO(Team team) {

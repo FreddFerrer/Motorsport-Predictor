@@ -12,5 +12,5 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PredictionsRequestDTO {
-    private List<Long> driverIds;
+    private List<String> driverShortnames;
 }

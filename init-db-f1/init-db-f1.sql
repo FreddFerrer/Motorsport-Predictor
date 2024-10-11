@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS teams (
 CREATE TABLE IF NOT EXISTS drivers (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
+    shortname VARCHAR(10) NOT NULL,
     nationality VARCHAR(255),
     team_id BIGINT,
     FOREIGN KEY (team_id) REFERENCES teams(id)
@@ -86,28 +87,28 @@ INSERT INTO teams (name, country) VALUES
 
 
 -- insertar valores en drivers
-INSERT INTO drivers (name, nationality, team_id) VALUES
-('Max Verstappen', 'NED', 1),
-('Lando Norris', 'GBR', 2),
-('Charles Leclerc', 'MON', 3),
-('Oscar Piastri', 'AUS', 2),
-('Carlos Sainz', 'ESP', 3),
-('Lewis Hamilton', 'GBR', 4),
-('Sergio Perez', 'MEX', 1),
-('George Russell', 'GBR', 4),
-('Fernando Alonso', 'ESP', 5),
-('Lance Stroll', 'CAN', 5),
-('Nico Hulkenberg', 'GER', 6),
-('Yuki Tsunoda', 'JPN', 7),
-('Liam Lawson', 'AUS', 7),
-('Oliver Bearman', 'GBR', 2),
-('Pierre Gasly', 'FRA', 8),
-('Kevin Magnussen', 'DEN', 6),
-('Esteban Ocon', 'FRA', 8),
-('Alexander Albon', 'THA', 9),
-('Zhou Guanyu', 'CHN', 10),
-('Franco Colapinto', 'ARG', 9),
-('Valtteri Bottas', 'FIN', 10);
+INSERT INTO drivers (name, shortname, nationality, team_id) VALUES
+('Max Verstappen', 'VER', 'NED', 1),
+('Lando Norris', 'NOR', 'GBR', 2),
+('Charles Leclerc', 'LEC', 'MON', 3),
+('Oscar Piastri', 'PIA', 'AUS', 2),
+('Carlos Sainz', 'SAI', 'ESP', 3),
+('Lewis Hamilton', 'HAM','GBR', 4),
+('Sergio Perez', 'PER', 'MEX', 1),
+('George Russell', 'RUS', 'GBR', 4),
+('Fernando Alonso', 'ALO', 'ESP', 5),
+('Lance Stroll', 'STR', 'CAN', 5),
+('Nico Hulkenberg', 'HUL', 'GER', 6),
+('Yuki Tsunoda', 'TSU', 'JPN', 7),
+('Liam Lawson', 'LAW', 'AUS', 7),
+('Oliver Bearman', 'BEA', 'GBR', 2),
+('Pierre Gasly', 'GAS', 'FRA', 8),
+('Kevin Magnussen', 'MAG', 'DEN', 6),
+('Esteban Ocon', 'OCO', 'FRA', 8),
+('Alexander Albon', 'ALB', 'THA', 9),
+('Zhou Guanyu', 'ZHO', 'CHN', 10),
+('Franco Colapinto', 'COL', 'ARG', 9),
+('Valtteri Bottas', 'BOT', 'FIN', 10);
 
 -- insertar valores en race
 INSERT INTO race (season, round, race_name, circuit_id, date, time) VALUES

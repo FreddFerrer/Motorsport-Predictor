@@ -88,20 +88,20 @@ public class RaceServiceImpl implements IRaceService {
 
     @Override
     public void uploadRaceResults(Long raceId, RaceResultRequestDTO results) {
-        List<String> driverShortcodes = results.getResults();
+        List<String> driverShortnames = results.getResults();
 
-        if (driverShortcodes.size() != 10) {
+        if (driverShortnames.size() != 10) {
             throw new IllegalArgumentException("Debe haber exactamente 10 pilotos en los resultados.");
         }
 
-        Set<String> uniqueShortcodes = new HashSet<>(driverShortcodes);
-        if (uniqueShortcodes.size() != 10) {
+        Set<String> uniqueShortnames = new HashSet<>(driverShortnames);
+        if (uniqueShortnames.size() != 10) {
             throw new IllegalArgumentException("Los pilotos no deben repetirse en los resultados.");
         }
 
 
-        for (String shortcode : driverShortcodes) {
-            Optional<Driver> driver = driverRepository.findByShortcode(shortcode);
+        for (String shortcode : driverShortnames) {
+            Optional<Driver> driver = driverRepository.findByShortname(shortcode);
             if (!driver.isPresent()) {
                 throw new IllegalArgumentException("El piloto con shortcode " + shortcode + " no existe.");
             }
@@ -109,7 +109,7 @@ public class RaceServiceImpl implements IRaceService {
 
         // Crea el objeto RaceResultRequestDTO para enviar al servicio de predicciones
         RaceResultRequestDTO raceResultRequestDTO = new RaceResultRequestDTO();
-        raceResultRequestDTO.setResults(driverShortcodes);
+        raceResultRequestDTO.setResults(driverShortnames);
 
         // Envía los resultados
         predictionsClient.sendRaceResults(raceId, raceResultRequestDTO);

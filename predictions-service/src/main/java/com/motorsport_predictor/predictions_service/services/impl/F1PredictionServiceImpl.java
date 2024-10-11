@@ -10,6 +10,7 @@ import com.motorsport_predictor.predictions_service.models.entities.F1Prediction
 import com.motorsport_predictor.predictions_service.models.repositories.IF1PredictionRepository;
 import com.motorsport_predictor.predictions_service.services.IF1PredictionService;
 import com.motorsport_predictor.predictions_service.utils.JsonUtils;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,19 +29,20 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
     private final IF1PredictionRepository f1PredictionRepository;
     private final KafkaProducer kafkaProducer;
 
+
     @Override
     public void createPrediction(
             @PathVariable Long memberGroupId,
             @PathVariable Long raceId,
             PredictionsRequestDTO request) {
 
-        // Check if user exist in the group
+        // Check if user exists in the group
         String userId = usersClient.getLoggedInUserId();
         if (!usersClient.existUserInGroup(memberGroupId, userId)) {
             throw new BadRequestException("El usuario " + userId + " no pertenece al grupo.");
         }
 
-        // Check if race_id exist
+        // Check if race_id exists
         boolean raceExists = f1Client.existsRacesById(raceId);
         if (!raceExists) {
             throw new IllegalArgumentException("La carrera " + raceId + " no existe.");
@@ -53,26 +55,39 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
         }
 
         // Validate number of predictions
-        if (request.getDriverIds().size() > 10) {
+        if (request.getDriverShortnames().size() > 10) {
             throw new IllegalArgumentException("Solo se permiten hasta 10 pilotos por solicitud.");
         }
 
-        // Check if all drivers exist in a single request
-        boolean allDriversExist = f1Client.doAllDriversExist(request.getDriverIds());
-        if (!allDriversExist) {
-            throw new IllegalArgumentException("Uno o más pilotos no existen.");
+        // Check for duplicate shortnames
+        Set<String> driverShortcodes = new HashSet<>(request.getDriverShortnames());
+        if (driverShortcodes.size() != request.getDriverShortnames().size()) {
+            throw new IllegalArgumentException("No se pueden repetir pilotos en una predicción.");
         }
 
-        // Check for duplicate drivers
-        Set<Long> driverIds = new HashSet<>(request.getDriverIds());
-        if (driverIds.size() != request.getDriverIds().size()) {
-            throw new IllegalArgumentException("No se pueden repetir pilotos en una predicción.");
+        // Convert shortcodes to driverIds and identify invalid shortnames
+        List<String> shortnames = request.getDriverShortnames();
+        List<Long> driverIds = new ArrayList<>();
+
+        for (String shortname : shortnames) {
+            // Shortname uppercase validate
+            if (!shortname.equals(shortname.toUpperCase())) {
+                throw new IllegalArgumentException("El piloto " + shortname + " debe ser ingresado en mayúsculas.");
+            }
+
+            try {
+                Long driverId = f1Client.getDriverIdByShortname(shortname);
+                driverIds.add(driverId);
+            } catch (FeignException.NotFound e) {
+                // Captura el error 404 y arroja un mensaje personalizado
+                throw new IllegalArgumentException("El piloto " + shortname + " no existe.");
+            }
         }
 
         // Save each prediction
         List<PredictionDTO> savedPredictions = new ArrayList<>();
         int predictedPosition = 1;  // Start with first position
-        for (Long driverId : request.getDriverIds()) {
+        for (Long driverId : driverIds) {
             F1Prediction individualPrediction = new F1Prediction();
             individualPrediction.setGroupMemberId(memberGroupId);
             individualPrediction.setRaceId(raceId);
@@ -87,14 +102,13 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
 
         String userEmail = usersClient.getUserEmail();
 
-        // Create DTO to send to kafka
+        // Create DTO to send to Kafka
         RaceDTO raceInfo = f1Client.getRaceInfo(raceId);
         raceInfo.setEmail(userEmail);
 
-        // Send to kafka
+        // Send to Kafka
         kafkaProducer.sendPredictionNotification(JsonUtils.toJson(raceInfo));
     }
-
 
     @Override
     public String getUserEmail() {

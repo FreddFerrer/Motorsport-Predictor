@@ -5,6 +5,7 @@ import com.motorsport_predictor.f1_service.dto.DriverDTO;
 import com.motorsport_predictor.f1_service.dto.RaceDTO;
 import com.motorsport_predictor.f1_service.dto.request.RaceResultRequestDTO;
 import com.motorsport_predictor.f1_service.exceptions.BadRequestException;
+import com.motorsport_predictor.f1_service.models.entities.Driver;
 import com.motorsport_predictor.f1_service.services.ICircuitService;
 import com.motorsport_predictor.f1_service.services.IDriverService;
 import com.motorsport_predictor.f1_service.services.IRaceService;
@@ -26,8 +27,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/f1")
@@ -161,14 +165,29 @@ public class F1Controller {
 
     // Internal endpoint
     @Hidden
-    @GetMapping("/drivers/exist")
+    @GetMapping("/drivers/ids")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
-    public ResponseEntity<Boolean> getDriverById(@RequestParam List<Long> driverIds) {
+    public ResponseEntity<List<Long>> getDriverIdsByShortnames(@RequestParam List<String> shortnames) {
         try {
-            boolean allDriversExist = driverService.doAllDriversExist(driverIds);
-            return ResponseEntity.ok().body(allDriversExist);
+            List<Long> driverIds = driverService.getDriverIdsByShortname(shortnames);
+            return ResponseEntity.ok().body(driverIds);
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());
+        }
+    }
+
+    // Internal endpoint
+    @Hidden
+    @GetMapping("/drivers/id")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    public ResponseEntity<Long> getDriverIdByShortname(@RequestParam String shortname) {
+        Optional<Driver> driver = driverService.getDriverIdByShortname(shortname);
+
+        // Si el piloto no existe, devuelve un error 404
+        if (driver.isPresent()) {
+            return ResponseEntity.ok(driver.get().getId());  // Devuelve solo el ID del piloto
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El piloto " + shortname + " no existe.");
         }
     }
 
