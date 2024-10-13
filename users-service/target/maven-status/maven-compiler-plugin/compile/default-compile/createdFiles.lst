@@ -18,6 +18,7 @@ com\motorsport_predictor\users_service\exceptions\ResourceNotFoundException.clas
 com\motorsport_predictor\users_service\models\entities\GroupMember.class
 com\motorsport_predictor\users_service\config\OpenApiConfig.class
 com\motorsport_predictor\users_service\models\repositories\IGroupRepository.class
+com\motorsport_predictor\users_service\config\WebConfig.class
 com\motorsport_predictor\users_service\dto\request\CreateUserDTO.class
 com\motorsport_predictor\users_service\service\IGroupService.class
 com\motorsport_predictor\users_service\models\repositories\IGroupMemberRepository.class
