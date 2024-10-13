@@ -99,9 +99,10 @@ public class SecurityConfig {
     @Bean
     public CorsWebFilter corsWebFilter() {
         CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.addAllowedOrigin("http://localhost"); // Permite localhost
-        corsConfig.addAllowedOrigin("http://localhost:8080"); // Permite localhost
-        corsConfig.addAllowedOrigin("http://localhost:9090"); // Permite localhost
+        corsConfig.addAllowedOrigin("http://localhost");
+        corsConfig.addAllowedOrigin("http://192.168.100.66");
+        corsConfig.addAllowedOrigin("https://motorsport-predictor.tech");
+        corsConfig.addAllowedOrigin("http://motorsport-predictor.tech");
         corsConfig.addAllowedHeader("*");
         corsConfig.addAllowedMethod("*");
         corsConfig.setAllowCredentials(true);
@@ -112,4 +113,5 @@ public class SecurityConfig {
 
         return new CorsWebFilter(source);
     }
+
 }

@@ -1,4 +1,4 @@
-package com.motorsport_predictor.f1_service.config;
+package com.motorsport_predictor.users_service.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
