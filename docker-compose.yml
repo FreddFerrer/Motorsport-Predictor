@@ -128,8 +128,6 @@ services:
       - ./init-db-users:/docker-entrypoint-initdb.d
     ports:
       - 3307:3306
-    expose:
-      - 3306
     networks:
       - local_network
 
@@ -147,8 +145,6 @@ services:
       - ./init-db-predictions:/docker-entrypoint-initdb.d
     ports:
       - 3308:3306
-    expose:
-      - 3306
     networks:
       - local_network
 
@@ -164,8 +160,6 @@ services:
       MYSQL_ROOT_PASSWORD: root
     ports:
       - 3309:3306
-    expose:
-      - 3306
     networks:
       - local_network
 
@@ -183,8 +177,6 @@ services:
       - ./init-db-f1:/docker-entrypoint-initdb.d
     ports:
       - 3310:3306
-    expose:
-      - 3306
     networks:
       - local_network
 

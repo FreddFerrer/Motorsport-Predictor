@@ -102,7 +102,7 @@ public class SecurityConfig {
         corsConfig.addAllowedOrigin("http://localhost");
         corsConfig.addAllowedOrigin("http://192.168.100.66");
         corsConfig.addAllowedOrigin("https://motorsport-predictor.tech");
-        corsConfig.addAllowedOrigin("http://motorsport-predictor.tech");
+        corsConfig.addAllowedOrigin("http://motorsport-predictor.tech:8080");
         corsConfig.addAllowedHeader("*");
         corsConfig.addAllowedMethod("*");
         corsConfig.setAllowCredentials(true);
@@ -113,5 +113,4 @@ public class SecurityConfig {
 
         return new CorsWebFilter(source);
     }
-
 }
