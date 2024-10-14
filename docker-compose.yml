@@ -29,8 +29,8 @@ services:
       DB_PASSWORD: Test123
       EUREKA_USER: eureka
       EUREKA_PASSWORD: password
-      REALM_NAME: http://keycloak-server:8080/realms/microservices-motorsport-predictor-realm
-      REALM_CERTS: http://keycloak-server:8080/realms/microservices-motorsport-predictor-realm/protocol/openid-connect/certs
+      REALM_NAME: http://motorsport-predictor.tech:8080/realms/microservices-motorsport-predictor-realm
+      REALM_CERTS: http://motorsport-predictor.tech:8080/realms/microservices-motorsport-predictor-realm/protocol/openid-connect/certs
     restart: always
     networks:
       - local_network
@@ -50,8 +50,8 @@ services:
       DB_PASSWORD: Test123
       EUREKA_USER: eureka
       EUREKA_PASSWORD: password
-      REALM_NAME: http://keycloak-server:8080/realms/microservices-motorsport-predictor-realm
-      REALM_CERTS: http://keycloak-server:8080/realms/microservices-motorsport-predictor-realm/protocol/openid-connect/certs
+      REALM_NAME: http://motorsport-predictor.tech:8080/realms/microservices-motorsport-predictor-realm
+      REALM_CERTS: http://motorsport-predictor.tech:8080/realms/microservices-motorsport-predictor-realm/protocol/openid-connect/certs
     restart: always
     networks:
       - local_network
@@ -71,7 +71,7 @@ services:
       DB_PASSWORD: Test123
       EUREKA_USER: eureka
       EUREKA_PASSWORD: password
-      REALM_CERTS: http://keycloak-server:8080/realms/microservices-motorsport-predictor-realm/protocol/openid-connect/certs
+      REALM_CERTS: http://motorsport-predictor.tech:8080/realms/microservices-motorsport-predictor-realm/protocol/openid-connect/certs
     restart: always
     networks:
       - local_network
@@ -107,8 +107,8 @@ services:
       EUREKA_PASSWORD: password  
       KC_CLIENT_ID: microservices-motorsport-client
       KC_CLIENT_SECRET: cKqUA6aHPFAU4kaZjXe7FY1mw1VwVxxh
-      REALM_NAME: http://keycloak-server:8080/realms/microservices-motorsport-predictor-realm
-      REALM_CERTS: http://keycloak-server:8080/realms/microservices-motorsport-predictor-realm/protocol/openid-connect/certs
+      REALM_NAME: http://motorsport-predictor.tech:8080/realms/microservices-motorsport-predictor-realm
+      REALM_CERTS: http://motorsport-predictor.tech:8080/realms/microservices-motorsport-predictor-realm/protocol/openid-connect/certs
       
     restart: always
     networks:
