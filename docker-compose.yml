@@ -196,9 +196,9 @@ services:
       KC_DB_PASSWORD: Test123
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
-      KC_HOSTNAME: "motorsport-predictor.tech"
-      KC_HOSTNAME_URL: "http://motorsport-predictor.tech"
-      KC_HOSTNAME_ADMIN: "http://motorsport-predictor.tech"
+      KC_HOSTNAME: motorsport-predictor.tech
+      KC_HOSTNAME_URL: http://motorsport-predictor.tech
+      KC_HOSTNAME_ADMIN: http://motorsport-predictor.tech
     volumes:
       - ./imports:/opt/keycloak/data/import
     networks:
