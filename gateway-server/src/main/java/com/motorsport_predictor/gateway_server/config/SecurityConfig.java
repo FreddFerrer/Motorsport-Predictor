@@ -92,17 +92,15 @@ public class SecurityConfig {
                         .uri("http://predictions-service:8082"))
                 // Catch-all for POST requests to localhost
                 .route(r -> r.path("/**").and().method(HttpMethod.POST)
-                        .uri("http://localhost:8080"))
+                        .uri("https://localhost:8080"))
                 .build();
     }
 
     @Bean
     public CorsWebFilter corsWebFilter() {
         CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.addAllowedOrigin("http://localhost");
-        corsConfig.addAllowedOrigin("http://192.168.100.66");
         corsConfig.addAllowedOrigin("https://motorsport-predictor.tech");
-        corsConfig.addAllowedOrigin("http://motorsport-predictor.tech:8080");
+        corsConfig.addAllowedOrigin("http://motorsport-predictor.tech");
         corsConfig.addAllowedHeader("*");
         corsConfig.addAllowedMethod("*");
         corsConfig.setAllowCredentials(true);
