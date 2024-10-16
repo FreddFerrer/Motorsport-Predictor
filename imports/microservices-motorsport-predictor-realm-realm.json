@@ -715,7 +715,7 @@
     "clientId" : "microservices-motorsport-client",
     "name" : "microservices-motorsport-client",
     "description" : "",
-    "rootUrl" : "https://motorsport-predictor.tech",
+    "rootUrl" : "http://motorsport-predictor.tech/8080",
     "adminUrl" : "",
     "baseUrl" : "",
     "surrogateAuthRequired" : false,
