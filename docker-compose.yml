@@ -8,7 +8,7 @@ services:
       - 8761:8761
     environment:
       EUREKA_USER: eureka
-      EUREKA_PASSWORD: password  
+      EUREKA_PASSWORD: password
     restart: always
     networks:
       - local_network
@@ -29,8 +29,8 @@ services:
       DB_PASSWORD: Test123
       EUREKA_USER: eureka
       EUREKA_PASSWORD: password
-      REALM_NAME: https://motorsport-predictor.tech/realms/microservices-motorsport-predictor-realm
-      REALM_CERTS: https://motorsport-predictor.tech/realms/microservices-motorsport-predictor-realm/protocol/openid-connect/certs
+      REALM_NAME: http://keycloak-server:8080/realms/microservices-motorsport-predictor-realm
+      REALM_CERTS: http://keycloak-server:8080/realms/microservices-motorsport-predictor-realm/protocol/openid-connect/certs
     restart: always
     networks:
       - local_network
@@ -50,8 +50,8 @@ services:
       DB_PASSWORD: Test123
       EUREKA_USER: eureka
       EUREKA_PASSWORD: password
-      REALM_NAME: https://motorsport-predictor.tech/realms/microservices-motorsport-predictor-realm
-      REALM_CERTS: https://motorsport-predictor.tech/realms/microservices-motorsport-predictor-realm/protocol/openid-connect/certs
+      REALM_NAME: http://keycloak-server:8080/realms/microservices-motorsport-predictor-realm
+      REALM_CERTS: http://keycloak-server:8080/realms/microservices-motorsport-predictor-realm/protocol/openid-connect/certs
     restart: always
     networks:
       - local_network
@@ -71,7 +71,7 @@ services:
       DB_PASSWORD: Test123
       EUREKA_USER: eureka
       EUREKA_PASSWORD: password
-      REALM_CERTS: https://motorsport-predictor.tech/realms/microservices-motorsport-predictor-realm/protocol/openid-connect/certs
+      REALM_CERTS: http://keycloak-server:8080/realms/microservices-motorsport-predictor-realm/protocol/openid-connect/certs
     restart: always
     networks:
       - local_network
@@ -86,7 +86,7 @@ services:
       - eureka-server
     environment:
       EUREKA_USER: eureka
-      EUREKA_PASSWORD: password  
+      EUREKA_PASSWORD: password
       MAIL_USERNAME: ferreirafreddy39@gmail.com
       MAIL_PASSWORD: arku qlqw zqpg ntjj
     restart: always
@@ -104,12 +104,12 @@ services:
       - keycloak-server
     environment:
       EUREKA_USER: eureka
-      EUREKA_PASSWORD: password  
+      EUREKA_PASSWORD: password
       KC_CLIENT_ID: microservices-motorsport-client
       KC_CLIENT_SECRET: cKqUA6aHPFAU4kaZjXe7FY1mw1VwVxxh
-      REALM_NAME: https://motorsport-predictor.tech/realms/microservices-motorsport-predictor-realm
-      REALM_CERTS: https://motorsport-predictor.tech/realms/microservices-motorsport-predictor-realm/protocol/openid-connect/certs
-      
+      REALM_NAME: http://keycloak-server:8080/realms/microservices-motorsport-predictor-realm
+      REALM_CERTS: http://keycloak-server:8080/realms/microservices-motorsport-predictor-realm/protocol/openid-connect/certs
+
     restart: always
     networks:
       - local_network
@@ -196,7 +196,7 @@ services:
       KC_DB_PASSWORD: Test123
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
-      KC_HOSTNAME: motorsport-predictor.tech
+      KC_HOSTNAME: keycloak-server
       KC_HOSTNAME_URL: https://motorsport-predictor.tech
       KC_HOSTNAME_ADMIN: https://motorsport-predictor.tech
     volumes:
