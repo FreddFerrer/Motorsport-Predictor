@@ -98,7 +98,7 @@ services:
     build: gateway-server
     container_name: gateway-server
     ports:
-      - 443:8080
+      - 8080:8080
     depends_on:
       - eureka-server
       - keycloak-server
