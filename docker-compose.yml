@@ -97,6 +97,7 @@ services:
   gateway-server:
     build: gateway-server
     container_name: gateway-server
+    hostname: gateway
     ports:
       - 8080:8080
     depends_on:
@@ -236,4 +237,4 @@ services:
 
 networks:
   local_network:
-    driver: host
+    driver: bridge
