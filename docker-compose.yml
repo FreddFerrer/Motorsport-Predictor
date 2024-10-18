@@ -159,7 +159,7 @@ services:
       MYSQL_PASSWORD: Test123
       MYSQL_ROOT_PASSWORD: root
     ports:
-      - 3309:3306
+      - 3311:3306
     networks:
       - local_network
 
