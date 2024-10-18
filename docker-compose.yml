@@ -97,7 +97,6 @@ services:
   gateway-server:
     build: gateway-server
     container_name: gateway-server
-    hostname: gateway
     ports:
       - 8085:8080
     depends_on:
@@ -203,6 +202,23 @@ services:
       KC_HTTP_PORT: 9090
     volumes:
       - ./imports:/opt/keycloak/data/import
+    networks:
+      - local_network
+
+
+    ### Nginx
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    volumes:
+      - ./nginx:/etc/nginx/nginx.conf
+      - /etc/ssl/certs:/etc/ssl/certs
+      - /etc/ssl/private:/etc/ssl/private
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - gateway-server
     networks:
       - local_network
 
