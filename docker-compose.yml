@@ -99,7 +99,7 @@ services:
     container_name: gateway-server
     hostname: gateway
     ports:
-      - 8080:8080
+      - 8081:8080
     depends_on:
       - eureka-server
       - keycloak-server
