@@ -9,6 +9,7 @@ import com.motorsport_predictor.f1_service.models.entities.Driver;
 import com.motorsport_predictor.f1_service.services.ICircuitService;
 import com.motorsport_predictor.f1_service.services.IDriverService;
 import com.motorsport_predictor.f1_service.services.IRaceService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -18,6 +19,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -29,13 +31,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/f1")
 @RequiredArgsConstructor
+@Tag(name = "F1 controller", description = "Controlador dedicado para la categoria de Formula 1. \n\n")
 public class F1Controller {
     private final ICircuitService circuitService;
     private final IDriverService driverService;
@@ -358,8 +360,8 @@ public class F1Controller {
     }
 
     @Operation(
-            summary = "Cargar los resultados de una carrera de Fórmula 1",
-            description = "Este endpoint permite a un administrador cargar los resultados de una carrera de Fórmula 1, incluyendo las posiciones de los pilotos.",
+            summary = "Cargar los resultados de una carrera. ",
+            description = "Tarea reservada para el usuario tipo 'ADMIN'",
             security = @SecurityRequirement(name = "Bearer Authentication")
     )
     @ApiResponses(value = {
@@ -385,13 +387,23 @@ public class F1Controller {
                             examples = {
                                     @ExampleObject(
                                             name = "400 Response",
-                                            summary = "Error obtenido si se ingresa un ID de un piloto que no existe",
-                                            value = "{\"message\": \"El piloto con ID 78 no existe.\", \"path\": \"uri=/api/f1/races/18/results\"}"
+                                            summary = "Error si se ingresan más de 10 pilotos",
+                                            value = "{\"message\": \"Solo se permiten hasta 10 pilotos.\", \"path\": \"uri=/api/f1/{memberGroupId}/{raceId}/newPrediction\"}"
                                     ),
                                     @ExampleObject(
                                             name = "400 Response",
-                                            summary = "Error obtenido si se ingresa una posicion menor a 1 o mayor a 10.",
-                                            value = "{\"message\": \"La posición 100 es inválida. Debe estar entre 1 y 10.\", \"path\": \"uri=/api/f1/races/18/results\"}"
+                                            summary = "Error al ingresar un piloto",
+                                            value = "{\"message\": \"El piloto 'col' debe ser ingresado en mayúsculas.\", \"path\": \"uri=/api/f1/{memberGroupId}/{raceId}/newPrediction\"}"
+                                    ),
+                                    @ExampleObject(
+                                            name = "400 Response",
+                                            summary = "Error al ingresar un piloto",
+                                            value = "{\"message\": \"No se pueden repetir los pilotos.\", \"path\": \"uri=/api/f1/{memberGroupId}/{raceId}/newPrediction\"}"
+                                    ),
+                                    @ExampleObject(
+                                            name = "400 Response",
+                                            summary = "Error si un piloto no existe",
+                                            value = "{\"message\": \"El piloto con ID 25 no existe.\", \"path\": \"uri=/api/f1/{memberGroupId}/{raceId}/newPrediction\"}"
                                     )
                             }
                     )
@@ -405,13 +417,14 @@ public class F1Controller {
                                     @ExampleObject(
                                             name = "403 Response",
                                             summary = "Acceso no autorizado",
-                                            value = "{\"message\": \"Access denied\", \"path\": \"uri=/api/f1/races/{raceId}/results\"}"
+                                            value = "{\"message\": \"Access denied\", \"path\": \"uri=/api/f1/{memberGroupId}/{raceId}/newPrediction\"}"
                                     )
                             }
                     )
             )
     })
     @PostMapping("/races/{raceId}/results")
+    @CircuitBreaker(name = "f1Service", fallbackMethod = "uploadResultsFallback")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> uploadF1RaceResult(@PathVariable Long raceId, @RequestBody @Valid RaceResultRequestDTO raceResult){
         try {
@@ -420,5 +433,9 @@ public class F1Controller {
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());
         }
+    }
+
+    private ResponseEntity<?> uploadResultsFallback(@PathVariable Long raceId, @RequestBody @Valid RaceResultRequestDTO raceResult) {
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
     }
 }

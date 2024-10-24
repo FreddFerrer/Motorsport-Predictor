@@ -44,13 +44,13 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
             throw new IllegalArgumentException("La carrera " + raceId + " no existe.");
         }
 
-        // Obtener la fecha y hora de la carrera
-        RaceDTO raceDateTime = f1Client.getRaceInfo(raceId);
+        // Get race info
+        RaceDTO raceInfo = f1Client.getRaceInfo(raceId);
 
         // Combinar fecha y hora en un solo objeto LocalDateTime
-        LocalDateTime raceDateTimeCombined = LocalDateTime.of(raceDateTime.getDate(), raceDateTime.getTime());
+        LocalDateTime raceDateTimeCombined = LocalDateTime.of(raceInfo.getDate(), raceInfo.getTime());
 
-        // Verificar si el tiempo límite ha pasado (1 hora antes de la carrera)
+        // Check limit time (1 hour before the race)
         LocalDateTime now = LocalDateTime.now();
         if (now.isAfter(raceDateTimeCombined.minusHours(1))) {
             throw new IllegalArgumentException("El límite para hacer predicciones ha pasado. Ya no es posible realizar predicciones para esta carrera.");
@@ -87,7 +87,6 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
                 Long driverId = f1Client.getDriverIdByShortname(shortname);
                 driverIds.add(driverId);
             } catch (FeignException.NotFound e) {
-                // Captura el error 404 y arroja un mensaje personalizado
                 throw new IllegalArgumentException("El piloto " + shortname + " no existe.");
             }
         }
@@ -107,7 +106,6 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
         String userEmail = usersClient.getUserEmail();
 
         // Create DTO to send to Kafka
-        RaceDTO raceInfo = f1Client.getRaceInfo(raceId);
         raceInfo.setEmail(userEmail);
 
         // Send to Kafka
@@ -121,6 +119,7 @@ public class F1PredictionServiceImpl implements IF1PredictionService {
 
     @Override
     public void saveRaceResults(Long raceId, List<Long> resultDriverIds) {
+
         int actualPosition = 1;
 
         // Mapeo de los resultados oficiales: driverId -> actualPosition

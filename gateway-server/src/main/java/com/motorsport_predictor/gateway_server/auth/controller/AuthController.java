@@ -23,14 +23,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-@Tag(name = "Authentication", description = "Controlador para autenticación de usuarios. \n\n" +
-        "**Usuarios de prueba**:\n\n" +
-        "- **admin_user** / Password@123\n" +
-        "- **usuario_prueba_1** / Password@123\n" +
-        "- **usuario_prueba_2** / Password@123\n" +
-        "- **usuario_prueba_3** / Password@123\n" +
-        "- **usuario_prueba_4** / Password@123\n" +
-        "- **usuario_prueba_5** / Password@123")
+@Tag(name = "Authentication", description = "Controlador para autenticación de usuarios. \n\n")
 public class AuthController {
 
     private final IUserService userService;

@@ -18,6 +18,7 @@ com\motorsport_predictor\f1_service\F1ServiceApplication.class
 com\motorsport_predictor\f1_service\dto\TeamDTO.class
 com\motorsport_predictor\f1_service\models\repositories\ICircuitRepository.class
 com\motorsport_predictor\f1_service\dto\CircuitDTO.class
+com\motorsport_predictor\f1_service\dto\request\RaceResultRequestDTO$RaceResultRequestDTOBuilder.class
 com\motorsport_predictor\f1_service\config\FeignConfig.class
 com\motorsport_predictor\f1_service\config\WebConfig.class
 com\motorsport_predictor\f1_service\controllers\F1Controller.class

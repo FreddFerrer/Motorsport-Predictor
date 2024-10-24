@@ -6,7 +6,6 @@ C:\Users\fredd\Desktop\motorsport-predictor\Motorsport-Predictor\predictions-ser
 C:\Users\fredd\Desktop\motorsport-predictor\Motorsport-Predictor\predictions-service\src\main\java\com\motorsport_predictor\predictions_service\controllers\F1PredictionController.java
 C:\Users\fredd\Desktop\motorsport-predictor\Motorsport-Predictor\predictions-service\src\main\java\com\motorsport_predictor\predictions_service\dto\CircuitDTO.java
 C:\Users\fredd\Desktop\motorsport-predictor\Motorsport-Predictor\predictions-service\src\main\java\com\motorsport_predictor\predictions_service\dto\PredictionDTO.java
-C:\Users\fredd\Desktop\motorsport-predictor\Motorsport-Predictor\predictions-service\src\main\java\com\motorsport_predictor\predictions_service\dto\PredictionNotificationDTO.java
 C:\Users\fredd\Desktop\motorsport-predictor\Motorsport-Predictor\predictions-service\src\main\java\com\motorsport_predictor\predictions_service\dto\RaceDTO.java
 C:\Users\fredd\Desktop\motorsport-predictor\Motorsport-Predictor\predictions-service\src\main\java\com\motorsport_predictor\predictions_service\dto\RaceResultIdDTO.java
 C:\Users\fredd\Desktop\motorsport-predictor\Motorsport-Predictor\predictions-service\src\main\java\com\motorsport_predictor\predictions_service\dto\request\PredictionsRequestDTO.java

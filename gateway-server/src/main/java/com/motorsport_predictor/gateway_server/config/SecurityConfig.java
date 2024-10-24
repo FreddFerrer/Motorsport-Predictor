@@ -41,11 +41,13 @@ public class SecurityConfig {
                         .pathMatchers("/api/groups/populars").permitAll()
                         .pathMatchers("/api/groups/search/{searchTerm}").permitAll()
                         .pathMatchers("/api/groups/{groupId}/members").permitAll()
+                        .pathMatchers("/actuator/users-service/**").permitAll()
 
                         // F1-service
                         .pathMatchers("/api/f1/races").permitAll()
                         .pathMatchers("/api/f1/races/nextRace").permitAll()
                         .pathMatchers("/api/f1/races/{raceId}").permitAll()
+                        .pathMatchers("/actuator/f1-service/**").permitAll()
 
                         // Swagger
                         .pathMatchers("/f1-service/v3/api-docs/**").permitAll()

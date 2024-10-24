@@ -3,13 +3,16 @@ package com.motorsport_predictor.predictions_service.controllers;
 import com.motorsport_predictor.predictions_service.dto.RaceResultIdDTO;
 import com.motorsport_predictor.predictions_service.dto.request.PredictionsRequestDTO;
 import com.motorsport_predictor.predictions_service.exceptions.BadRequestException;
+import com.motorsport_predictor.predictions_service.exceptions.CustomErrorResponse;
 import com.motorsport_predictor.predictions_service.services.IF1PredictionService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +26,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/predictions")
 @RequiredArgsConstructor
+@Tag(name = "F1 Prediction Controller", description = "Controlador dedicado para las predicciones de la categoria Formula 1. \n\n")
 public class F1PredictionController {
     private final IF1PredictionService predictionService;
 
@@ -111,6 +115,7 @@ public class F1PredictionController {
             )
     })
     @PostMapping("/f1/{memberGroupId}/{raceId}/newPrediction")
+    @CircuitBreaker(name = "predictionsService", fallbackMethod = "newPredictionsFallback")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<?> newPredictions(@PathVariable Long memberGroupId,
                                             @PathVariable Long raceId,
@@ -123,6 +128,7 @@ public class F1PredictionController {
         }
     }
 
+    @Operation(hidden = true)
     @PostMapping("/f1/upload-results/{raceId}")
     public ResponseEntity<?> uploadRaceResults(@PathVariable Long raceId,
                                                @RequestBody @Valid RaceResultIdDTO raceResultIdDTO) {
@@ -134,6 +140,25 @@ public class F1PredictionController {
             return ResponseEntity.status(HttpStatus.CREATED).body("Resultados guardados correctamente");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    private ResponseEntity<?> newPredictionsFallback(@PathVariable Long memberGroupId,
+                                                 @PathVariable Long raceId,
+                                                 @RequestBody @Valid PredictionsRequestDTO predictionsRequestDTO,
+                                                 Throwable throwable) {
+        if (throwable instanceof BadRequestException) {
+            // Si la excepción es BadRequestException, devuelve el mensaje de error personalizado
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new CustomErrorResponse(throwable.getMessage(), "/api/predictions/f1/" + memberGroupId + "/" + raceId + "/newPrediction"));
+        } else if (throwable instanceof IllegalArgumentException) {
+            // Si es IllegalArgumentException, también puedes devolver una respuesta personalizada
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new CustomErrorResponse(throwable.getMessage(), "/api/predictions/f1/" + memberGroupId + "/" + raceId + "/newPrediction"));
+        } else {
+            // Si es cualquier otro tipo de excepción, se puede devolver un error 503
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                    .body(new CustomErrorResponse("Service is currently unavailable. Please try again later.", "/api/predictions/f1/" + memberGroupId + "/" + raceId + "/newPrediction"));
         }
     }
 }

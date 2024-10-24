@@ -19,9 +19,6 @@ import java.util.List;
                 title = "Users Service",
                 version = "1.0.0",
                 description = """
-            ## Documentación F1 Service v1.0
-            
-            #### Información importante
             Este microservicio se encarga de la administración de los usuarios y grupos de predicciones.
             Un usuario puede crear/eliminar un grupo de predicción y agregar/eliminar a usuarios buscándolos por su username o id.
             También nos permite ver cuales son los grupos mas populares teniendo en cuenta el numero de sus miembros.

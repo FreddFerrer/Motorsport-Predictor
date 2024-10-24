@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class KeycloakProvider {
-    private static final String SERVER_URL = "http://keycloak-server:8080";
+    private static final String SERVER_URL = "http://keycloak-server:9090";
     private static final String REALM_NAME = "microservices-motorsport-predictor-realm";
     private static final String REALM_MASTER = "master";
     private static final String ADMIN_CLI = "admin-cli";

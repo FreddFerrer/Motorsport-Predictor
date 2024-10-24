@@ -17,9 +17,9 @@ import java.util.List;
 @Configuration
 @OpenAPIDefinition(
         info = @io.swagger.v3.oas.annotations.info.Info(
-                title = "F1 Service API",
+                title = "F1 Service",
                 version = "1.0.0",
-                description = "F1 Service v1.0.0 proporciona información sobre las carreras de Fórmula 1, incluyendo circuitos, pilotos, equipos y resultados de las carreras. La API ofrece endpoints para consultar y administrar datos relacionados con las competiciones de Fórmula 1.\n\n" +
+                description = "F1 Service v1.0.0 proporciona información sobre las carreras de Fórmula 1, incluyendo circuitos, pilotos, equipos y resultados de las carreras. Este microservicio ofrece endpoints para consultar y administrar datos relacionados con las competiciones de Fórmula 1.\n\n" +
                         "Después de realizar el login, los usuarios deben obtener el **access_token** y pegarlo en el campo correspondiente de Swagger para acceder a los endpoints protegidos.\n\n" +
                         "**Datos Iniciales Incluidos** (solo algunos de ejemplo):\n\n" +
                         "**Circuits**:\n" +
