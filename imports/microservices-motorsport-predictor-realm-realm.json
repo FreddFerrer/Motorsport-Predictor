@@ -715,11 +715,7 @@
     "clientId" : "microservices-motorsport-client",
     "name" : "microservices-motorsport-client",
     "description" : "",
-<<<<<<< HEAD
-    "rootUrl" : "http://localhost:9090",
-=======
-    "rootUrl" : "http://keycloak-server:8080",
->>>>>>> 0ba527ef3d550f80f17d40200cc905781ac5ee60
+    "rootUrl" : "http://keycloak-server:9090",
     "adminUrl" : "",
     "baseUrl" : "",
     "surrogateAuthRequired" : false,
