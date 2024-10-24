@@ -29,8 +29,8 @@ services:
       DB_PASSWORD: Test123
       EUREKA_USER: eureka
       EUREKA_PASSWORD: password
-      REALM_NAME: http://keycloak-server:8080/realms/microservices-motorsport-predictor-realm
-      REALM_CERTS: http://keycloak-server:8080/realms/microservices-motorsport-predictor-realm/protocol/openid-connect/certs
+      REALM_NAME: http://keycloak-server:9090/realms/microservices-motorsport-predictor-realm
+      REALM_CERTS: http://keycloak-server:9090/realms/microservices-motorsport-predictor-realm/protocol/openid-connect/certs
     restart: always
     networks:
       - local_network
@@ -50,8 +50,8 @@ services:
       DB_PASSWORD: Test123
       EUREKA_USER: eureka
       EUREKA_PASSWORD: password
-      REALM_NAME: http://keycloak-server:8080/realms/microservices-motorsport-predictor-realm
-      REALM_CERTS: http://keycloak-server:8080/realms/microservices-motorsport-predictor-realm/protocol/openid-connect/certs
+      REALM_NAME: http://keycloak-server:9090/realms/microservices-motorsport-predictor-realm
+      REALM_CERTS: http://keycloak-server:9090/realms/microservices-motorsport-predictor-realm/protocol/openid-connect/certs
     restart: always
     networks:
       - local_network
@@ -71,7 +71,7 @@ services:
       DB_PASSWORD: Test123
       EUREKA_USER: eureka
       EUREKA_PASSWORD: password
-      REALM_CERTS: http://keycloak-server:8080/realms/microservices-motorsport-predictor-realm/protocol/openid-connect/certs
+      REALM_CERTS: http://keycloak-server:9090/realms/microservices-motorsport-predictor-realm/protocol/openid-connect/certs
     restart: always
     networks:
       - local_network
@@ -98,7 +98,7 @@ services:
     build: gateway-server
     container_name: gateway-server
     ports:
-      - 8085:8080
+      - 8080:8080
     depends_on:
       - eureka-server
       - keycloak-server
@@ -186,7 +186,7 @@ services:
     image: quay.io/keycloak/keycloak:25.0.1
     command: -v start-dev --hostname-strict=false --import-realm
     ports:
-      - 8080:9090
+      - 9090:9090
     depends_on:
       - db-keycloak
     environment:
@@ -200,23 +200,6 @@ services:
 
     volumes:
       - ./imports:/opt/keycloak/data/import
-    networks:
-      - local_network
-
-
-    ### Nginx
-  nginx:
-    image: nginx:latest
-    container_name: nginx
-    volumes:
-      - ./nginx:/etc/nginx/nginx.conf
-      - /etc/ssl/certs:/etc/ssl/certs
-      - /etc/ssl/private:/etc/ssl/private
-    ports:
-      - "80:80"
-      - "443:443"
-    depends_on:
-      - gateway-server
     networks:
       - local_network
 
