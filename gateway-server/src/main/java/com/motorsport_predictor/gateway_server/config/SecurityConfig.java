@@ -101,8 +101,9 @@ public class SecurityConfig {
     @Bean
     public CorsWebFilter corsWebFilter() {
         CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.addAllowedOrigin("https://motorsport-predictor.tech");
-        corsConfig.addAllowedOrigin("http://motorsport-predictor.tech");
+        corsConfig.addAllowedOrigin("http://localhost:8080");
+        corsConfig.addAllowedOrigin("http://localhost:9090");
+        corsConfig.addAllowedOrigin("http://localhost");
         corsConfig.addAllowedHeader("*");
         corsConfig.addAllowedMethod("*");
         corsConfig.setAllowCredentials(true);
