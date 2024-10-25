@@ -15,6 +15,9 @@ Motorsport Predictor API permite a los usuarios registrados realizar prediccione
     - **Users Service**: Gestiona toda la lógica relacionada con los usuarios (registro, actualicación, eliminación).
     - **F1 Service**: Proporciona información sobre las carreras de Fórmula 1, incluidos resultados, pilotos, y manejo de datos sobre las competiciones.
     - **Predictions Service**: Gestiona la creación y almacenamiento de las predicciones.
+    - **Notification Service**: Se encarga de enviar avisos mediante email al ocurrir eventos importantes.
+
+
 
 - Autenticación y Autorización: Keycloak se utiliza para gestionar la autenticación y autorización de los usuarios.
 
