@@ -87,8 +87,8 @@ services:
     environment:
       EUREKA_USER: eureka
       EUREKA_PASSWORD: password
-      MAIL_USERNAME: ferreirafreddy39@gmail.com
-      MAIL_PASSWORD: arku qlqw zqpg ntjj
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
     restart: always
     networks:
       - local_network
@@ -98,7 +98,7 @@ services:
     build: gateway-server
     container_name: gateway-server
     ports:
-      - 80:8080
+      - 8080:8080
     depends_on:
       - eureka-server
       - keycloak-server

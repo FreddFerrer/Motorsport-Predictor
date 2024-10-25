@@ -118,6 +118,7 @@ public class UsersController {
     }
 
     // Intern endpoint
+    @Operation(hidden = true)
     @GetMapping("/loggedUser")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     public ResponseEntity<?> getUserLoggedId(){
